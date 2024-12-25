@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class IndexController {
-    @GetMapping("/")
+    @GetMapping("/index")
     public String index() {
         return "index";
     }
@@ -21,12 +21,20 @@ public class IndexController {
     public String contact() {
         return "contact";
     }
-    @GetMapping("/job-detail")
+    @GetMapping("/jobDetail")
     public String jobDetail() {
-        return "job-detail";
+        return "jobDetail";
     }
-    @GetMapping("/job-list")
+    @GetMapping("/jobList")
     public String jobList() {
-        return "job-list";
+        return "jobList";
+    }
+    @GetMapping("/notFound")
+    public String notFound() {
+        return "notFound";
+    }
+    @GetMapping("/testimonial")
+    public String testimonial() {
+        return "testimonial";
     }
 }
