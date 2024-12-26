@@ -37,4 +37,32 @@ public class IndexController {
     public String testimonial() {
         return "testimonial";
     }
+    @GetMapping("/java")
+    public String java() {
+        return "java";
+    }
+    @GetMapping("/springboot")
+    public String springboot() {
+        return "springboot";
+    }
+    @GetMapping("ubuntu")
+    public String ubuntu() {
+        return "ubuntu";
+    }
+    @GetMapping("html")
+    public String html() {
+        return "html";
+    }
+    @GetMapping("css")
+    public String css() {
+        return "css";
+    }
+    @GetMapping("javascript")
+    public String javascript() {
+        return "javascript";
+    }
+    @GetMapping("thymeleaf")
+    public String thymeleaf() {
+        return "thymeleaf";
+    }
 }
