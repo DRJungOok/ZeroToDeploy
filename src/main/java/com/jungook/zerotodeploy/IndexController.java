@@ -17,6 +17,10 @@ public class IndexController {
     public String about() {
         return "about";
     }
+    @GetMapping("/history")
+    public String history() {
+        return "history";
+    }
     @GetMapping("/category")
     public String category() {
         return "category";
@@ -25,21 +29,9 @@ public class IndexController {
     public String contact() {
         return "contact";
     }
-    @GetMapping("/jobDetail")
-    public String jobDetail() {
-        return "jobDetail";
-    }
-    @GetMapping("/jobList")
-    public String jobList() {
-        return "jobList";
-    }
     @GetMapping("/notFound")
     public String notFound() {
         return "notFound";
-    }
-    @GetMapping("/testimonial")
-    public String testimonial() {
-        return "testimonial";
     }
     @GetMapping("/java")
     public String java() {
