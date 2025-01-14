@@ -32,7 +32,6 @@
             <span class="sr-only">Loading...</span>
         </div>
     </div>
-
     <!-- Spinner End -->
 
     <!-- Navbar Start -->
@@ -61,58 +60,16 @@
                     </div>
                 </div>
             </div>
-            <a href="write.html" th:href="@{write}" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Writing<i class="fa fa-arrow-right ms-3"></i></a>
+            <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Writing<i class="fa fa-arrow-right ms-3"></i></a>
         </div>
     </nav>
     <!-- Navbar End -->
 
+    <!--  signUp Start  -->
+    <form>
 
-    <!-- login Start  -->
-    <div class="container-xxl py-5 wow fadeInUp d-flex justify-content-center align-items-center" data-wow-delay="0.1s" style="min-height: 100vh; overflow: hidden;">
-        <div class="card shadow-lg" style="max-width: 400px; width: 100%;">
-            <div class="card-header bg-primary text-white text-center py-3">
-                <h4>Login</h4>
-            </div>
-            <div class="card-body">
-                <form method="post">
-                    <div class="mb-3">
-                        <label for="userId" class="form-label">User ID</label>
-                        <input type="text" name="id" id="userId" class="form-control" placeholder="Enter your ID" required />
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="userPwd" class="form-label">Password</label>
-                        <input type="password" name="pwd" id="userPwd" class="form-control" placeholder="Enter your password" required />
-                    </div>
-
-                    <div class="d-grid mb-3">
-                        <button type="submit" class="btn btn-primary">Login</button>
-                    </div>
-
-                    <div class="text-center text-muted mb-3">or login with</div>
-
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-outline-secondary">
-                            <i class="fab fa-google me-2"></i> Login with Google
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary">
-                            <i class="fab fa-instagram me-2"></i> Login with Instagram
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary">
-                            <i class="fas fa-comment me-2"></i> Login with Kakao
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary">
-                            <i class="fab fa-microsoft me-2"></i> Login with Microsoft
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="card-footer text-center text-muted py-2">
-                <small>Don't have an account? <a href="SignUp.html" th:href="@{signUp}" class="text-primary">Sign up</a></small>
-            </div>
-        </div>
-    </div>
-    <!-- login End  -->
+    </form>
+    <!--  signUp End  -->
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
