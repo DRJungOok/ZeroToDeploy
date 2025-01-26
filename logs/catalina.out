@@ -1217,3 +1217,22 @@ com.jungook.zerotodeploy.IndexController#index() mapped.
 2025-01-26T15:13:44.974+09:00  INFO 22132 --- [ZeroToDeploy] [http-nio-8085-exec-2] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2025-01-26T15:13:44.974+09:00  INFO 22132 --- [ZeroToDeploy] [http-nio-8085-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2025-01-26T15:13:44.976+09:00  INFO 22132 --- [ZeroToDeploy] [http-nio-8085-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-01-26T16:24:34.246+09:00  INFO 22132 --- [ZeroToDeploy] [RMI TCP Connection(81)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2025-01-26T16:24:34.258+09:00  INFO 22132 --- [ZeroToDeploy] [RMI TCP Connection(81)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-01-26T16:24:34.270+09:00  INFO 22132 --- [ZeroToDeploy] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-01-26T19:20:55.711+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 23.0.1 with PID 22688 (E:\dev\git\ZeroToDeploy\bin\main started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-01-26T19:20:55.712+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-01-26T19:20:55.767+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-01-26T19:20:55.768+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-01-26T19:20:56.613+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8085 (http)
+2025-01-26T19:20:56.628+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-01-26T19:20:56.628+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-01-26T19:20:56.678+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring embedded WebApplicationContext
+2025-01-26T19:20:56.679+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 911 ms
+2025-01-26T19:20:56.782+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-01-26T19:20:57.020+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-01-26T19:20:57.053+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8085 (http) with context path '/zerotodeploy'
+2025-01-26T19:20:57.061+09:00  INFO 22688 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 1.684 seconds (process running for 2.452)
+2025-01-26T19:46:53.197+09:00  INFO 22688 --- [ZeroToDeploy] [http-nio-8085-exec-5] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-01-26T19:46:53.197+09:00  INFO 22688 --- [ZeroToDeploy] [http-nio-8085-exec-5] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-01-26T19:46:53.199+09:00  INFO 22688 --- [ZeroToDeploy] [http-nio-8085-exec-5] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
