@@ -83,6 +83,69 @@
 		</nav>
 		<!-- Navbar End -->
 
+		<!-- signUp Start  -->
+		<div
+			class="container-xxl py-5 wow fadeInUp d-flex justify-content-center align-items-center"
+			data-wow-delay="0.1s" style="min-height: 100vh; overflow: hidden;">
+			<div class="card shadow-lg" style="max-width: 400px; width: 100%;">
+				<div class="card-header bg-primary text-white text-center py-3">
+					<h4>Sign Up</h4>
+				</div>
+				<div class="card-body">
+					<form method="post">
+						<div class="mb-3">
+							<label for="userName" class="form-label">Full Name</label> <input
+								type="text" name="name" id="userName" class="form-control"
+								placeholder="Enter your full name" required />
+						</div>
+
+						<div class="mb-3">
+							<label for="userEmail" class="form-label">Email</label> <input
+								type="email" name="email" id="userEmail" class="form-control"
+								placeholder="Enter your email" required />
+						</div>
+
+						<div class="mb-3">
+							<label for="userId" class="form-label">User ID</label> <input
+								type="text" name="id" id="userId" class="form-control"
+								placeholder="Choose a user ID" required />
+						</div>
+
+						<div class="mb-4">
+							<label for="userPwd" class="form-label">Password</label> <input
+								type="password" name="pwd" id="userPwd" class="form-control"
+								placeholder="Create a password" required />
+						</div>
+
+						<div class="d-grid mb-3">
+							<button type="submit" class="btn btn-primary">Sign Up</button>
+						</div>
+
+						<div class="text-center text-muted mb-3">or sign up with</div>
+
+						<div class="d-grid gap-2">
+							<button type="button" class="btn btn-outline-secondary">
+								<i class="fab fa-google me-2"></i> Sign Up with Google
+							</button>
+							<button type="button" class="btn btn-outline-secondary">
+								<i class="fab fa-instagram me-2"></i> Sign Up with Instagram
+							</button>
+							<button type="button" class="btn btn-outline-secondary">
+								<i class="fas fa-comment me-2"></i> Sign Up with Kakao
+							</button>
+							<button type="button" class="btn btn-outline-secondary">
+								<i class="fab fa-microsoft me-2"></i> Sign Up with Microsoft
+							</button>
+						</div>
+					</form>
+				</div>
+				<div class="card-footer text-center text-muted py-2">
+					<small>Already have an account? <a href="login.html" th:href="@{login}"
+						class="text-primary">Login</a></small>
+				</div>
+			</div>
+		</div>
+		<!-- signUp End  -->
 
 		<!-- Footer Start -->
 		<div
