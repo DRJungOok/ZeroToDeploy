@@ -63,6 +63,6 @@ public class IndexController {
     }
     @GetMapping("/write")
     public String write() {
-        return "/write";
+        return "write";
     }
 }
