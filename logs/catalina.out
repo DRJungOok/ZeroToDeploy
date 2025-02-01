@@ -1,20 +1,13 @@
-2025-01-30T14:38:47.139+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 23.0.1 with PID 11856 (E:\dev\git\ZeroToDeploy\bin\main started by 01077 in E:\dev\git\ZeroToDeploy)
-2025-01-30T14:38:47.152+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
-2025-01-30T14:38:47.243+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2025-01-30T14:38:47.243+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2025-01-30T14:38:48.544+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8085 (http)
-2025-01-30T14:38:48.566+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-01-30T14:38:48.567+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
-2025-01-30T14:38:48.629+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring embedded WebApplicationContext
-2025-01-30T14:38:48.631+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1387 ms
-2025-01-30T14:38:48.754+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
-2025-01-30T14:38:49.091+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
-2025-01-30T14:38:49.125+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8085 (http) with context path '/zerotodeploy'
-2025-01-30T14:38:49.135+09:00  INFO 11856 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 2.486 seconds (process running for 2.974)
-2025-01-30T14:38:56.515+09:00  INFO 11856 --- [ZeroToDeploy] [http-nio-8085-exec-1] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2025-01-30T14:38:56.515+09:00  INFO 11856 --- [ZeroToDeploy] [http-nio-8085-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2025-01-30T14:38:56.516+09:00  INFO 11856 --- [ZeroToDeploy] [http-nio-8085-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
-2025-01-30T15:07:35.205+09:00  INFO 24340 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : Starting ZeroToDeployApplicationTests using Java 17.0.12 with PID 24340 (started by 01077 in E:\dev\git\ZeroToDeploy)
-2025-01-30T15:07:35.207+09:00  INFO 24340 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : No active profile set, falling back to 1 default profile: "default"
-2025-01-30T15:07:36.325+09:00  INFO 24340 --- [ZeroToDeploy] [Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
-2025-01-30T15:07:36.683+09:00  INFO 24340 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : Started ZeroToDeployApplicationTests in 1.816 seconds (process running for 3.114)
+2025-02-01T14:20:12.668+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 23.0.1 with PID 27736 (E:\dev\git\ZeroToDeploy\bin\main started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-02-01T14:20:12.679+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-02-01T14:20:12.745+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-01T14:20:12.745+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-01T14:20:13.840+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8085 (http)
+2025-02-01T14:20:13.864+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-01T14:20:13.865+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-01T14:20:13.933+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring embedded WebApplicationContext
+2025-02-01T14:20:13.935+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1189 ms
+2025-02-01T14:20:14.077+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-02-01T14:20:14.369+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-01T14:20:14.400+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8085 (http) with context path '/zerotodeploy'
+2025-02-01T14:20:14.408+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 2.155 seconds (process running for 2.633)
