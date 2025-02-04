@@ -1,13 +1,106 @@
-2025-02-01T14:20:12.668+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 23.0.1 with PID 27736 (E:\dev\git\ZeroToDeploy\bin\main started by 01077 in E:\dev\git\ZeroToDeploy)
-2025-02-01T14:20:12.679+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
-2025-02-01T14:20:12.745+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2025-02-01T14:20:12.745+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2025-02-01T14:20:13.840+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8085 (http)
-2025-02-01T14:20:13.864+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-02-01T14:20:13.865+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
-2025-02-01T14:20:13.933+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring embedded WebApplicationContext
-2025-02-01T14:20:13.935+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1189 ms
-2025-02-01T14:20:14.077+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
-2025-02-01T14:20:14.369+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
-2025-02-01T14:20:14.400+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8085 (http) with context path '/zerotodeploy'
-2025-02-01T14:20:14.408+09:00  INFO 27736 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 2.155 seconds (process running for 2.633)
+2025-02-03T21:29:23.856+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 23.0.1 with PID 26984 (E:\dev\git\ZeroToDeploy\bin\main started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-02-03T21:29:23.876+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-02-03T21:29:23.978+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-02-03T21:29:23.978+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-02-03T21:29:25.735+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8085 (http)
+2025-02-03T21:29:25.768+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-03T21:29:25.769+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-03T21:29:25.836+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring embedded WebApplicationContext
+2025-02-03T21:29:25.837+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1857 ms
+2025-02-03T21:29:25.981+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-02-03T21:29:26.359+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-03T21:29:26.402+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8085 (http) with context path '/zerotodeploy'
+2025-02-03T21:29:26.414+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 3.327 seconds (process running for 4.013)
+2025-02-03T21:31:04.460+09:00  INFO 26984 --- [ZeroToDeploy] [http-nio-8085-exec-2] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-03T21:31:04.461+09:00  INFO 26984 --- [ZeroToDeploy] [http-nio-8085-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-02-03T21:31:04.463+09:00  INFO 26984 --- [ZeroToDeploy] [http-nio-8085-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-02-03T22:45:16.948+09:00  INFO 26984 --- [ZeroToDeploy] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2025-02-03T22:45:16.953+09:00  INFO 26984 --- [ZeroToDeploy] [Thread-5] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-02-03T22:45:16.959+09:00  INFO 26984 --- [ZeroToDeploy] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-02-03T22:45:17.045+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 23.0.1 with PID 26984 (E:\dev\git\ZeroToDeploy\bin\main started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-02-03T22:45:17.046+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-02-03T22:45:17.200+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8085 (http)
+2025-02-03T22:45:17.201+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-03T22:45:17.201+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-03T22:45:17.222+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring embedded WebApplicationContext
+2025-02-03T22:45:17.222+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 174 ms
+2025-02-03T22:45:17.242+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-02-03T22:45:17.290+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-03T22:45:17.296+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8085 (http) with context path '/zerotodeploy'
+2025-02-03T22:45:17.299+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 0.277 seconds (process running for 4554.897)
+2025-02-03T22:45:17.301+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-02-03T22:45:23.878+09:00  INFO 26984 --- [ZeroToDeploy] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2025-02-03T22:45:23.879+09:00  INFO 26984 --- [ZeroToDeploy] [Thread-7] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-02-03T22:45:23.884+09:00  INFO 26984 --- [ZeroToDeploy] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-02-03T22:45:23.963+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 23.0.1 with PID 26984 (E:\dev\git\ZeroToDeploy\bin\main started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-02-03T22:45:23.963+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-02-03T22:45:24.130+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8085 (http)
+2025-02-03T22:45:24.131+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-03T22:45:24.131+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-03T22:45:24.153+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring embedded WebApplicationContext
+2025-02-03T22:45:24.153+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 187 ms
+2025-02-03T22:45:24.173+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-02-03T22:45:24.219+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-03T22:45:24.227+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8085 (http) with context path '/zerotodeploy'
+2025-02-03T22:45:24.229+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 0.287 seconds (process running for 4561.829)
+2025-02-03T22:45:24.231+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-02-03T22:45:30.813+09:00  INFO 26984 --- [ZeroToDeploy] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2025-02-03T22:45:30.814+09:00  INFO 26984 --- [ZeroToDeploy] [Thread-11] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-02-03T22:45:30.817+09:00  INFO 26984 --- [ZeroToDeploy] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-02-03T22:45:30.891+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 23.0.1 with PID 26984 (E:\dev\git\ZeroToDeploy\bin\main started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-02-03T22:45:30.891+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-02-03T22:45:31.018+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8085 (http)
+2025-02-03T22:45:31.019+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-03T22:45:31.019+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-03T22:45:31.038+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring embedded WebApplicationContext
+2025-02-03T22:45:31.040+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 147 ms
+2025-02-03T22:45:31.055+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-02-03T22:45:31.095+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-03T22:45:31.103+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8085 (http) with context path '/zerotodeploy'
+2025-02-03T22:45:31.105+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 0.234 seconds (process running for 4568.705)
+2025-02-03T22:45:31.107+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-02-03T22:45:35.660+09:00  INFO 26984 --- [ZeroToDeploy] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-02-03T22:45:35.661+09:00  INFO 26984 --- [ZeroToDeploy] [Thread-15] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-02-03T22:45:35.665+09:00  INFO 26984 --- [ZeroToDeploy] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-02-03T22:45:35.738+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 23.0.1 with PID 26984 (E:\dev\git\ZeroToDeploy\bin\main started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-02-03T22:45:35.738+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-02-03T22:45:35.873+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8085 (http)
+2025-02-03T22:45:35.874+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-03T22:45:35.874+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-03T22:45:35.897+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring embedded WebApplicationContext
+2025-02-03T22:45:35.897+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 157 ms
+2025-02-03T22:45:35.915+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-02-03T22:45:35.957+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-03T22:45:35.963+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8085 (http) with context path '/zerotodeploy'
+2025-02-03T22:45:35.966+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 0.247 seconds (process running for 4573.565)
+2025-02-03T22:45:35.968+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-02-03T22:47:12.098+09:00  INFO 26984 --- [ZeroToDeploy] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2025-02-03T22:47:12.099+09:00  INFO 26984 --- [ZeroToDeploy] [Thread-19] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-02-03T22:47:12.103+09:00  INFO 26984 --- [ZeroToDeploy] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-02-03T22:47:12.175+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 23.0.1 with PID 26984 (E:\dev\git\ZeroToDeploy\bin\main started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-02-03T22:47:12.175+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-02-03T22:47:12.317+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8085 (http)
+2025-02-03T22:47:12.318+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-03T22:47:12.318+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-03T22:47:12.342+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring embedded WebApplicationContext
+2025-02-03T22:47:12.342+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 164 ms
+2025-02-03T22:47:12.367+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-02-03T22:47:12.411+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-03T22:47:12.420+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8085 (http) with context path '/zerotodeploy'
+2025-02-03T22:47:12.424+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 0.265 seconds (process running for 4670.023)
+2025-02-03T22:47:12.425+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-02-03T23:02:49.659+09:00  INFO 26984 --- [ZeroToDeploy] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2025-02-03T23:02:49.660+09:00  INFO 26984 --- [ZeroToDeploy] [Thread-23] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-02-03T23:02:49.665+09:00  INFO 26984 --- [ZeroToDeploy] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-02-03T23:02:49.754+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 23.0.1 with PID 26984 (E:\dev\git\ZeroToDeploy\bin\main started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-02-03T23:02:49.755+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-02-03T23:02:49.880+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8085 (http)
+2025-02-03T23:02:49.881+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-03T23:02:49.881+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-03T23:02:49.900+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[.[localhost].[/zerotodeploy]  : Initializing Spring embedded WebApplicationContext
+2025-02-03T23:02:49.900+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 143 ms
+2025-02-03T23:02:49.913+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-02-03T23:02:49.953+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-02-03T23:02:49.961+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8085 (http) with context path '/zerotodeploy'
+2025-02-03T23:02:49.964+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 0.231 seconds (process running for 5607.564)
+2025-02-03T23:02:49.967+09:00  INFO 26984 --- [ZeroToDeploy] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
