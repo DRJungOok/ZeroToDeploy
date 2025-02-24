@@ -204,4 +204,29 @@
 	<script th:src="@{lib/owlcarousel/owl.carousel.min.js}"></script>
 	<script th:src="@{js/main.js}"></script>
 </body>
+
+<script>
+    async function registerUser() {
+        const user = {
+            name: document.getElementById("userName").value,
+            email: document.getElementById("userEmail").value,
+            username: document.getElementById("userId").value,
+            password: document.getElementById("userPwd").value
+        };
+
+        const response = await fetch("/api/auth/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user)
+        });
+
+        const result = await response.text();
+        if (response.ok) {
+            alert("회원가입이 성공적으로 완료되었습니다.");
+            window.location.href = "/login";
+        } else {
+            alert("회원가입 실패: " + result);
+        }
+    }
+</script>
 </html>

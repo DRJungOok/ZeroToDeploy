@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class IndexController {
-    @GetMapping("/zerotodeploy")
+    @GetMapping("/")
     public String index() {
         return "index";
     }
