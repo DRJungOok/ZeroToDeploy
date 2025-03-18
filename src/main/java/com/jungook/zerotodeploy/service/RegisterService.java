@@ -1,12 +1,10 @@
-package com.jungook.zerotodeploy.user.register.service;
+package com.jungook.zerotodeploy.service;
 
 import java.util.Optional;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.jungook.zerotodeploy.user.register.repository.RegisterEntity;
-import com.jungook.zerotodeploy.user.register.repository.RegisterRepo;
+import com.jungook.zerotodeploy.model.RegisterEntity;
+import com.jungook.zerotodeploy.repository.RegisterRepo;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,12 +15,12 @@ public class RegisterService {
 
     public RegisterEntity registerUser(RegisterEntity registerEntity) {
         Optional<RegisterEntity> existingUser = registerRepo.findByUsername(registerEntity.getUsername());
-        if(existingUser.isPresent()) {
+        if (existingUser.isPresent()) {
             throw new IllegalArgumentException("Username already exists");
         }
 
         Optional<RegisterEntity> existingEmail = registerRepo.findByEmail(registerEntity.getEmail());
-        if(existingEmail.isPresent()) {
+        if (existingEmail.isPresent()) {
             throw new IllegalArgumentException("Email already exists");
         }
 

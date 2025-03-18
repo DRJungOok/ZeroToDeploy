@@ -1,5 +1,6 @@
-package com.jungook.zerotodeploy.user.register.repository;
+package com.jungook.zerotodeploy.repository;
 
+import com.jungook.zerotodeploy.model.RegisterEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
