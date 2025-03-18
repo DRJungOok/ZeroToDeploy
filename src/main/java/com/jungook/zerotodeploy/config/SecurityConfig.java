@@ -20,7 +20,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf.disable())  // CSRF 보호를 사용하려면 변경 필요
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/signUp.html", "/api/auth/signup", "/login.html", "/css/**", "/js/**", "/images/**").permitAll()
@@ -29,7 +29,7 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login.html")
-                .defaultSuccessUrl("/", true)  // 로그인 성공 후 리디렉트할 페이지
+                .defaultSuccessUrl("/", true)
                 .permitAll()
             )
             .logout(logout -> logout
@@ -37,7 +37,9 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login.html")
                 .permitAll()
             );
-
+    
         return http.build();
     }
+    
+
 }
