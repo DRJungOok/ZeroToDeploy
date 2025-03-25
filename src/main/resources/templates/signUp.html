@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
 
 <meta charset="utf-8">
@@ -93,9 +93,9 @@
 				</div>
 				<div class="card-body">
 					<form id="signupForm" action="/signup" method="POST" th:object="${form}" th:action="@{/signup}">
-						<div class="mb-3">
-							<label for="userId" class="form-label">User ID</label>
-							<input type="text" name="username" id="userId" th:field="*{username}" class="form-control" required />
+						<div class="mb-3">n
+							<label class="form-label">User ID</label>
+							<input type="text" th:field="*{username}" class="form-control" required />
 						</div>
 
 						<div class="mb-3">
