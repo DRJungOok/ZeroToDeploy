@@ -15,7 +15,7 @@ public class IndexController {
     }
     @GetMapping("/signUp")
     public String signUp() {
-        return "SignUp";
+        return "signUp";
     }
     @GetMapping("/about")
     public String about() {

@@ -23,7 +23,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())  // CSRF 보호를 사용하려면 변경 필요
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/signUp.html", "/api/auth/signup", "/login.html", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/", "/signUp.html", "/signup", "/signUp", "/login.html", "/css/**", "/js/**", "/images/**").permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll()
             )

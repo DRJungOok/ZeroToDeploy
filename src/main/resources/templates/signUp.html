@@ -92,32 +92,31 @@
 					<h4>Sign Up</h4>
 				</div>
 				<div class="card-body">
-					<form id="signupForm" action="/signup" method="POST" th:object="${form}" th:action="@{/signup}">
-						<div class="mb-3">n
+					<form method="post" th:action="@{/join}">
+						<div class="mb-3">
+							<label class="form-label">User name</label>
+							<input type="text" class="form-control" name="name" required />
+						</div>
+
+						<div class="mb-3">
 							<label class="form-label">User ID</label>
-							<input type="text" th:field="*{username}" class="form-control" required />
+							<input type="text" class="form-control" name="userId" required />
 						</div>
 
 						<div class="mb-3">
 							<label for="userEmail" class="form-label">Email</label>
-							<input type="email" name="email" id="userEmail" class="form-control" required />
-						</div>
-					
-						<div class="mb-4">
-							<label for="userPwd" class="form-label">Password</label>
-							<input type="password" name="password" id="userPwd" class="form-control" required />
+							<input type="email" id="userEmail" name="email" class="form-control" required />
 						</div>
 
 						<div class="mb-4">
-							<label for="verUserPwd" class="form-label">verify password</label>
-							<input type="password" name="password" id="verUserPwd" class="form-control" required />
+							<label for="userPwd" class="form-label">Password</label>
+							<input type="password" id="userPwd" name="password" class="form-control" required />
 						</div>
-					
+
 						<div class="d-grid mb-3">
 							<button type="submit" class="btn btn-primary">Sign Up</button>
 						</div>
 					</form>
-					
 				</div>
 				<div class="card-footer text-center text-muted py-2">
 					<small>Already have an account? <a href="login.html" th:href="@{login}"
