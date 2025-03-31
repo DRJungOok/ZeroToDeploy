@@ -94,7 +94,7 @@
 					<h4>Login</h4>
 				</div>
 				<div class="card-body">
-					<form method="post">
+					<form method="post" th:action="@{login}" th:object="${loginDTO}">
 						<div class="mb-3">
 							<label for="userId" class="form-label">User ID</label> <input
 								type="text" name="id" id="userId" class="form-control"
