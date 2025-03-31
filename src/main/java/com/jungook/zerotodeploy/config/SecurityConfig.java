@@ -20,10 +20,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())  // CSRF 보호를 사용하려면 변경 필요
+            .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/signUp.html", "/signup", "/signUp", "/login.html", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers(
+                    "/", "/signUp.html", "/signup", "/signUp", "/login.html",
+                    "/css/**", "/js/**", "/images/**",
+
+                    // ✅ Swagger 관련 경로 허용
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/swagger-resources/**",
+                    "/webjars/**"
+                ).permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll()
             )
@@ -37,9 +47,7 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login.html")
                 .permitAll()
             );
-    
+
         return http.build();
     }
-    
-
 }
