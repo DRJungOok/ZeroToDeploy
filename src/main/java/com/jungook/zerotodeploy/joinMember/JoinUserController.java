@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,8 +20,9 @@ public class JoinUserController {
 
 	@PostMapping
 	@Operation(summary = "회원가입 처리")
-	public String handleSignUp(@ModelAttribute JoinUserDTO dto) {
+	public String handleSignUp(@ModelAttribute JoinUserDTO dto, RedirectAttributes redirectAttributes) {
 		joinUserService.registerUser(dto);
+		redirectAttributes.addFlashAttribute("message", "completes Join User");
 		return "redirect:/login";
 	}
 }

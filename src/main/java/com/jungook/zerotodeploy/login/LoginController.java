@@ -3,6 +3,7 @@ package com.jungook.zerotodeploy.login;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -107,6 +107,11 @@
 								placeholder="Enter your password" required />
 						</div>
 
+						<div th:if="${message}">
+							<script>
+								alert([[${message}]]);
+							</script>
+						</div>
 						<div class="d-grid mb-3">
 							<button type="submit" class="btn btn-primary">Login</button>
 						</div>
