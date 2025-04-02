@@ -13,14 +13,15 @@ import lombok.*;
 public class JoinUserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, name = "user_id")
 	private String userId;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, name = "email")
 	private String email;
 
-	@Column(nullable = false)
+	@Column(nullable = false, name = "password")
 	private String password;
 }
