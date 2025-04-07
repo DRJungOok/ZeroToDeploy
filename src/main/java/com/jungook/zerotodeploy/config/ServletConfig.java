@@ -1,4 +1,4 @@
-package com.jungook.zerotodeploy;
+package com.jungook.zerotodeploy.config;
 
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
@@ -9,6 +9,6 @@ public class ServletConfig implements WebServerFactoryCustomizer<ConfigurableSer
 
 	@Override
 	public void customize(ConfigurableServletWebServerFactory factory) {
-		factory.setContextPath("/zerotodeploy");
+		factory.setContextPath("/");
 	}
 }
