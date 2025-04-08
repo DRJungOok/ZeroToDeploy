@@ -294,3 +294,37 @@
 2025-04-08T12:01:49.435+09:00  INFO 20020 --- [ZeroToDeploy] [Thread-15] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-04-08T12:01:49.436+09:00  INFO 20020 --- [ZeroToDeploy] [Thread-15] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
 2025-04-08T12:01:49.456+09:00  INFO 20020 --- [ZeroToDeploy] [Thread-15] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+2025-04-08T12:01:50.981+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Starting ZeroToDeployApplication using Java 21.0.6 with PID 20020 (E:\dev\git\ZeroToDeploy\build\classes\java\main started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-04-08T12:01:50.981+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-04-08T12:01:51.136+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-04-08T12:01:51.142+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 1 JPA repository interface.
+2025-04-08T12:01:51.215+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-04-08T12:01:51.216+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-04-08T12:01:51.216+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-04-08T12:01:51.241+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-04-08T12:01:51.241+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 259 ms
+2025-04-08T12:01:51.264+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-04-08T12:01:51.266+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-04-08T12:01:51.273+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-04-08T12:01:51.273+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2025-04-08T12:01:51.284+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection org.mariadb.jdbc.Connection@36843515
+2025-04-08T12:01:51.284+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2025-04-08T12:01:51.286+09:00  WARN 20020 --- [ZeroToDeploy] [restartedMain] org.hibernate.dialect.Dialect            : HHH000511: The 10.3.39 version for [org.hibernate.dialect.MariaDBDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 10.4.0. Check the community dialects project for available legacy versions.
+2025-04-08T12:01:51.286+09:00  WARN 20020 --- [ZeroToDeploy] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-08T12:01:51.288+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-5)']
+	Database driver: undefined/unknown
+	Database version: 10.3.39
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-04-08T12:01:51.313+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-08T12:01:51.323+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-04-08T12:01:51.380+09:00  WARN 20020 --- [ZeroToDeploy] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-04-08T12:01:51.390+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-04-08T12:01:51.398+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-04-08T12:01:51.495+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-04-08T12:01:51.505+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-04-08T12:01:51.507+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] c.j.z.ZeroToDeployApplication            : Started ZeroToDeployApplication in 0.545 seconds (process running for 2619.458)
+2025-04-08T12:01:51.508+09:00  INFO 20020 --- [ZeroToDeploy] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
