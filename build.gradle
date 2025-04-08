@@ -19,6 +19,15 @@ springBoot {
 	mainClass = 'com.jungook.zerotodeploy.ZeroToDeployApplication'
 }
 
+sourceSets {
+	main {
+		resources {
+			srcDirs = ['src/main/resources']
+			include '**/*.html'
+		}
+	}
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
