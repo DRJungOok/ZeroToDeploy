@@ -19,6 +19,10 @@ springBoot {
 	mainClass = 'com.jungook.zerotodeploy.ZeroToDeployApplication'
 }
 
+clean.doLast {
+	delete fileTree(dir: 'build')
+}
+
 sourceSets {
 	main {
 		resources {
