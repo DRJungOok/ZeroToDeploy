@@ -6,7 +6,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication(scanBasePackages = "com.jungook.zerotodeploy")
-public class ZeroToDeployApplication extends SpringBootServletInitializer {
+public class ZeroToDeployApplication extends SpringBootServletInitializer{
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
@@ -17,4 +17,3 @@ public class ZeroToDeployApplication extends SpringBootServletInitializer {
 		SpringApplication.run(ZeroToDeployApplication.class, args);
 	}
 }
-
