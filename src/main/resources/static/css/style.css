@@ -395,8 +395,26 @@
 .oauth2Login {
     text-align: center;
 }
+body, html {
+    height: 100%;
+}
+.menu-section {
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+}
 
-.googleLogin {}
+.menu-section .container-fluid {
+    flex: 1 1 auto;
+}
 
-.naverLogin{}
-.kakaoLogin{}
+.menu-section .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.menu-section .col-4 {
+    height: 50%; /* 2줄로 나눔 */
+}
