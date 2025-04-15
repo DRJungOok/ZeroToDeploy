@@ -416,5 +416,9 @@ body, html {
 }
 
 .menu-section .col-4 {
-    height: 50%; /* 2줄로 나눔 */
+    height: 50%;
+}
+
+.mobile-login-btn {
+    margin-right: 0 !important;
 }
