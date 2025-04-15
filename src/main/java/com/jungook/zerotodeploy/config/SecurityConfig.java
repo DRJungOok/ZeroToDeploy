@@ -1,4 +1,3 @@
-// SecurityConfig.java (수정됨)
 package com.jungook.zerotodeploy.config;
 
 import lombok.RequiredArgsConstructor;
@@ -49,7 +48,7 @@ public class SecurityConfig {
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login.html")
+                .logoutSuccessUrl("/")
                 .permitAll()
             );
 

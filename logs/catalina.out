@@ -1,17 +1,17 @@
-2025-04-14T16:23:43.316+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : Starting ZeroToDeployApplicationTests using Java 21.0.6 with PID 24580 (started by 01077 in E:\dev\git\ZeroToDeploy)
-2025-04-14T16:23:43.324+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : No active profile set, falling back to 1 default profile: "default"
-2025-04-14T16:23:44.176+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-04-14T16:23:44.232+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 45 ms. Found 1 JPA repository interface.
-2025-04-14T16:23:44.708+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-04-14T16:23:44.796+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.2.Final
-2025-04-14T16:23:44.835+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-04-14T16:23:45.136+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-04-14T16:23:45.172+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-04-14T16:23:45.280+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.mariadb.jdbc.Connection@64eeddd8
-2025-04-14T16:23:45.282+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-04-14T16:23:45.307+09:00  WARN 24580 --- [ZeroToDeploy] [Test worker] org.hibernate.dialect.Dialect            : HHH000511: The 10.3.39 version for [org.hibernate.dialect.MariaDBDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 10.4.0. Check the community dialects project for available legacy versions.
-2025-04-14T16:23:45.311+09:00  WARN 24580 --- [ZeroToDeploy] [Test worker] org.hibernate.orm.deprecation            : HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-04-14T16:23:45.331+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2025-04-15T20:54:11.315+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : Starting ZeroToDeployApplicationTests using Java 21.0.6 with PID 24232 (started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-04-15T20:54:11.328+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : No active profile set, falling back to 1 default profile: "default"
+2025-04-15T20:54:12.822+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-04-15T20:54:12.893+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 58 ms. Found 1 JPA repository interface.
+2025-04-15T20:54:13.536+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-04-15T20:54:13.642+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.2.Final
+2025-04-15T20:54:13.678+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-04-15T20:54:14.023+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-04-15T20:54:14.062+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-04-15T20:54:14.169+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.mariadb.jdbc.Connection@4a58e0e9
+2025-04-15T20:54:14.170+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-04-15T20:54:14.195+09:00  WARN 24232 --- [ZeroToDeploy] [Test worker] org.hibernate.dialect.Dialect            : HHH000511: The 10.3.39 version for [org.hibernate.dialect.MariaDBDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 10.4.0. Check the community dialects project for available legacy versions.
+2025-04-15T20:54:14.201+09:00  WARN 24232 --- [ZeroToDeploy] [Test worker] org.hibernate.orm.deprecation            : HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-15T20:54:14.220+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 10.3.39
@@ -19,29 +19,29 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2025-04-14T16:23:45.994+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-04-14T16:23:46.038+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-04-14T16:23:46.472+09:00  WARN 24580 --- [ZeroToDeploy] [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-04-14T16:23:46.494+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2025-04-14T16:23:46.574+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
-2025-04-14T16:23:47.268+09:00  INFO 24580 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : Started ZeroToDeployApplicationTests in 4.224 seconds (process running for 5.404)
-2025-04-14T16:23:47.707+09:00  INFO 24580 --- [ZeroToDeploy] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-04-14T16:23:47.710+09:00  INFO 24580 --- [ZeroToDeploy] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2025-04-14T16:23:47.735+09:00  INFO 24580 --- [ZeroToDeploy] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2025-04-14T16:59:42.695+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : Starting ZeroToDeployApplicationTests using Java 21.0.6 with PID 4392 (started by 01077 in E:\dev\git\ZeroToDeploy)
-2025-04-14T16:59:42.697+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : No active profile set, falling back to 1 default profile: "default"
-2025-04-14T16:59:43.819+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-04-14T16:59:43.895+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 63 ms. Found 1 JPA repository interface.
-2025-04-14T16:59:44.545+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-04-14T16:59:44.614+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.2.Final
-2025-04-14T16:59:44.651+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-04-14T16:59:44.993+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-04-14T16:59:45.028+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-04-14T16:59:45.129+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.mariadb.jdbc.Connection@949d347
-2025-04-14T16:59:45.132+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-04-14T16:59:45.162+09:00  WARN 4392 --- [ZeroToDeploy] [Test worker] org.hibernate.dialect.Dialect            : HHH000511: The 10.3.39 version for [org.hibernate.dialect.MariaDBDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 10.4.0. Check the community dialects project for available legacy versions.
-2025-04-14T16:59:45.166+09:00  WARN 4392 --- [ZeroToDeploy] [Test worker] org.hibernate.orm.deprecation            : HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-04-14T16:59:45.189+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2025-04-15T20:54:15.024+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-15T20:54:15.069+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-04-15T20:54:15.568+09:00  WARN 24232 --- [ZeroToDeploy] [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-04-15T20:54:15.591+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-04-15T20:54:15.684+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-04-15T20:54:16.673+09:00  INFO 24232 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : Started ZeroToDeployApplicationTests in 5.716 seconds (process running for 6.927)
+2025-04-15T20:54:17.190+09:00  INFO 24232 --- [ZeroToDeploy] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-04-15T20:54:17.193+09:00  INFO 24232 --- [ZeroToDeploy] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-04-15T20:54:17.259+09:00  INFO 24232 --- [ZeroToDeploy] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-04-15T22:15:00.346+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : Starting ZeroToDeployApplicationTests using Java 21.0.6 with PID 25372 (started by 01077 in E:\dev\git\ZeroToDeploy)
+2025-04-15T22:15:00.348+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : No active profile set, falling back to 1 default profile: "default"
+2025-04-15T22:15:01.308+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-04-15T22:15:01.373+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 54 ms. Found 1 JPA repository interface.
+2025-04-15T22:15:01.961+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-04-15T22:15:02.065+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.2.Final
+2025-04-15T22:15:02.114+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-04-15T22:15:02.464+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-04-15T22:15:02.501+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-04-15T22:15:02.622+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.mariadb.jdbc.Connection@5e95b0ab
+2025-04-15T22:15:02.624+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-04-15T22:15:02.651+09:00  WARN 25372 --- [ZeroToDeploy] [Test worker] org.hibernate.dialect.Dialect            : HHH000511: The 10.3.39 version for [org.hibernate.dialect.MariaDBDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 10.4.0. Check the community dialects project for available legacy versions.
+2025-04-15T22:15:02.655+09:00  WARN 25372 --- [ZeroToDeploy] [Test worker] org.hibernate.orm.deprecation            : HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-15T22:15:02.678+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 10.3.39
@@ -49,12 +49,12 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2025-04-14T16:59:46.021+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-04-14T16:59:46.078+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-04-14T16:59:46.622+09:00  WARN 4392 --- [ZeroToDeploy] [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-04-14T16:59:46.649+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2025-04-14T16:59:46.739+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
-2025-04-14T16:59:47.841+09:00  INFO 4392 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : Started ZeroToDeployApplicationTests in 5.476 seconds (process running for 7.16)
-2025-04-14T16:59:48.482+09:00  INFO 4392 --- [ZeroToDeploy] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-04-14T16:59:48.487+09:00  INFO 4392 --- [ZeroToDeploy] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2025-04-14T16:59:48.511+09:00  INFO 4392 --- [ZeroToDeploy] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-04-15T22:15:03.416+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-15T22:15:03.462+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-04-15T22:15:03.948+09:00  WARN 25372 --- [ZeroToDeploy] [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-04-15T22:15:03.976+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-04-15T22:15:04.066+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-04-15T22:15:04.839+09:00  INFO 25372 --- [ZeroToDeploy] [Test worker] c.j.z.ZeroToDeployApplicationTests       : Started ZeroToDeployApplicationTests in 4.835 seconds (process running for 6.224)
+2025-04-15T22:15:05.304+09:00  INFO 25372 --- [ZeroToDeploy] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-04-15T22:15:05.307+09:00  INFO 25372 --- [ZeroToDeploy] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-04-15T22:15:05.336+09:00  INFO 25372 --- [ZeroToDeploy] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

@@ -37,10 +37,17 @@
             <a href="/" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
                 <h1 class="m-0 text-primary">ZeroToDeploy</h1>
             </a>
-            <div class="mobile-login-btn">
-                <a href="login" class="btn btn-success px-4 py-2 fw-bold d-flex align-items-center">
-                    Login <i class="fa fa-arrow-right"></i>
-                </a>
+            <div class="text-end mb-3">
+                <!-- 로그인 전 -->
+                <a th:if="${not #authorization.expression('isAuthenticated()')}" th:href="@{/login}" class="btn btn-outline-primary">Login</a>
+                <!-- 로그인 후 -->
+                <button
+                        th:if="${#authorization.expression('isAuthenticated()')}"
+                        class="btn btn-outline-danger"
+                        onclick="confirmLogout()"
+                >
+                    Logout
+                </button>
             </div>
         </div>
     </nav>
@@ -135,5 +142,13 @@
 <script th:src="@{lib/owlcarousel/owl.carousel.min.js}"></script>
 <script th:src="@{js/main.js}"></script>
 </body>
+<script>
+    function confirmLogout() {
+        if (confirm('로그아웃 하시겠습니까?')) {
+            // Spring Security 로그아웃 URL
+            window.location.href = '/logout';
+        }
+    }
+</script>
 
 </html>
