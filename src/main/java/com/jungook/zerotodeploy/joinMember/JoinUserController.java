@@ -15,13 +15,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class JoinUserController {
 	private final JoinUserService joinUserService;
 
-	@GetMapping
+	@GetMapping("signUp")
 	@Operation(summary = "회원가입 폼 보기")
 	public String showJoinUserForm() {
 		return "signUp";
 	}
 
-	@PostMapping
+	@PostMapping("signUp")
 	@Operation(summary = "회원가입 처리")
 	public String handleSignUp(@ModelAttribute JoinUserDTO dto, RedirectAttributes redirectAttributes) {
 		joinUserService.registerUser(dto);
