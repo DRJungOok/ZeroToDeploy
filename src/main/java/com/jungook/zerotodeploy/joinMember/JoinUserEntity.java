@@ -24,4 +24,7 @@ public class JoinUserEntity {
 
 	@Column(nullable = false, name = "password")
 	private String password;
+
+	@Column(nullable = false, name="role")
+	private String role;
 }
