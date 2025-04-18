@@ -1,6 +1,7 @@
 package com.jungook.zerotodeploy.config;
 
 import com.jungook.zerotodeploy.details.CustomUserDetailsService;
+import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +25,9 @@ public class SecurityConfig {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        return new BCryptPasswordEncoder();
+        JoinUserEntity joinUserEntity = new JoinUserEntity();
+        System.out.println("✅ matches 결과: " + encoder.matches("admin", joinUserEntity.getPassword()));
+        return encoder;
     }
 
     @Bean
@@ -43,16 +45,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println("✅ SecurityFilterChain 등록됨");
-        System.out.println("✅ formLogin 활성화됨 - login 처리 경로: /login");
-
         http
             .authenticationProvider(daoAuthenticationProvider()) // ✅ 등록 필수
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/", "/signUp.html", "/signup", "/signUp", "/login.html",
+                    "/", "/signUp", "/signup", "/signUp", "/login",
                     "/css/**", "/js/**", "/images/**",
                     "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
                     "/swagger-resources/**"
@@ -61,7 +60,7 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form
-                .loginPage("/login.html")
+                .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .successHandler(successHandler())
                 .defaultSuccessUrl("/", true)
@@ -78,8 +77,12 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationSuccessHandler successHandler() {
-        SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler();
-        handler.setUseReferer(true);
-        return handler;
+        return (request, response, authentication) -> {
+            System.out.println("✅ 로그인 성공!");
+            System.out.println("👤 사용자명: " + authentication.getName());
+            System.out.println("🔑 권한: " + authentication.getAuthorities());
+            response.sendRedirect("/");
+        };
     }
+
 }

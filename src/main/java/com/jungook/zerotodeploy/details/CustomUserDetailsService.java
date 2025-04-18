@@ -18,12 +18,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+		System.out.println("🔍 loadUserByUsername 호출됨 - userId: " + userId);
+
 		JoinUserEntity user = joinUserRepo.findByUserId(userId)
 				.orElseThrow(() -> {
-					System.out.println("로그인 실패 - 존재하지 않는 사용자 ID: " + userId);
+					System.out.println("❌ 사용자 ID 없음: " + userId);
 					return new UsernameNotFoundException("해당 사용자 없음: " + userId);
 				});
-		System.out.println("🔐 유저 정보 확인됨: " + user.getUserId() + ", 권한: " + user.getRole());
+
+		System.out.println("✅ 사용자 정보 조회됨: " + user.getUserId());
+		System.out.println("✅ DB에서 불러온 권한: " + user.getRole());
 		return User.builder()
 				.username(user.getUserId())
 				.password(user.getPassword())

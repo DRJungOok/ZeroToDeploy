@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:fragment="header">
     <meta charset="utf-8">
     <title>ZeroToDeploy</title>
@@ -32,6 +32,25 @@
         <a href="/" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
             <h1 class="m-0 text-primary">ZeroToDeploy</h1>
         </a>
+        <div sec:authorize="hasRole('ROLE_ADMIN')"
+             th:if="${currentPath != '/write'}">
+            <a th:href="@{/write}">write</a>
+        </div>
+        <div>
+
+        </div>
+        <div class="text-end mb-3">
+            <!-- 로그인 전 -->
+            <a th:if="${not #authorization.expression('isAuthenticated()')}" th:href="@{/login}" class="btn btn-outline-primary" style="text-align: center;">Login</a>
+            <!-- 로그인 후 -->
+            <button
+                    th:if="${#authorization.expression('isAuthenticated()')}"
+                    class="btn btn-outline-danger"
+                    onclick="confirmLogout()"
+            >
+                Logout
+            </button>
+        </div>
     </div>
 </nav>
 
@@ -46,5 +65,13 @@
         </div>
     </div>
 </footer>
+
+<script>
+    function confirmLogout() {
+        if (confirm('로그아웃 하시겠습니까?')) {
+            window.location.href = '/logout';
+        }
+    }
+</script>
 </body>
 </html>

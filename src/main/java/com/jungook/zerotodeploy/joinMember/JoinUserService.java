@@ -22,6 +22,7 @@ public class JoinUserService {
 				.userId(joinUserDTO.getUserId())
 				.email(joinUserDTO.getEmail())
 				.password(bCryptPasswordEncoder.encode(joinUserDTO.getPassword()))
+				.role("ROLE_USER")
 				.build();
 
 		joinUserRepo.save(joinUserEntity);
