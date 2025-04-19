@@ -29,6 +29,11 @@
 					<label for="content" class="form-label">내용</label>
 					<textarea class="form-control" id="content" name="content" rows="10" placeholder="내용을 입력하세요" required></textarea>
 				</div>
+				<div class="filebox">
+					<input class="upload-name" placeholder="첨부파일">
+					<label for="file">파일찾기</label>
+					<input type="file" id="file">
+				</div>
 				<button type="submit" class="btn btn-primary">작성 완료</button>
 			</form>
 		</div>
@@ -46,5 +51,12 @@
 	<script th:src="@{lib/waypoints/waypoints.min.js}"></script>
 	<script th:src="@{lib/owlcarousel/owl.carousel.min.js}"></script>
 	<script th:src="@{js/main.js}"></script>
+
+<script>
+	$("#file").on('change',function(){
+		let fileName = $("#file").val();
+		$(".upload-name").val(fileName);
+	});
+</script>
 </body>
 </html>
