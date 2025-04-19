@@ -25,41 +25,21 @@ public class IndexController {
     public String history() {
         return "history";
     }
-    @GetMapping("/category")
-    public String category() {
-        return "category";
-    }
     @GetMapping("/notFound")
     public String notFound() {
         return "notFound";
     }
-    @GetMapping("/java")
-    public String java() {
-        return "java";
+    @GetMapping("/javaSpring")
+    public String javaSpring() {
+        return "javaSpring";
     }
-    @GetMapping("/springboot")
-    public String springboot() {
-        return "springboot";
+    @GetMapping("/linux")
+    public String linux() {
+        return "linux";
     }
-    @GetMapping("/ubuntu")
-    public String ubuntu() {
-        return "ubuntu";
-    }
-    @GetMapping("/html")
-    public String html() {
-        return "html";
-    }
-    @GetMapping("/css")
-    public String css() {
-        return "css";
-    }
-    @GetMapping("/javascript")
-    public String javascript() {
-        return "javascript";
-    }
-    @GetMapping("/thymeleaf")
-    public String thymeleaf() {
-        return "thymeleaf";
+    @GetMapping("/web")
+    public String web() {
+        return "web";
     }
     @GetMapping("/write")
     public String write() {
