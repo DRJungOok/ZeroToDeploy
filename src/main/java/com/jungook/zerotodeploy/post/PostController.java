@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,14 +29,15 @@ public class PostController {
 		post.setCategory(category);
 		postRepo.save(post);
 
-		switch (category) {
-			case "java&spring": return "redirect:/javaSpring";
-			case "linux": return "redirect:/linux";
-			case "web": return "redirect:/web";
-			case "history": return "redirect:/history";
-			case "about": return "redirect:/about";
-			default: return "redirect:/";
-		}
+		return switch (category) {
+			case "javaSpring" -> "redirect:/javaSpring";
+			case "linux" -> "redirect:/linux";
+			case "web" -> "redirect:/web";
+			case "history" -> "redirect:/history";
+			case "about" -> "redirect:/about";
+			case "etc" -> "redirect:/etc";
+			default -> "redirect:/";
+		};
 	}
 
 	@GetMapping("/javaSpring")
@@ -71,5 +73,33 @@ public class PostController {
 		List<PostEntity> posts = postRepo.findByCategory("about");
 		model.addAttribute("posts", posts);
 		return "about";
+	}
+	@GetMapping("/etc")
+	public String etc(Model model) {
+		List<PostEntity> posts = postRepo.findByCategory("etc");
+		model.addAttribute("posts", posts);
+		return "etc";
+	}
+
+	@GetMapping("/post/{id}")
+	public String detail(@PathVariable Long id, Model model) {
+		PostEntity post = postRepo.findById(id).orElseThrow();
+		model.addAttribute("post", post);
+		return "postDetail";
+	}
+
+	@PostMapping("/post/update/{id}")
+	public String update(@PathVariable Long id, @RequestParam String title, @RequestParam String content) {
+		PostEntity post = postRepo.findById(id).orElseThrow();
+		post.setTitle(title);
+		post.setContent(content);
+		postRepo.save(post);
+		return "redirect:/post/" + id;
+	}
+
+	@GetMapping("/post/delete/{id}")
+	public String delete(@PathVariable Long id) {
+		postRepo.deleteById(id);
+		return "redirect:/";
 	}
 }
