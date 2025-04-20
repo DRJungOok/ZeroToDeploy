@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "user")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(schema = "zerotodeploy", name = "user")
 public class JoinUserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

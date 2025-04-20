@@ -9,7 +9,7 @@
 		<!-- Write Form Section Start -->
 		<div class="container py-5">
 			<h2 class="mb-4">글 작성</h2>
-			<form th:action="@{/write}" method="post">
+			<form th:action="@{/write}" method="post" enctype="multipart/form-data">
 				<div class="mb-3">
 					<label for="title" class="form-label">제목</label>
 					<input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요" required>
@@ -23,6 +23,7 @@
 						<option value="web">web</option>
 						<option value="history">history</option>
 						<option value="about">about</option>
+						<option value="etc">etc</option>
 					</select>
 				</div>
 				<div class="mb-3">
@@ -30,9 +31,9 @@
 					<textarea class="form-control" id="content" name="content" rows="10" placeholder="내용을 입력하세요" required></textarea>
 				</div>
 				<div class="filebox">
-					<input class="upload-name" placeholder="첨부파일">
-					<label for="file">파일찾기</label>
-					<input type="file" id="file">
+					<input class="upload-name" placeholder="첨부파일" disabled>
+					<label for="files">파일찾기</label>
+					<input type="file" id="files" name="files" multiple>
 				</div>
 				<button type="submit" class="btn btn-primary">작성 완료</button>
 			</form>
@@ -54,8 +55,8 @@
 
 <script>
 	$("#file").on('change',function(){
-		let fileName = $("#file").val();
-		$(".upload-name").val(fileName);
+		let file_name = $("#file").val();
+		$(".upload-name").val(file_name);
 	});
 </script>
 </body>

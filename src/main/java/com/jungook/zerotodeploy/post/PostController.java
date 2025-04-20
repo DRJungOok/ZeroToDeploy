@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -23,12 +26,35 @@ public class PostController {
 	}
 
 	@PostMapping("write")
-	public String writePost(@RequestParam String title, @RequestParam String category, @RequestParam String content) {
+	public String writePost(@RequestParam String title, @RequestParam String category, @RequestParam String content, @RequestParam MultipartFile[] files) throws IOException {
 		PostEntity post = new PostEntity();
 		post.setTitle(title);
 		post.setContent(content);
 		post.setCategory(category);
 		postRepo.save(post);
+
+		String uploadPath;
+		if (System.getProperty("os.name").toLowerCase().contains("win")) {
+			uploadPath = new File("src/main/resources/static/uploads").getAbsolutePath(); // window
+		} else {
+			uploadPath = "/home/ubuntu/uploads/"; // linux
+		}
+
+		File dir = new File(uploadPath);
+		if (!dir.exists()) {
+			boolean created = dir.mkdirs();
+			if (!created) {
+				throw new IOException("Failed create upload directory: " + uploadPath);
+			}
+		}
+
+		for (MultipartFile file : files) {
+			if (!file.isEmpty()) {
+				String fileName = file.getOriginalFilename();
+				file.transferTo(new File(uploadPath + File.separator + fileName));
+				post.setFileName(fileName);
+			}
+		}
 
 		return switch (category) {
 			case "javaSpring" -> "redirect:/javaSpring";

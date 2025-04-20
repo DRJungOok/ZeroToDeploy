@@ -9,13 +9,19 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(schema = "post_entity")
+@Table( schema = "zerotodeploy", name = "post_entity")
 public class PostEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
+	@Column(name = "title")
 	private String title;
+	@Column(name = "content")
 	private String content;
+	@Column(name = "category")
 	private String category;
 	private LocalDateTime createdAt = LocalDateTime.now();
+	@Column(name = "file_name")
+	private String fileName;
 }

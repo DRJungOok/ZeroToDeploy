@@ -27,7 +27,7 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         JoinUserEntity joinUserEntity = new JoinUserEntity();
-        System.out.println("✅ matches 결과: " + encoder.matches("admin", joinUserEntity.getPassword()));
+        System.out.println("result matches: " + encoder.matches("admin", joinUserEntity.getPassword()));
         return encoder;
     }
 
@@ -47,12 +47,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authenticationProvider(daoAuthenticationProvider()) // ✅ 등록 필수
+            .authenticationProvider(daoAuthenticationProvider())
             .csrf(AbstractHttpConfigurer :: disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/", "/signUp", "/signup", "/signUp", "/login",
+                    "/", "/signUp", "/login",
                     "/css/**", "/js/**", "/images/**",
                     "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
                     "/swagger-resources/**"
@@ -79,9 +79,9 @@ public class SecurityConfig {
     @Bean
     public AuthenticationSuccessHandler successHandler() {
         return (request, response, authentication) -> {
-            System.out.println("✅ 로그인 성공!");
-            System.out.println("👤 사용자명: " + authentication.getName());
-            System.out.println("🔑 권한: " + authentication.getAuthorities());
+            System.out.println("✅ success Login!");
+            System.out.println("👤 user Name: " + authentication.getName());
+            System.out.println("🔑 has a Role: " + authentication.getAuthorities());
             response.sendRedirect("/");
         };
     }
