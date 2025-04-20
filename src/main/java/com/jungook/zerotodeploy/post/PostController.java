@@ -1,6 +1,7 @@
 package com.jungook.zerotodeploy.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,17 +90,35 @@ public class PostController {
 	}
 
 	@PostMapping("/post/update/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String update(@PathVariable Long id, @RequestParam String title, @RequestParam String content) {
 		PostEntity post = postRepo.findById(id).orElseThrow();
 		post.setTitle(title);
 		post.setContent(content);
 		postRepo.save(post);
-		return "redirect:/post/" + id;
+		String category =  post.getCategory();
+		return "redirect:/" + toCategoryPath(category);
 	}
 
 	@GetMapping("/post/delete/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String delete(@PathVariable Long id) {
+		PostEntity post = postRepo.findById(id).orElseThrow();
+		String category = post.getCategory();
+
 		postRepo.deleteById(id);
-		return "redirect:/";
+		return "redirect:/" + toCategoryPath(category);
+	}
+
+	private String toCategoryPath(String category) {
+		return switch (category) {
+			case "java&spring" -> "javaSpring";
+			case "linux" -> "linux";
+			case "web" -> "web";
+			case "history" -> "history";
+			case "about" -> "about";
+			case "etc" -> "etc";
+			default -> "/";
+		};
 	}
 }

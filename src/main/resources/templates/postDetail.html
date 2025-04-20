@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{common::header}"></head>
 <body>
 <div class="container-xxl bg-white p-0">
+    <div th:replace="~{common::spinner}"></div>
     <div th:replace="~{common::nav}"></div>
 
     <div class="container py-5">
@@ -16,13 +17,16 @@
                 <label class="form-label">내용</label>
                 <textarea class="form-control" name="content" rows="10" th:text="${post.content}"></textarea>
             </div>
-            <button type="submit" class="btn btn-success">저장</button>
-            <a th:href="@{/post/delete/{id}(id=${post.id})}" class="btn btn-danger"
-               onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <button type="submit" class="btn btn-success">저장</button>
+                <a th:href="@{/post/delete/{id}(id=${post.id})}" class="btn btn-danger"
+                   onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+            </div>
         </form>
     </div>
 
     <footer th:replace="~{common::footer}"></footer>
 </div>
+<div th:replace="~{common::script}"></div>
 </body>
 </html>

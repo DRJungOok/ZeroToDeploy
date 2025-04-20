@@ -13,7 +13,7 @@
 		</div>
 		<div th:each="post : ${posts}" class="mb-4 p-4 border rounded shadow-sm">
 			<h4 class="mb-2">
-				<a th:href="@{/post/{title}(title=${post.title})}" th:text="${post.title}" class="text-dark text-decoration-none"></a>
+				<a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}" class="text-dark text-decoration-none"></a>
 			</h4>
 			<p class="mb-0" th:text="${post.content}"></p>
 			<small class="text-muted" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
