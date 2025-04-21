@@ -26,22 +26,20 @@ public class PostController {
 	}
 
 	@PostMapping("write")
-	public String writePost(@RequestParam String title, @RequestParam String category, @RequestParam String content, @RequestParam MultipartFile[] files) throws IOException {
-		PostEntity post = new PostEntity();
-		post.setTitle(title);
-		post.setContent(content);
-		post.setCategory(category);
-		postRepo.save(post);
+	public String writePost(@RequestParam String title,
+													@RequestParam String category,
+													@RequestParam String content,
+													@RequestParam MultipartFile[] files) throws IOException {
 
 		String uploadPath;
 		String os = System.getProperty("os.name").toLowerCase();
+
 		if (os.contains("win")) {
-			uploadPath = new File("src/main/resources/static/uploads").getAbsolutePath(); // window
-		} else if(os.contains("mac")) {
-			uploadPath = new File("/Users/kimjungook/uploads").getAbsolutePath(); // window
-		}
-		else {
-			uploadPath = "/home/ubuntu/uploads/"; // linux
+			uploadPath = new File("src/main/resources/static/uploads").getAbsolutePath(); // Windows
+		} else if (os.contains("mac")) {
+			uploadPath = new File("/Users/kimjungook/uploads").getAbsolutePath(); // macOS
+		} else {
+			uploadPath = "/home/ubuntu/uploads/"; // Linux
 		}
 
 		File dir = new File(uploadPath);
@@ -52,6 +50,11 @@ public class PostController {
 			}
 		}
 
+		PostEntity post = new PostEntity();
+		post.setTitle(title);
+		post.setContent(content);
+		post.setCategory(category);
+
 		for (MultipartFile file : files) {
 			if (!file.isEmpty()) {
 				String fileName = file.getOriginalFilename();
@@ -59,6 +62,7 @@ public class PostController {
 				post.setFileName(fileName);
 			}
 		}
+		postRepo.save(post);
 
 		return switch (category) {
 			case "javaSpring" -> "redirect:/javaSpring";
@@ -70,6 +74,7 @@ public class PostController {
 			default -> "redirect:/";
 		};
 	}
+
 
 	@GetMapping("/javaSpring")
 	public String javaSpring(Model model) {

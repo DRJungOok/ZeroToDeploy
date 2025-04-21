@@ -1,5 +1,6 @@
 package com.jungook.zerotodeploy.config;
 
+import jakarta.annotation.Nonnull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -20,10 +21,26 @@ public class WebConfig  implements WebMvcConfigurer {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/**")
-				.addResourceLocations("classpath:/templates/")
-				.addResourceLocations("classpath:/static/")
-				.addResourceLocations("file:/home/ubuntu/uploads/")
+		String os = System.getProperty("os.name").toLowerCase();
+		String uploadPath;
+
+		if (os.contains("mac")) {
+			// macOS
+			uploadPath = "file:/Users/kimjungook/uploads/";
+		} else if (os.contains("win")) {
+			// Windows
+			uploadPath = "file:///C:/uploads/";
+		} else {
+			// Linux (Ubuntu)
+			uploadPath = "file:/home/ubuntu/uploads/";
+		}
+
+		registry.addResourceHandler("/uploads/**")
+				.addResourceLocations(uploadPath)
 				.setCacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES));
+
+		registry.addResourceHandler("/**")
+				.addResourceLocations("classpath:/templates/", "classpath:/static/");
 	}
+
 }

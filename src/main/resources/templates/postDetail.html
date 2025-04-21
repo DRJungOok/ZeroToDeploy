@@ -17,19 +17,26 @@
                 <label class="form-label">내용</label>
                 <textarea class="form-control" name="content" rows="10" th:text="${post.content}"></textarea>
                 <div th:if="${post.fileName != null}">
-                    <p>첨부파일:</p>
+                    <p>첨부파일</p>
+                    <div>
+                        <img th:if="${#strings.toLowerCase(post.fileName).endsWith('.jpg')
+          or #strings.toLowerCase(post.fileName).endsWith('.jpeg')
+          or #strings.toLowerCase(post.fileName).endsWith('.png')
+          or #strings.toLowerCase(post.fileName).endsWith('.gif')}"
+                             th:src="@{'/uploads/' + ${post.fileName}}"
+                             style="max-width: 300px;"/>
 
-                    <div th:switch="${#strings.toLowerCase(post.fileName)?.split('\\.')[1]}">
-                        <img th:case="'jpg'" th:src="@{'/uploads/' + ${post.fileName}}" style="max-width: 300px;" />
-                        <img th:case="'jpeg'" th:src="@{'/uploads/' + ${post.fileName}}" style="max-width: 300px;" />
-                        <img th:case="'png'" th:src="@{'/uploads/' + ${post.fileName}}" style="max-width: 300px;" />
-                        <img th:case="'gif'" th:src="@{'/uploads/' + ${post.fileName}}" style="max-width: 300px;" />
-                        <a th:case="*"
+                        <a th:if="${!(#strings.toLowerCase(post.fileName).endsWith('.jpg')
+            or #strings.toLowerCase(post.fileName).endsWith('.jpeg')
+            or #strings.toLowerCase(post.fileName).endsWith('.png')
+            or #strings.toLowerCase(post.fileName).endsWith('.gif'))}"
                            th:href="@{'/uploads/' + ${post.fileName}}"
                            th:text="${post.fileName}"
                            download></a>
+
                     </div>
                 </div>
+
 
             </div>
             <div sec:authorize="hasRole('ROLE_ADMIN')">

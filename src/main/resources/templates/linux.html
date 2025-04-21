@@ -11,24 +11,23 @@
 		<div th:if="${#lists.isEmpty(posts)}">
 			<p>작성된 글이 없습니다.</p>
 		</div>
-		<div th:each="post : ${posts}" class="mb-4 p-4 border rounded shadow-sm">
+		<div th:each="post : ${posts}"
+			 class="mb-4 p-4 border rounded shadow-sm post-item"
+			 th:data-href="@{/post/{id}(id=${post.id})}"
+			 style="cursor: pointer;">
 			<h4 class="mb-2">
-				<a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}" class="text-dark text-decoration-none"></a>
+				<span th:text="${post.title}" class="text-dark text-decoration-none"></span>
 			</h4>
 			<p class="mb-0" th:text="${post.content}"></p>
+			<p th:if="${post.fileName != null}">
+				첨부파일 : <span th:text="${post.fileName}"></span>
+			</p>
 			<small class="text-muted" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
 		</div>
 	</div>
 
 	<footer th:replace="~{common::footer}"></footer>
 </div>
-<!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{lib/wow/wow.js}"></script>
-<script th:src="@{lib/easing/easing.min.js}"></script>
-<script th:src="@{lib/waypoints/waypoints.min.js}"></script>
-<script th:src="@{lib/owlcarousel/owl.carousel.min.js}"></script>
-<script th:src="@{js/main.js}"></script>
+<div th:replace="~{common::script}"></div>
 </body>
 </html>
