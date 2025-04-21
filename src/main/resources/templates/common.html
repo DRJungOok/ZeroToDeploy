@@ -37,8 +37,9 @@
              th:if="${currentPath != '/write'}">
             <a th:href="@{/write}">write</a>
         </div>
-        <div>
-
+        <div id="session-info">
+            세션 남은 시간 :<span id="remaining-time">--</span>초
+            <button onclick="extendSession()">연장</button>
         </div>
         <div class="text-end mb-3">
             <!-- 로그인 전 -->
@@ -93,6 +94,20 @@
             });
         });
     });
+    function updateRemainingTime() {
+        fetch('/session-info')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('remaining-time').innerText = data.remainingTime;
+            });
+    }
+
+    function extendSession() {
+        fetch('/extend-session', { method: 'POST' })
+            .then(() => updateRemainingTime());
+    }
+    setInterval(updateRemainingTime, 10000);
+    updateRemainingTime();
 </script>
 </body>
 </html>
