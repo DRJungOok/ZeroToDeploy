@@ -435,3 +435,11 @@ body, html {
     overflow: hidden;
     border: 0;
 }
+
+.post-item {
+    transition: background-color 0.3s;
+}
+
+.post-item:hover {
+    background-color: #f8f9fa;
+}
