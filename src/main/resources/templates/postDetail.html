@@ -16,6 +16,21 @@
             <div class="mb-3">
                 <label class="form-label">내용</label>
                 <textarea class="form-control" name="content" rows="10" th:text="${post.content}"></textarea>
+                <div th:if="${post.fileName != null}">
+                    <p>첨부파일:</p>
+
+                    <div th:switch="${#strings.toLowerCase(post.fileName)?.split('\\.')[1]}">
+                        <img th:case="'jpg'" th:src="@{'/uploads/' + ${post.fileName}}" style="max-width: 300px;" />
+                        <img th:case="'jpeg'" th:src="@{'/uploads/' + ${post.fileName}}" style="max-width: 300px;" />
+                        <img th:case="'png'" th:src="@{'/uploads/' + ${post.fileName}}" style="max-width: 300px;" />
+                        <img th:case="'gif'" th:src="@{'/uploads/' + ${post.fileName}}" style="max-width: 300px;" />
+                        <a th:case="*"
+                           th:href="@{'/uploads/' + ${post.fileName}}"
+                           th:text="${post.fileName}"
+                           download></a>
+                    </div>
+                </div>
+
             </div>
             <div sec:authorize="hasRole('ROLE_ADMIN')">
                 <button type="submit" class="btn btn-success">저장</button>

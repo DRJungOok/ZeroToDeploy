@@ -16,6 +16,9 @@
 				<a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}" class="text-dark text-decoration-none"></a>
 			</h4>
 			<p class="mb-0" th:text="${post.content}"></p>
+			<p th:if="${post.fileName != null}">
+				첨부파일 : <span th:text="${post.fileName\}"></span>
+			</p>
 			<small class="text-muted" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
 		</div>
 	</div>

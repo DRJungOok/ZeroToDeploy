@@ -34,9 +34,13 @@ public class PostController {
 		postRepo.save(post);
 
 		String uploadPath;
-		if (System.getProperty("os.name").toLowerCase().contains("win")) {
+		String os = System.getProperty("os.name").toLowerCase();
+		if (os.contains("win")) {
 			uploadPath = new File("src/main/resources/static/uploads").getAbsolutePath(); // window
-		} else {
+		} else if(os.contains("mac")) {
+			uploadPath = new File("/Users/kimjungook/uploads").getAbsolutePath(); // window
+		}
+		else {
 			uploadPath = "/home/ubuntu/uploads/"; // linux
 		}
 
