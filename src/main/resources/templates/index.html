@@ -7,23 +7,22 @@
     <div th:replace="~{common::spinner}"></div>
     <div th:replace="~{common::nav}"></div>
 
-    <!-- Search Bar -->
     <div class="container-fluid bg-primary wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
         <div class="container">
-            <div class="row g-2 align-items-center">
+            <div class="row justify-content-center align-items-center g-2">
                 <div class="col-md-4 position-relative">
-                    <input id="keywordInput" type="text" class="form-control border-0" placeholder="Keyword" />
+                    <input id="keywordInput" type="text" class="form-control border-0 w-100" placeholder="Keyword" />
                     <div id="searchResults" class="search-dropdown shadow-sm" style="display: none;"></div>
                 </div>
                 <div class="col-md-3">
-                    <select id="filterSelect" class="form-select border-0">
+                    <select id="filterSelect" class="form-select border-0 w-100">
                         <option value="all">전체</option>
                         <option value="title">제목</option>
                         <option value="content">내용</option>
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <button class="btn btn-dark border-0 w-100" onclick="performSearch()">Search</button>
+                <div class="col-md-2 text-center">
+                    <button class="btn btn-dark border-0 w-100 fw-bold" onclick="performSearch()">Search</button>
                 </div>
             </div>
         </div>
@@ -62,7 +61,11 @@
     function performSearch() {
         const keyword = document.getElementById('keywordInput').value.trim();
         const filter = document.getElementById('filterSelect').value;
-        if (!keyword) return;
+        const container = document.getElementById('searchResults');
+        if (!keyword) {
+            container.style.display = 'none';
+            return;
+        }
         fetch(`/api/search?keyword=${encodeURIComponent(keyword)}&filter=${filter}`)
             .then(res => res.json())
             .then(data => {
@@ -112,8 +115,18 @@
         }
     }
     document.getElementById('keywordInput').addEventListener('keydown', function (e) {
+        let debounceTimer = null;
         if (e.key === 'Enter') {
             performSearch();
+        }
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            performSearch();
+        }, 100);
+    });
+    document.getElementById('keywordInput').addEventListener('keyup', function (e) {
+        if (this.value.trim() === '') {
+            document.getElementById('searchResults').style.display = 'none';
         }
     });
 </script>
