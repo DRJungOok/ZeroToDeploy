@@ -28,34 +28,39 @@
     </div>
 </div>
 
-<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0" th:fragment="nav">
-    <div class="container-fluid">
-        <a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-            <h1 class="m-0 text-primary">ZeroToDeploy</h1>
-        </a>
-        <div sec:authorize="hasRole('ROLE_ADMIN')"
-             th:if="${currentPath != '/write'}">
-            <a th:href="@{/write}">write</a>
-        </div>
-        <div id="session-info">
-            세션 남은 시간 :<span id="remaining-time">--</span>초
-            <button onclick="extendSession()">연장</button>
-        </div>
-        <div class="text-end mb-3">
-            <!-- 로그인 전 -->
-            <a th:if="${not #authorization.expression('isAuthenticated()')}" th:href="@{/login}" class="btn btn-outline-primary" style="text-align: center;">Login</a>
-            <!-- 로그인 후 -->
-            <button
-                    th:if="${#authorization.expression('isAuthenticated()')}"
-                    class="btn btn-outline-danger"
-                    onclick="confirmLogout()"
-            >
-                Logout
-            </button>
-        </div>
-    </div>
-</nav>
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0" th:fragment="nav">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
+                <h1 class="m-0 text-primary">ZeroToDeploy</h1>
+            </a>
 
+            <div class="d-flex align-items-center gap-3">
+                <div sec:authorize="hasRole('ROLE_ADMIN')" th:if="${currentPath != '/write'}">
+                    <a th:href="@{/write}" class="btn btn-outline-success">✍ 글쓰기</a>
+                </div>
+
+                <!-- 로그인한 경우에만 세션 정보 표시 -->
+                <div sec:authorize="isAuthenticated()" id="session-info" class="d-flex align-items-center border rounded px-3 py-1" style="font-size: 14px; color: #666; height: 42px;">
+                    <i class="bi bi-clock me-2 text-secondary"></i>
+                    <span>세션 : <span id="remaining-time">--</span></span>
+                    <button onclick="extendSession()" class="btn btn-sm btn-outline-dark ms-2">연장</button>
+                </div>
+
+                <div>
+                    <!-- 로그인 전 -->
+                    <a th:if="${not #authorization.expression('isAuthenticated()')}" th:href="@{/login}" class="btn btn-outline-primary d-flex align-items-center justify-content-center" style="height: 42px;">Login</a>
+
+                    <!-- 로그인 후 -->
+                    <button
+                            th:if="${#authorization.expression('isAuthenticated()')}"
+                            class="btn btn-outline-danger"
+                            onclick="confirmLogout()">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
 <footer class="bg-dark text-white-50 footer mt-auto pt-5 wow fadeIn" data-wow-delay="0.1s" th:fragment="footer">
     <div class="container">
         <div class="copyright">
@@ -94,20 +99,42 @@
             });
         });
     });
+    let remainingSeconds = 0;
+    let countdownInterval = null;
+
     function updateRemainingTime() {
-        fetch('/session-info')
+        fetch('/session/info')
             .then(res => res.json())
             .then(data => {
-                document.getElementById('remaining-time').innerText = data.remainingTime;
+                remainingSeconds = data.remainingTime;
+                updateTimerDisplay();
+                if (countdownInterval) clearInterval(countdownInterval);
+                countdownInterval = setInterval(() => {
+                    remainingSeconds--;
+                    if (remainingSeconds <= 0) {
+                        clearInterval(countdownInterval);
+                        document.getElementById('remaining-time').innerText = "만료됨";
+                    } else {
+                        updateTimerDisplay();
+                    }
+                }, 1000);
             });
     }
 
+    function updateTimerDisplay() {
+        const minutes = Math.floor(remainingSeconds / 60);
+        const seconds = remainingSeconds % 60;
+        const formatted = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        document.getElementById('remaining-time').innerText = formatted;
+    }
+
     function extendSession() {
-        fetch('/extend-session', { method: 'POST' })
+        fetch('/session/extend', { method: 'POST' })
             .then(() => updateRemainingTime());
     }
-    setInterval(updateRemainingTime, 10000);
+
     updateRemainingTime();
+
 </script>
 </body>
 </html>
