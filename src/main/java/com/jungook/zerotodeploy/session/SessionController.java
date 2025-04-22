@@ -14,7 +14,8 @@ public class SessionController {
 
 	@GetMapping("/info")
 	public Map<String, Object> getSessionInfo(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession(true);
+		session.setMaxInactiveInterval(60 * 60); // 60분
 		Map<String, Object> response = new HashMap<>();
 		if (session != null) {
 			long now = System.currentTimeMillis();
@@ -23,8 +24,11 @@ public class SessionController {
 		} else {
 			response.put("remainingTime", 0);
 		}
+		System.out.println("lastAccessedTime: " + session.getLastAccessedTime());
+		System.out.println("maxInactiveInterval (sec): " + session.getMaxInactiveInterval());
 		return response;
 	}
+
 
 	@PostMapping("/extend")
 	public ResponseEntity<String> extendSession(HttpServletRequest request) {

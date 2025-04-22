@@ -99,6 +99,7 @@
             });
         });
     });
+
     let remainingSeconds = 0;
     let countdownInterval = null;
 
@@ -106,7 +107,7 @@
         fetch('/session/info')
             .then(res => res.json())
             .then(data => {
-                remainingSeconds = data.remainingTime;
+                remainingSeconds = parseInt(data.remainingTime || 0);
                 updateTimerDisplay();
                 if (countdownInterval) clearInterval(countdownInterval);
                 countdownInterval = setInterval(() => {
@@ -118,6 +119,7 @@
                         updateTimerDisplay();
                     }
                 }, 1000);
+                console.log("data ::", data);
             });
     }
 
@@ -134,7 +136,7 @@
     }
 
     updateRemainingTime();
-
 </script>
+
 </body>
 </html>
