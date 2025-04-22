@@ -443,3 +443,26 @@ body, html {
 .post-item:hover {
     background-color: #f8f9fa;
 }
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    z-index: 999;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.search-result-item {
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.search-result-item:hover {
+    background-color: #f1f1f1;
+}

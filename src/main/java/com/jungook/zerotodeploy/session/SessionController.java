@@ -24,8 +24,6 @@ public class SessionController {
 		} else {
 			response.put("remainingTime", 0);
 		}
-		System.out.println("lastAccessedTime: " + session.getLastAccessedTime());
-		System.out.println("maxInactiveInterval (sec): " + session.getMaxInactiveInterval());
 		return response;
 	}
 

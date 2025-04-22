@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -19,6 +16,8 @@ public class PostController {
 
 	@Autowired
 	private PostRepo postRepo;
+	@Autowired
+	private PostService postService;
 
 	@GetMapping("write")
 	public String write() {
@@ -73,6 +72,12 @@ public class PostController {
 			case "etc" -> "redirect:/etc";
 			default -> "redirect:/";
 		};
+	}
+
+	@GetMapping("/api/search")
+	@ResponseBody
+	public List<PostEntity> searchApi(@RequestParam String keyword, @RequestParam(defaultValue = "all") String filter) {
+		return postService.searchPosts(keyword, filter);
 	}
 
 

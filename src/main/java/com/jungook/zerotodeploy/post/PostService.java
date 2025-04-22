@@ -12,8 +12,11 @@ public class PostService {
 	public PostService(PostRepo postRepo) {
 		this.postRepo = postRepo;
 	}
-
-	public List<PostEntity> getPostsByCategory(String category) {
-		return postRepo.findByCategory(category);
+	public List<PostEntity> searchPosts(String keyword, String filter) {
+		return switch (filter) {
+			case "title" -> postRepo.searchByTitle(keyword);
+			case "content" -> postRepo.searchByContent(keyword);
+			default -> postRepo.searchByTitle(keyword);
+		};
 	}
 }

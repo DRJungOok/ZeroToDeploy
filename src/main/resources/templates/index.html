@@ -10,18 +10,25 @@
     <!-- Search Bar -->
     <div class="container-fluid bg-primary wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
         <div class="container">
-            <div class="row g-2">
-                <div class="col-md-10">
-                    <input type="text" class="form-control border-0" placeholder="Keyword" />
+            <div class="row g-2 align-items-center">
+                <div class="col-md-4 position-relative">
+                    <input id="keywordInput" type="text" class="form-control border-0" placeholder="Keyword" />
+                    <div id="searchResults" class="search-dropdown shadow-sm" style="display: none;"></div>
+                </div>
+                <div class="col-md-3">
+                    <select id="filterSelect" class="form-select border-0">
+                        <option value="all">전체</option>
+                        <option value="title">제목</option>
+                        <option value="content">내용</option>
+                    </select>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-dark border-0 w-100">Search</button>
+                    <button class="btn btn-dark border-0 w-100" onclick="performSearch()">Search</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Center Menu Buttons -->
     <section class="menu-section flex-grow-1">
         <div class="container-fluid px-0 h-100">
             <div class="row g-0 h-100">
@@ -48,9 +55,67 @@
     </section>
     <footer th:replace="~{common::footer}"></footer>
 </div>
-
-<!-- JS -->
 <div th:replace="~{common::script}"></div>
-</body>
+<script>
+    let results = [];
 
+    function performSearch() {
+        const keyword = document.getElementById('keywordInput').value.trim();
+        const filter = document.getElementById('filterSelect').value;
+        if (!keyword) return;
+        fetch(`/api/search?keyword=${encodeURIComponent(keyword)}&filter=${filter}`)
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    results = data;
+                } else if (data && Array.isArray(data.data)) {
+                    results = data.data;
+                } else {
+                    results = [];
+                }
+                currentPage = 0;
+                showResults();
+            });
+
+    }
+
+    function showResults() {
+        const container = document.getElementById('searchResults');
+        container.innerHTML = '';
+
+        if (results.length > 0) {
+            results.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'search-result-item';
+                div.textContent = item.title;
+                div.onclick = () => {
+                    window.location.href = `/post/${item.id}`;
+                };
+                container.appendChild(div);
+            });
+            container.style.display = 'block';
+        } else {
+            container.innerHTML = '<div class="p-2 text-muted">검색 결과가 없습니다.</div>';
+            container.style.display = 'block';
+        }
+    }
+    function nextPage() {
+        if ((currentPage + 1) * pageSize < results.length) {
+            currentPage++;
+            showResults();
+        }
+    }
+    function prevPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            showResults();
+        }
+    }
+    document.getElementById('keywordInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+</script>
+</body>
 </html>
