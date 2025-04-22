@@ -31,7 +31,7 @@
 					<textarea class="form-control" id="content" name="content" rows="10" placeholder="내용을 입력하세요" required></textarea>
 				</div>
 				<div class="filebox">
-					<input class="upload-name" placeholder="첨부파일" disabled>
+						<input class="upload-name" placeholder="첨부파일" disabled>
 					<label for="files">파일찾기</label>
 					<input type="file" id="files" name="files" multiple>
 				</div>
@@ -54,10 +54,10 @@
 	<script th:src="@{js/main.js}"></script>
 
 <script>
-	$("#file").on('change',function(){
-		let file_name = $("#file").val();
-		$(".upload-name").val(file_name);
-	});
+		$("#files").on('change', function() {
+			let fileNames = Array.from(this.files).map(file => file.name).join(', ');
+			$(".upload-name").val(fileNames);
+		});
 </script>
 </body>
 </html>

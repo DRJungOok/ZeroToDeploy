@@ -36,7 +36,7 @@
 
             <div class="d-flex align-items-center gap-3">
                 <div sec:authorize="hasRole('ROLE_ADMIN')" th:if="${currentPath != '/write'}">
-                    <a th:href="@{/write}" class="btn btn-outline-success">✍ 글쓰기</a>
+                    <a th:href="@{/write}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">✍ 글쓰기</a>
                 </div>
 
                 <!-- 로그인한 경우에만 세션 정보 표시 -->
