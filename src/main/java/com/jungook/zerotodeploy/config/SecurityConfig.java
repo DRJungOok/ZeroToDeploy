@@ -1,5 +1,6 @@
 package com.jungook.zerotodeploy.config;
 
+import com.jungook.zerotodeploy.Oauth.CustomOAuthService;
 import com.jungook.zerotodeploy.details.CustomUserDetailsService;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomOAuthService customOAuthService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -71,6 +73,12 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .permitAll()
+            )
+            .oauth2Login(oauth2 -> oauth2
+                .loginPage("/login")
+                .userInfoEndpoint(userInfo -> userInfo
+                    .userService(customOAuthService)
+                )
             );
 
         return http.build();

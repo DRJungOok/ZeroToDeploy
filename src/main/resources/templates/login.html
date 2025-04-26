@@ -66,11 +66,11 @@
 <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script>
-	function confirmLogout() {
-		if (confirm('로그아웃 하시겠습니까?')) {
-			window.location.href = '/logout';
-		}
-	}
+	document.addEventListener("DOMContentLoaded", function () {
+		document.querySelector(".kakaoLogin").addEventListener("click", function () {
+			window.location.href = "/oauth2/authorization/kakao";
+		});
+	});
 </script>
 </body>
 </html>
