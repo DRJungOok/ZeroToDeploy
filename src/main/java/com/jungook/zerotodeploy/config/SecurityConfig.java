@@ -4,6 +4,8 @@ import com.jungook.zerotodeploy.Oauth.CustomOAuthService;
 import com.jungook.zerotodeploy.details.CustomUserDetailsService;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -92,6 +94,13 @@ public class SecurityConfig {
             System.out.println("🔑 has a Role: " + authentication.getAuthorities());
             response.sendRedirect("/");
         };
+    }
+
+    @Bean
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> containerCustomizer() {
+        return server -> server.addContextCustomizers(context -> {
+            context.setUseRelativeRedirects(false);
+        });
     }
 
 }
