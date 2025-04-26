@@ -37,11 +37,11 @@
 					<div class="text-center text-muted mb-3">or login with</div>
 
 					<div class="d-grid gap-2">
-						<button type="button" class="oauth2Login googleLogin">
+<!--						<button type="button" class="oauth2Login googleLogin">-->
+<!--							<i class="fab fa-google me-2"></i> Login with Naver-->
+<!--						</button>-->
+						<button type="button" class="oauth2Login googleLogin" onclick="location.href='/oauth2/authorization/google'">
 							<i class="fab fa-google me-2"></i> Login with Google
-						</button>
-						<button type="button" class="oauth2Login naverLogin">
-							<i class="fab fa-instagram me-2"></i> Login with naver
 						</button>
 						<button type="button" class="oauth2Login kakaoLogin">
 							<img th:src="@{/img/kakao_login/en/kakao_login_medium_narrow.png}" alt="kakao login">
@@ -66,10 +66,28 @@
 <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script>
-	document.addEventListener("DOMContentLoaded", function () {
-		document.querySelector(".kakaoLogin").addEventListener("click", function () {
-			window.location.href = "/oauth2/authorization/kakao";
-		});
+		document.addEventListener("DOMContentLoaded", function () {
+		const kakaoBtn = document.querySelector(".kakaoLogin");
+		const googleBtn = document.querySelector(".googleLogin");
+		const naverBtn = document.querySelector(".naverLogin");
+
+		if (kakaoBtn) {
+		kakaoBtn.addEventListener("click", function () {
+		window.location.href = "/oauth2/authorization/kakao";
+	});
+	}
+
+		if (googleBtn) {
+		googleBtn.addEventListener("click", function () {
+		window.location.href = "/oauth2/authorization/google";
+	});
+	}
+
+		if (naverBtn) {
+		naverBtn.addEventListener("click", function () {
+		window.location.href = "/oauth2/authorization/naver";
+	});
+	}
 	});
 </script>
 </body>

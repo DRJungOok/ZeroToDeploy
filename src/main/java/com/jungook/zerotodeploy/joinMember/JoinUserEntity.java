@@ -11,20 +11,34 @@ import lombok.*;
 @Builder
 @Table(schema = "zerotodeploy", name = "user")
 public class JoinUserEntity {
+	public JoinUserEntity(String email, String nickname, Object o, Role role) {
+	}
+
+	public enum Role {
+		ROLE_USER, ROLE_ADMIN
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 
-	@Column(nullable = false, unique = true, name = "user_id")
+	@Column(nullable = true, unique = true, name = "user_id")
 	private String userId;
 
 	@Column(nullable = false, unique = true, name = "email")
 	private String email;
 
-	@Column(nullable = false, name = "password")
+	@Column(name = "password")
 	private String password;
 
-	@Column(nullable = false, name="role")
-	private String role;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, name = "role")
+	private Role role;
+	public JoinUserEntity(String email, String nickname, Role role) {
+		this.email = email;
+		this.userId = nickname;
+		this.password = null;
+		this.role = role;
+	}
 }

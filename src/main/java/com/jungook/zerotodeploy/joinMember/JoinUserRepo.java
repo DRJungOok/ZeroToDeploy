@@ -8,6 +8,5 @@ public interface JoinUserRepo extends JpaRepository<JoinUserEntity, Long> {
 	boolean existsByUserId(String userId);
 	boolean existsByEmail(String email);
 	Optional<JoinUserEntity> findByUserId(String id);
-
-	JoinUserEntity findByEmail(String email);
+	Optional<JoinUserEntity> findByEmail(String email);
 }
