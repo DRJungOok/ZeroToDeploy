@@ -6,7 +6,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication(scanBasePackages = "com.jungook.zerotodeploy")
+@ComponentScan("com.jungook.zerotodeploy")
 public class ZeroToDeployApplication extends SpringBootServletInitializer{
 
 	@Override
