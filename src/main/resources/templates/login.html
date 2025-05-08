@@ -4,13 +4,26 @@
 <head th:replace="~{common::header}"></head>
 <body>
 <div class="container-xxl p-0">
+	<div th:replace="~{common::spinner}"></div>
+	<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0" th:fragment="nav">
+		<div class="container-fluid d-flex align-items-center justify-content-between">
+			<a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
+				<h1 class="m-0 text-primary">ZeroToDeploy</h1>
+			</a>
 
-	<!-- Spinner -->
-	<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-		<div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-			<span class="sr-only">Loading...</span>
+			<div class="d-flex align-items-center gap-3">
+				<div sec:authorize="hasRole('ROLE_ADMIN')" th:if="${currentPath != '/write'}">
+					<a th:href="@{/write}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">✍ 글쓰기</a>
+				</div>
+
+				<div sec:authorize="isAuthenticated()" id="session-info" class="d-flex align-items-center border rounded px-3 py-1" style="font-size: 14px; color: #666; height: 42px;">
+					<i class="bi bi-clock me-2 text-secondary"></i>
+					<span>세션 : <span id="remaining-time">--</span></span>
+					<button onclick="extendSession()" class="btn btn-sm btn-outline-dark ms-2">연장</button>
+				</div>
+			</div>
 		</div>
-	</div>
+	</nav>
 	<!-- Login Card -->
 	<div class="container-xxl py-5 wow fadeInUp d-flex justify-content-center align-items-center" data-wow-delay="0.1s" style="min-height: 100vh; overflow: hidden;">
 		<div class="card shadow-lg" style="max-width: 400px; width: 100%;">

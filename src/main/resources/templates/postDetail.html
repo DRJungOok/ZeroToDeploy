@@ -11,11 +11,11 @@
         <form th:action="@{/post/update/{id}(id=${post.id})}" method="post">
             <div class="mb-3">
                 <label class="form-label">제목</label>
-                <input type="text" class="form-control" name="title" th:value="${post.title}">
+                <input type="text" name="title" th:value="${post.title}" th:readonly="${#authorization.expression('hasRole(''ROLE_USER'')')}" class="form-control write-textarea" />
             </div>
             <div class="mb-3">
                 <label class="form-label">내용</label>
-                <textarea class="form-control" name="content" rows="10" th:text="${post.content}"></textarea>
+                    <textarea name="content" th:text="${post.content}" th:readonly="${#authorization.expression('hasRole(''ROLE_USER'')')}" class="form-control write-textarea" rows="10"></textarea>
                 <div th:if="${post.fileName != null}">
                     <p>첨부파일</p>
                     <div>
