@@ -1,5 +1,7 @@
 package com.jungook.zerotodeploy.post;
 
+import com.jungook.zerotodeploy.comment.CommentEntity;
+import com.jungook.zerotodeploy.comment.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -18,6 +22,8 @@ public class PostController {
 	private PostRepo postRepo;
 	@Autowired
 	private PostService postService;
+	@Autowired
+	private CommentRepository commentRepository;
 
 	@GetMapping("write")
 	public String write() {
@@ -122,13 +128,6 @@ public class PostController {
 		return "etc";
 	}
 
-	@GetMapping("/post/{id}")
-	public String detail(@PathVariable Long id, Model model) {
-		PostEntity post = postRepo.findById(id).orElseThrow();
-		model.addAttribute("post", post);
-		return "postDetail";
-	}
-
 	@PostMapping("/post/update/{id}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String update(@PathVariable Long id, @RequestParam String title, @RequestParam String content) {
@@ -160,5 +159,34 @@ public class PostController {
 			case "etc" -> "etc";
 			default -> "/";
 		};
+	}
+
+	@PostMapping("/comment/create")
+	public String addComment(@RequestParam Long postId, @RequestParam String content, Principal principal) {
+		PostEntity post = postRepo.findById(postId).orElseThrow();
+		CommentEntity comment = new CommentEntity();
+		comment.setContent(content);
+		comment.setAuthor(principal.getName());
+		comment.setPost(post);
+		comment.setCreatedDate(LocalDateTime.now());
+
+		commentRepository.save(comment);
+
+		return "redirect:/post/" + postId;
+	}
+
+	@GetMapping("/post/{id}")
+	public String postDetail(@PathVariable Long id, Model model) {
+		PostEntity post = postRepo.findById(id).orElseThrow();
+		model.addAttribute("post", post);
+		return "postDetail";
+	}
+
+	@PostMapping("/post/like/{id}")
+	public String likePost(@PathVariable Long id) {
+		PostEntity post = postRepo.findById(id).orElseThrow();
+		post.setLikeCount(post.getLikeCount() + 1);
+		postRepo.save(post);
+		return "redirect:/post/" + id;
 	}
 }

@@ -7,8 +7,8 @@ import java.util.Optional;
 
 @Repository
 public interface JoinUserRepo extends JpaRepository<JoinUserEntity, Long> {
-	boolean existsByUserId(String userId);
+	boolean existsByUserName(String userId);
 	boolean existsByEmail(String email);
-	Optional<JoinUserEntity> findByUserId(String id);
+	Optional<JoinUserEntity> findByUserName(String name);
 	Optional<JoinUserEntity> findByEmail(String email);
 }

@@ -14,12 +14,12 @@ public class JoinUserService {
 		if (joinUserRepo.existsByEmail(joinUserDTO.getEmail())) {
 			throw new RuntimeException("user id already exists");
 		}
-		if (joinUserRepo.existsByUserId(joinUserDTO.getUserId())) {
+		if (joinUserRepo.existsByUserName(joinUserDTO.getUserId())) {
 			throw new RuntimeException("user id already exists");
 		}
 
 		JoinUserEntity joinUserEntity = JoinUserEntity.builder()
-				.userId(joinUserDTO.getUserId())
+				.userName(joinUserDTO.getUserId())
 				.email(joinUserDTO.getEmail())
 				.password(bCryptPasswordEncoder.encode(joinUserDTO.getPassword()))
 				.role(JoinUserEntity.Role.valueOf("ROLE_USER"))

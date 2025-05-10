@@ -23,8 +23,8 @@ public class JoinUserEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(nullable = true, unique = true, name = "user_id")
-	private String userId;
+	@Column(nullable = true, unique = true, name = "user_name")
+	private String userName;
 
 	@Column(nullable = false, unique = true, name = "email")
 	private String email;
@@ -37,7 +37,7 @@ public class JoinUserEntity {
 	private Role role;
 	public JoinUserEntity(String email, String nickname, Role role) {
 		this.email = email;
-		this.userId = nickname;
+		this.userName = nickname;
 		this.password = null;
 		this.role = role;
 	}

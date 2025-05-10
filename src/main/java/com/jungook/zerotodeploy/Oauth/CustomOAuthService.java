@@ -37,6 +37,9 @@ public class CustomOAuthService extends DefaultOAuth2UserService {
 				Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
 				email = (String) kakaoAccount.get("email");
 				nickname = (String) profile.get("nickname");
+
+				System.out.println(">>> [DEBUG] registrationId = " + registrationId);
+				System.out.println(">>> [DEBUG] attributes = " + attributes);
 			}
 			case "google" -> {
 				email = (String) attributes.get("email");
@@ -65,14 +68,14 @@ public class CustomOAuthService extends DefaultOAuth2UserService {
 		} else {
 			int duplicateCount = 0;
 			String baseNickname = nickname;
-			while (joinUserRepo.existsByUserId(nickname)) {
+			while (joinUserRepo.existsByUserName(nickname)) {
 				duplicateCount++;
 				nickname = baseNickname + "_" + duplicateCount;
 			}
 
 			user = JoinUserEntity.builder()
 					.email(email)
-					.userId(nickname)
+					.userName(nickname)
 					.password(null)
 					.role(JoinUserEntity.Role.ROLE_USER)
 					.build();
