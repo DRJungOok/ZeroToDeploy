@@ -20,22 +20,10 @@ public class LikeController {
 	private final PostRepo postRepo;
 
 	@PostMapping("/post/like/{id}")
-	public String likePost(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-		JoinUserEntity user = joinUserRepo.findByUserName(userDetails.getUsername())
-				.orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
-
-		PostEntity post = postRepo.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("게시글 없음"));
-
-		// 이미 좋아요를 눌렀는지 확인
-		if (!likeRepo.existsByPostAndUser(post, user)) {
-			LikeEntity like = LikeEntity.builder()
-					.post(post)
-					.user(user)
-					.build();
-			likeRepo.save(like);
-		}
-
+	public String likePost(@PathVariable Long id) {
+		PostEntity post = postRepo.findById(id).orElseThrow();
+		post.setLikeCount(post.getLikeCount() + 1);
+		postRepo.save(post);
 		return "redirect:/post/" + id;
 	}
 }

@@ -1,108 +1,78 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{common::header}"></head>
 <body>
-<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
-
+<div class="container-xxl bg-white p-0">
     <div th:replace="~{common::spinner}"></div>
     <div th:replace="~{common::nav}"></div>
 
-    <div class="container py-5 flex-grow-1">
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                <h2 class="mb-4 fw-bold text-primary">📄 글 상세</h2>
+    <div class="container py-5">
+        <h2>글 상세</h2>
 
+        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+            <form th:action="@{/post/update/{id}(id=${post.id})}" method="post">
                 <!-- 제목 -->
-                <div class="mb-4">
-                    <h5 class="fw-bold text-secondary">제목</h5>
-                    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                        <input type="text" th:value="${post.title}" name="title" class="form-control"/>
-                    </div>
-                    <div th:if="${#authorization.expression('!hasRole(''ROLE_ADMIN'')')}">
-                        <h4 class="border-bottom pb-2 mb-0" th:text="${post.title}"></h4>
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label">제목</label>
+                    <input type="text" th:value="${post.title}" name="title" class="form-control"/>
                 </div>
-
-                <!-- 작성자, 작성일 표시 -->
-                <!--
-                <div class="mb-3 text-muted small">
-                    <i class="bi bi-person-circle"></i> <span th:text="${post.author}">작성자</span> |
-                    <i class="bi bi-calendar-event"></i> <span th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</span>
-                </div>
-                -->
 
                 <!-- 내용 -->
-                <div class="mb-4">
-                    <h5 class="fw-bold text-secondary">내용</h5>
-                    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                        <textarea name="content" class="form-control" rows="10"
-                                  th:text="${post.content}"></textarea>
-                    </div>
-                    <div th:if="${#authorization.expression('!hasRole(''ROLE_ADMIN'')')}">
-                        <div class="bg-light border rounded p-3" style="white-space: pre-wrap;" th:text="${post.content}"></div>
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label">내용</label>
+                    <textarea name="content" class="form-control" rows="10" th:text="${post.content}"></textarea>
                 </div>
 
-                <!-- 첨부파일 -->
-                <div th:if="${post.fileName != null}" class="mb-4">
-                    <h5 class="fw-bold text-secondary">첨부파일</h5>
-                    <div>
-                        <img th:if="${#strings.toLowerCase(post.fileName).matches('.*\\.(jpg|jpeg|png|gif)$')}"
-                             th:src="@{'/uploads/' + ${post.fileName}}"
-                             class="img-fluid rounded shadow-sm" style="max-width: 300px;" />
+                <button type="submit" class="btn btn-success">💾 저장</button>
+                <a th:href="@{/post/delete/{id}(id=${post.id})}" class="btn btn-danger"
+                   onclick="return confirm('정말 삭제하시겠습니까?')">🗑 삭제</a>
+            </form>
+        </div>
 
-                        <a th:if="${!#strings.toLowerCase(post.fileName).matches('.*\\.(jpg|jpeg|png|gif)$')}"
-                           class="btn btn-outline-primary"
-                           th:href="@{'/uploads/' + ${post.fileName}}"
-                           th:text="${post.fileName}"
-                           download></a>
-                    </div>
-                </div>
+        <div th:if="${#authorization.expression('!hasRole(''ROLE_ADMIN'')')}">
+            <!-- 제목 (읽기 전용) -->
+            <div class="mb-3">
+                <label class="form-label">제목</label>
+                <p th:text="${post.title}" class="form-control-plaintext"></p>
+            </div>
 
-                <!-- 관리자 전용 버튼 -->
-                <div sec:authorize="hasRole('ROLE_ADMIN')">
-                    <button type="submit" class="btn btn-success">💾 저장</button>
-                    <a th:href="@{/post/delete/{id}(id=${post.id})}" class="btn btn-danger"
-                       onclick="return confirm('정말 삭제하시겠습니까?')">🗑 삭제</a>
-                </div>
-                <div class="container mt-5">
-                    <h5 class="fw-bold">💬 댓글</h5>
-                    <!-- 좋아요 영역 -->
-                    <div class="d-flex align-items-center mt-4">
-                        <form th:action="@{/post/like/{id}(id=${post.id})}" method="post" sec:authorize="isAuthenticated()">
-                            <button type="submit" class="btn btn-outline-danger me-2">❤️ 좋아요</button>
-                        </form>
-                        <span th:text="'총 좋아요 수: ' + ${post.likeCount}"></span>
-                    </div>
-                    <!-- 댓글 입력 -->
-                    <div sec:authorize="isAuthenticated()">
-                        <form th:action="@{/comment/create}" method="post">
-                            <input type="hidden" name="postId" th:value="${post.id}" />
-                            <div class="mb-3">
-                                <textarea class="form-control" name="content" rows="3" placeholder="댓글을 입력하세요..."></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">등록</button>
-                        </form>
-                    </div>
-                    <div sec:authorize="isAnonymous()">
-                        <p class="text-muted">로그인 후 댓글을 작성할 수 있습니다.</p>
-                    </div>
-
-                    <!-- 댓글 목록 -->
-                    <div class="mt-4">
-                        <div th:each="comment : ${post.comments}" class="border-bottom py-2">
-                            <p class="mb-1"><strong th:text="${comment.author}">작성자</strong></p>
-                            <p th:text="${comment.content}" class="mb-1"></p>
-                            <small class="text-muted" th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</small>
-                        </div>
-                    </div>
-                </div>
+            <!-- 내용 (읽기 전용) -->
+            <div class="mb-3">
+                <label class="form-label">내용</label>
+                <p th:text="${post.content}" class="form-control-plaintext"></p>
             </div>
         </div>
+
+        <!-- 좋아요 버튼 -->
+        <form th:action="@{/post/like/{id}(id=${post.id})}" method="post">
+            <button type="submit" class="btn btn-outline-primary">
+                👍 좋아요 <span th:text="${post.likeCount}">0</span>
+            </button>
+        </form>
+
+        <!-- 댓글 -->
+            <div th:if="${post.comments != null}">
+                <h4>댓글</h4>
+                <div th:each="comment : ${post.comments}">
+                    <p>
+                        <strong th:text="${comment?.userName}">작성자 없음</strong>:
+                        <span th:text="${comment?.content}">댓글 내용 없음</span>
+                    </p>
+                </div>
+            </div>
+
+        <!-- 댓글 작성 폼 -->
+        <form th:action="@{/comment/create}" method="post">
+            <input type="hidden" name="postId" th:value="${post.id}" />
+            <div class="mb-3">
+                <textarea name="content" class="form-control" rows="3" placeholder="댓글을 입력하세요."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">댓글 작성</button>
+        </form>
     </div>
 
-    <footer th:replace="~{common::footer}"></footer>
+    <div th:replace="~{common::footer}"></div>
 </div>
-<div th:replace="~{common::script}"></div>
 </body>
 </html>

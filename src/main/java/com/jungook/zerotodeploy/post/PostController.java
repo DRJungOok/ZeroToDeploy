@@ -182,11 +182,5 @@ public class PostController {
 		return "postDetail";
 	}
 
-	@PostMapping("/post/like/{id}")
-	public String likePost(@PathVariable Long id) {
-		PostEntity post = postRepo.findById(id).orElseThrow();
-		post.setLikeCount(post.getLikeCount() + 1);
-		postRepo.save(post);
-		return "redirect:/post/" + id;
-	}
+
 }

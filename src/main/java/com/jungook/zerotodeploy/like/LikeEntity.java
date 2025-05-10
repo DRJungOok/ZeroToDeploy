@@ -14,10 +14,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(schema = "zerotodeploy", name = "likes")
 public class LikeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
 	@ManyToOne
@@ -27,4 +29,7 @@ public class LikeEntity {
 	@ManyToOne
 	@JoinColumn(name = "post_id")
 	private PostEntity post;
+
+	@Column(name = "created_at", nullable = false, updatable = false)
+	private LocalDateTime createdAt = LocalDateTime.now();
 }
