@@ -160,27 +160,11 @@ public class PostController {
 			default -> "/";
 		};
 	}
-
-	@PostMapping("/comment/create")
-	public String addComment(@RequestParam Long postId, @RequestParam String content, Principal principal) {
-		PostEntity post = postRepo.findById(postId).orElseThrow();
-		CommentEntity comment = new CommentEntity();
-		comment.setContent(content);
-		comment.setAuthor(principal.getName());
-		comment.setPost(post);
-		comment.setCreatedDate(LocalDateTime.now());
-
-		commentRepository.save(comment);
-
-		return "redirect:/post/" + postId;
-	}
-
 	@GetMapping("/post/{id}")
-	public String postDetail(@PathVariable Long id, Model model) {
+	public String detailPost(@PathVariable Long id, Model model, @RequestParam(required = false) Long editCommentId) {
 		PostEntity post = postRepo.findById(id).orElseThrow();
 		model.addAttribute("post", post);
+		model.addAttribute("editCommentId", editCommentId);
 		return "postDetail";
 	}
-
-
 }
