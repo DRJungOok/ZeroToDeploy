@@ -26,10 +26,11 @@ public class LikeEntity {
 	@JoinColumn(name = "user_id")
 	private JoinUserEntity user;
 
-	@ManyToOne
-	@JoinColumn(name = "post_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "post_id", referencedColumnName = "id")
 	private PostEntity post;
 
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt = LocalDateTime.now();
+
 }

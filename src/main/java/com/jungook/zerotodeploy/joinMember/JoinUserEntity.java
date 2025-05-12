@@ -23,7 +23,7 @@ public class JoinUserEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(nullable = true, unique = true, name = "user_name")
+	@Column(nullable = false, unique = true, name = "user_name")
 	private String userName;
 
 	@Column(nullable = false, unique = true, name = "email")

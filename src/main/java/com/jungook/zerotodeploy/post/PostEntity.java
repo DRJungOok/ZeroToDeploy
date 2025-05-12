@@ -30,6 +30,10 @@ public class PostEntity {
 	@Column(name = "like_count")
 	private int likeCount = 0;
 
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-	private List<CommentEntity> comments = new ArrayList<>();
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<CommentEntity> comments;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "post_id", nullable = true)
+	private PostEntity post;
 }

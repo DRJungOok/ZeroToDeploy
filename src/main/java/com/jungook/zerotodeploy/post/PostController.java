@@ -1,29 +1,26 @@
 package com.jungook.zerotodeploy.post;
 
-import com.jungook.zerotodeploy.comment.CommentEntity;
 import com.jungook.zerotodeploy.comment.CommentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 public class PostController {
 
-	@Autowired
 	private PostRepo postRepo;
-	@Autowired
-	private PostService postService;
-	@Autowired
 	private CommentRepository commentRepository;
+	private PostService postService;
 
 	@GetMapping("write")
 	public String write() {
@@ -122,7 +119,7 @@ public class PostController {
 		return "about";
 	}
 	@GetMapping("/etc")
-	public String etc(Model model) {
+	public String etc(Model model, @RequestParam(required = false) Long id) {
 		List<PostEntity> posts = postRepo.findByCategory("etc");
 		model.addAttribute("posts", posts);
 		return "etc";
@@ -162,9 +159,18 @@ public class PostController {
 	}
 	@GetMapping("/post/{id}")
 	public String detailPost(@PathVariable Long id, Model model, @RequestParam(required = false) Long editCommentId) {
-		PostEntity post = postRepo.findById(id).orElseThrow();
+		PostEntity post = postRepo.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글을 찾을 수 없습니다."));
+
 		model.addAttribute("post", post);
 		model.addAttribute("editCommentId", editCommentId);
 		return "postDetail";
 	}
+	@PostMapping("/post/write")
+	public String writePost(PostEntity post) {
+		PostEntity savedPost = postService.savePost(post);
+		System.out.println("🔥 savedPost id: " + savedPost.getId());
+		return "redirect:/post/" + savedPost.getId();
+	}
+
 }

@@ -19,4 +19,7 @@ public class PostService {
 			default -> postRepo.searchByTitle(keyword);
 		};
 	}
+	public PostEntity savePost(PostEntity post) {
+		return postRepo.save(post);
+	}
 }
