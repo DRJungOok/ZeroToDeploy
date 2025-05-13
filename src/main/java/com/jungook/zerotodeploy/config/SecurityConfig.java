@@ -60,7 +60,8 @@ public class SecurityConfig {
                     "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
                     "/swagger-resources/**"
                 ).permitAll()
-                .requestMatchers("/api/**").authenticated()
+                .requestMatchers("/api/**","/post/like/**")
+                .authenticated()
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form

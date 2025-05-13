@@ -23,19 +23,14 @@
 
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             <form th:action="@{/post/update/{id}(id=${post.id})}" method="post">
-                <!-- 제목 -->
                 <div class="mb-3">
                     <label class="form-label">제목</label>
                     <input type="text" th:value="${post.title}" name="title" class="form-control"/>
                 </div>
-
-                <!-- 내용 -->
                 <div class="mb-3">
                     <label class="form-label">내용</label>
                     <textarea name="content" class="form-control" rows="10" th:text="${post.content}"></textarea>
                 </div>
-
-                <!-- 관리자용 버튼 -->
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
                         <button type="submit" class="btn btn-success me-2">💾 저장</button>
@@ -47,20 +42,17 @@
         </div>
 
         <div th:if="${#authorization.expression('!hasRole(''ROLE_ADMIN'')')}">
-            <!-- 제목 (읽기 전용) -->
             <div class="mb-3">
                 <label class="form-label">제목</label>
                 <p th:text="${post.title}" class="form-control-plaintext"></p>
             </div>
-
-            <!-- 내용 (읽기 전용) -->
             <div class="mb-3">
                 <label class="form-label">내용</label>
                 <p th:text="${post.content}" class="form-control-plaintext"></p>
             </div>
         </div>
 
-        <!-- ✅ 로그인한 사용자에게 좋아요 버튼 보여줌 -->
+        <!-- 좋아요 버튼 -->
         <div sec:authorize="isAuthenticated()" class="text-end mb-3">
             <button type="button"
                     class="btn btn-outline-primary d-flex align-items-center gap-1"
@@ -84,13 +76,11 @@
                               class="form-control"
                               th:text="${comment.content}"
                               readonly></textarea>
-
                     <div th:if="${#authentication.name == comment.author}" class="d-flex gap-2">
                         <button type="button"
                                 th:id="'edit-btn-' + ${comment.id}"
                                 class="btn btn-outline-secondary"
                                 onclick="enableEdit('[[${comment.id}]]')">수정</button>
-
                         <button type="submit"
                                 th:id="'submit-btn-' + ${comment.id}"
                                 class="btn btn-outline-primary d-none">수정완료</button>
@@ -99,7 +89,7 @@
             </div>
         </div>
 
-        <!-- 댓글 작성 폼 -->
+        <!-- 댓글 작성 -->
         <form th:action="@{/comment/create}" method="post" onsubmit="return checkLoginBeforeSubmit()">
             <input type="hidden" name="postId" th:value="${post.id}" />
             <div class="mb-3">
@@ -142,7 +132,7 @@
     function likePost(button) {
         const postId = button.getAttribute("data-post-id");
 
-        fetch(`/post/like/${postId}`, {
+        fetch(location.origin + `/post/like/${postId}`, {
             method: "POST",
             headers: { "X-Requested-With": "XMLHttpRequest" },
             credentials: "include"
@@ -156,10 +146,7 @@
                 const likeIcon = document.getElementById("like-icon");
 
                 if (likeCountElement && likeIcon) {
-                    // 숫자 갱신
                     likeCountElement.innerText = data.likeCount;
-
-                    // UI 상태 갱신
                     if (data.liked === true) {
                         likeIcon.innerText = "♥";
                         likeIcon.style.color = "red";
@@ -173,7 +160,6 @@
                 alert("좋아요 처리 중 오류가 발생했습니다.");
             });
     }
-
 </script>
 </body>
 </html>

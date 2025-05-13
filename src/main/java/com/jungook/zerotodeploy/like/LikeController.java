@@ -42,7 +42,6 @@ public class LikeController {
 
 			if (responseObj instanceof Map<?, ?> responseMap) {
 				Object emailObj = responseMap.get("email");
-
 				if (emailObj != null) {
 					email = String.valueOf(emailObj);
 				} else {
@@ -55,7 +54,9 @@ public class LikeController {
 			email = authentication.getName();
 		}
 
-		PostEntity post = postRepo.findById(id).orElseThrow();
+		PostEntity post = postRepo.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글 없음"));
+
 		JoinUserEntity currentUser = joinUserRepo.findByEmail(email)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자 없음"));
 
@@ -63,12 +64,10 @@ public class LikeController {
 		boolean likedNow;
 
 		if (alreadyLiked) {
-			// 좋아요 취소
 			likeRepo.deleteByPostAndUser(post, currentUser);
 			post.setLikeCount(post.getLikeCount() - 1);
 			likedNow = false;
 		} else {
-			// 좋아요 추가
 			likeRepo.save(LikeEntity.builder().post(post).user(currentUser).build());
 			post.setLikeCount(post.getLikeCount() + 1);
 			likedNow = true;
