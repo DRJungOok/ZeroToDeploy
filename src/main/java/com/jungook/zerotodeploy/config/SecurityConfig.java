@@ -1,6 +1,6 @@
 package com.jungook.zerotodeploy.config;
 
-import com.jungook.zerotodeploy.Oauth.PrincipalOauth2UserService;
+import com.jungook.zerotodeploy.oauth.PrincipalOauth2UserService;
 import com.jungook.zerotodeploy.details.CustomUserDetailsService;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import lombok.RequiredArgsConstructor;

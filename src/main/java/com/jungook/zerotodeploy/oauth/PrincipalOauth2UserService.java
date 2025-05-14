@@ -1,9 +1,11 @@
-package com.jungook.zerotodeploy.Oauth;
+package com.jungook.zerotodeploy.oauth;
 
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity.Role;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -20,12 +22,18 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
+	private static final Logger log = LoggerFactory.getLogger(PrincipalOauth2UserService.class);
 	private final JoinUserRepo joinUserRepo;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+		System.out.println("🧪 userRequest.getClientRegistration().getRegistrationId() = " + userRequest.getClientRegistration().getRegistrationId());
+
 		OAuth2User oAuth2User = super.loadUser(userRequest);
 		String registrationId = userRequest.getClientRegistration().getRegistrationId();
+		log.info("🟡 registrationId = {}", registrationId);
+		log.info("✅ [{}] OAuth2 attributes received: {}", userRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
+		oAuth2User.getAttributes().forEach((key, value) -> System.out.println("🔑 " + key + " : " + value));
 
 		OAuthAttributes attributes = OAuthAttributes.of(registrationId, oAuth2User.getAttributes());
 		String email = attributes.getEmail();
@@ -44,7 +52,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 					return joinUserRepo.save(newUser);
 				});
 
-		// ✅ "email"이 key로 포함된 attribute map 생성
 		Map<String, Object> unifiedAttributes = new HashMap<>(oAuth2User.getAttributes());
 		unifiedAttributes.put("email", email);
 
