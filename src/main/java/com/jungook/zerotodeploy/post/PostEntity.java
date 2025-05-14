@@ -33,6 +33,9 @@ public class PostEntity {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<CommentEntity> comments;
 
+	@Transient
+	private boolean likedByCurrentUser;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id", nullable = true)
 	private PostEntity post;

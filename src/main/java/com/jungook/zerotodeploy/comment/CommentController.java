@@ -2,21 +2,23 @@ package com.jungook.zerotodeploy.comment;
 
 import com.jungook.zerotodeploy.post.PostEntity;
 import com.jungook.zerotodeploy.post.PostRepo;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
 
 @Controller
+@AllArgsConstructor
 public class CommentController {
 
-	@Autowired
 	private CommentRepository commentRepository;
-
-	@Autowired
 	private PostRepo postRepo;
 
 	@PostMapping("/comment/create")
@@ -37,27 +39,34 @@ public class CommentController {
 	}
 
 	@PostMapping("/comment/update")
-	@Transactional
-	public String updateComment(@RequestParam Long id,
-															@RequestParam String content,
-															Principal principal) {
-		CommentEntity comment = commentRepository.findById(id).orElseThrow();
-		if (!comment.getAuthor().equals(principal.getName())) {
-			return "redirect:/access-denied";
-		}
+	public String updateComment(@RequestParam("commentId") Long commentId,
+															@RequestParam("content") String content) {
+		CommentEntity comment = commentRepository.findById(commentId)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
 		comment.setContent(content);
+		commentRepository.save(comment);
+
 		return "redirect:/post/" + comment.getPost().getId();
 	}
 
-	@PostMapping("/comment/delete")
-	public String deleteComment(@RequestParam Long id,
-															Principal principal) {
-		CommentEntity comment = commentRepository.findById(id).orElseThrow();
-		if (!comment.getAuthor().equals(principal.getName())) {
-			return "redirect:/access-denied";
-		}
+	@GetMapping("/comment/delete/{id}")
+	@PreAuthorize("isAuthenticated()")
+	public String deleteComment(@PathVariable Long id, Principal principal) {
+		CommentEntity comment = commentRepository.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+		String currentUsername = principal.getName();
 		Long postId = comment.getPost().getId();
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		boolean isAdmin = auth.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+
+		if(!isAdmin && !comment.getAuthor().equals(currentUsername)) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+		}
 		commentRepository.deleteById(id);
 		return "redirect:/post/" + postId;
 	}
+
 }

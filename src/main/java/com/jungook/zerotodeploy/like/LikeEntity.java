@@ -30,6 +30,7 @@ public class LikeEntity {
 	@JoinColumn(name = "post_id", referencedColumnName = "id")
 	private PostEntity post;
 
+	@Builder.Default
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt = LocalDateTime.now();
 

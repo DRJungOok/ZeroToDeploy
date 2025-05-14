@@ -4,6 +4,7 @@ import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import com.jungook.zerotodeploy.post.PostEntity;
 import com.jungook.zerotodeploy.post.PostRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,37 +29,34 @@ public class LikeController {
 
 	@PostMapping("/post/like/{id}")
 	@ResponseBody
+	@Transactional
 	public ResponseEntity<Map<String, Object>> toggleLike(@PathVariable Long id, Authentication authentication) {
 
 		if (authentication == null || !authentication.isAuthenticated()) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 
-		String email;
+		JoinUserEntity currentUser;
+		Object principal = authentication.getPrincipal();
 
-		if (authentication.getPrincipal() instanceof OAuth2User oAuth2User) {
-			Map<String, Object> attributes = oAuth2User.getAttributes();
-			Object responseObj = attributes.get("response");
-
-			if (responseObj instanceof Map<?, ?> responseMap) {
-				Object emailObj = responseMap.get("email");
-				if (emailObj != null) {
-					email = String.valueOf(emailObj);
-				} else {
-					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-				}
-			} else {
+		if (principal instanceof OAuth2User oAuth2User) {
+			Object emailObj = oAuth2User.getAttribute("email");
+			if (emailObj == null) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 			}
-		} else {
-			email = authentication.getName();
+			String email = String.valueOf(emailObj);
+			currentUser = joinUserRepo.findByEmail(email)
+					.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자 없음"));
+		}
+		// 일반 로그인인 경우
+		else {
+			String username = authentication.getName();
+			currentUser = joinUserRepo.findByUserName(username)
+					.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자 없음"));
 		}
 
 		PostEntity post = postRepo.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글 없음"));
-
-		JoinUserEntity currentUser = joinUserRepo.findByEmail(email)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자 없음"));
 
 		boolean alreadyLiked = likeRepo.existsByPostAndUser(post, currentUser);
 		boolean likedNow;
@@ -79,9 +77,9 @@ public class LikeController {
 		response.put("likeCount", post.getLikeCount());
 		response.put("liked", likedNow);
 
-		System.out.println("🧪 좋아요 POST ID: " + post.getId());
-		System.out.println("🧪 사용자 EMAIL: " + currentUser.getEmail());
-		System.out.println("🧪 현재 좋아요 수: " + post.getLikeCount());
+		System.out.println("좋아요 POST ID: " + post.getId());
+		System.out.println("사용자 EMAIL 또는 USERNAME: " + currentUser.getEmail());
+		System.out.println("현재 좋아요 수: " + post.getLikeCount());
 
 		return ResponseEntity.ok(response);
 	}

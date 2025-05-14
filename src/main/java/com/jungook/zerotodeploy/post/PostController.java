@@ -1,9 +1,13 @@
 package com.jungook.zerotodeploy.post;
 
 import com.jungook.zerotodeploy.comment.CommentRepository;
+import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
+import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
+import com.jungook.zerotodeploy.like.LikeRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +25,8 @@ public class PostController {
 	private PostRepo postRepo;
 	private CommentRepository commentRepository;
 	private PostService postService;
+	private JoinUserRepo joinUserRepo;
+	private LikeRepo likeRepo;
 
 	@GetMapping("write")
 	public String write() {
@@ -158,14 +164,22 @@ public class PostController {
 		};
 	}
 	@GetMapping("/post/{id}")
-	public String detailPost(@PathVariable Long id, Model model, @RequestParam(required = false) Long editCommentId) {
+	public String detailPost(@PathVariable Long id, Model model, Authentication authentication) {
 		PostEntity post = postRepo.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글을 찾을 수 없습니다."));
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글 없음"));
 
+		if (authentication != null && authentication.isAuthenticated()) {
+			String username = authentication.getName();
+			JoinUserEntity user = joinUserRepo.findByUserName(username).orElse(null);
+
+			if (user != null && likeRepo.existsByPostAndUser(post, user)) {
+				post.setLikedByCurrentUser(true);
+			}
+		}
 		model.addAttribute("post", post);
-		model.addAttribute("editCommentId", editCommentId);
 		return "postDetail";
 	}
+
 	@PostMapping("/post/write")
 	public String writePost(PostEntity post) {
 		PostEntity savedPost = postService.savePost(post);
