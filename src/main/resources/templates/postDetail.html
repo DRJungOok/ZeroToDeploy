@@ -16,20 +16,20 @@
     }
 </style>
 <body th:attr="data-authenticated=${#authorization.expression('isAuthenticated()')}" style="overflow-y: scroll">
-<div class="container-xxl bg-white p-0">
+<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
     <div th:replace="~{common::nav}"></div>
     <div class="container py-5" style="max-width: 900px; margin: auto;">
         <h2>글 상세</h2>
 
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-            <form th:action="@{/post/update/{id}(id=${post.id})}" method="post">
-                <div class="mb-3">
+            <form th:action="@{/post/update/{id}(id=${post.id})}" method="post" onsubmit="return prepareSubmit()">
+            <div class="mb-3">
                     <label class="form-label">제목</label>
                     <input type="text" th:value="${post.title}" name="title" class="form-control"/>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">내용</label>
-                    <textarea name="content" class="form-control" rows="10" th:text="${post.content}"></textarea>
+                    <div id="editor-container" th:attr="data-content=${post.content}"></div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
@@ -48,7 +48,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">내용</label>
-                <p th:text="${post.content}" class="form-control-plaintext"></p>
+                <p th:utext="${post.content}" class="form-control-plaintext"></p>
             </div>
         </div>
 
@@ -64,7 +64,6 @@
             </button>
         </div>
 
-        <!-- 댓글 -->
         <div th:if="${post.comments != null}">
             <h4 class="mb-3">댓글</h4>
             <div th:each="comment : ${post.comments}" th:id="'comment-box-' + ${comment.id}" class="mb-3">
@@ -107,8 +106,9 @@
     <div th:replace="~{common::footer}"></div>
     <div th:replace="~{common::script}"></div>
 </div>
-
 <script>
+    let quill;
+
     function enableEdit(commentId) {
         const textarea = document.getElementById(`comment-content-${commentId}`);
         const editBtn = document.getElementById(`edit-btn-${commentId}`);
@@ -172,6 +172,35 @@
             textarea.setAttribute('readonly', 'readonly');
             submitBtn.classList.add('d-none');
             editBtn.classList.remove('d-none');
+        }
+        return true;
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+        const editor = document.querySelector("#editor-container");
+        if (editor) {
+            quill = new Quill("#editor-container", {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+            const contentHtml = editor.dataset.content;
+            if (contentHtml) {
+                quill.clipboard.dangerouslyPasteHTML(contentHtml);
+            }
+        }
+    });
+
+    function prepareSubmit() {
+        const hiddenInput = document.querySelector('#hidden-content');
+        if (quill && hiddenInput) {
+            hiddenInput.value = quill.root.innerHTML;
         }
         return true;
     }

@@ -12,25 +12,30 @@ import java.util.Map;
 @RequestMapping("/session")
 public class SessionController {
 
+	@PostMapping("/extend")
+	public ResponseEntity<?> extendSession(HttpSession session) {
+		session.setMaxInactiveInterval(1800);
+		return ResponseEntity.ok().build();
+	}
+
 	@GetMapping("/info")
 	public Map<String, Object> getSessionInfo(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		Map<String, Object> response = new HashMap<>();
+
 		if (session != null) {
-			long now = System.currentTimeMillis();
-			long expireAt = session.getLastAccessedTime() + session.getMaxInactiveInterval() * 1000L;
-			response.put("remainingTime", (expireAt - now) / 1000);
+			long currentTime = System.currentTimeMillis();
+			long lastAccessedTime = session.getLastAccessedTime();
+			int maxInactiveInterval = session.getMaxInactiveInterval();
+
+			long remainingTime = (lastAccessedTime + (maxInactiveInterval * 1000L) - currentTime) / 1000L;
+			remainingTime = Math.max(remainingTime, 0);
+
+			response.put("remainingTime", remainingTime);
 		} else {
 			response.put("remainingTime", 0);
 		}
+
 		return response;
-	}
-
-
-
-	@PostMapping("/extend")
-	public ResponseEntity<String> extendSession(HttpServletRequest request) {
-		request.getSession(true);
-		return ResponseEntity.ok("Session extended");
 	}
 }

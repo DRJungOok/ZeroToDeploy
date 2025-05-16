@@ -23,7 +23,6 @@ import java.util.List;
 public class PostController {
 
 	private PostRepo postRepo;
-	private CommentRepository commentRepository;
 	private PostService postService;
 	private JoinUserRepo joinUserRepo;
 	private LikeRepo likeRepo;
@@ -31,6 +30,22 @@ public class PostController {
 	@GetMapping("write")
 	public String write() {
 		return "write";
+	}
+
+	private List<PostEntity> summarizePosts(List<PostEntity> posts) {
+		return posts.stream().map(post -> {
+			PostEntity p = new PostEntity();
+			p.setId(post.getId());
+			p.setTitle(post.getTitle());
+			p.setFileName(post.getFileName());
+			p.setCreatedAt(post.getCreatedAt());
+			p.setCategory(post.getCategory());
+
+			String plain = post.getContent().replaceAll("<[^>]*>", "");
+			p.setContent(plain.length() > 100 ? plain.substring(0, 100) + "..." : plain);
+
+			return p;
+		}).toList();
 	}
 
 	@PostMapping("write")
@@ -89,45 +104,45 @@ public class PostController {
 		return postService.searchPosts(keyword, filter);
 	}
 
-
 	@GetMapping("/javaSpring")
 	public String javaSpring(Model model) {
 		List<PostEntity> posts = postRepo.findByCategory("java&spring");
-		model.addAttribute("posts", posts);
+		model.addAttribute("posts", summarizePosts(posts));
 		return "javaSpring";
 	}
 
 	@GetMapping("/linux")
 	public String linux(Model model) {
 		List<PostEntity> posts = postRepo.findByCategory("linux");
-		model.addAttribute("posts", posts);
+		model.addAttribute("posts", summarizePosts(posts));
 		return "linux";
 	}
 
 	@GetMapping("/web")
 	public String web(Model model) {
 		List<PostEntity> posts = postRepo.findByCategory("web");
-		model.addAttribute("posts", posts);
+		model.addAttribute("posts", summarizePosts(posts));
 		return "web";
 	}
 
 	@GetMapping("/history")
 	public String history(Model model) {
 		List<PostEntity> posts = postRepo.findByCategory("history");
-		model.addAttribute("posts", posts);
+		model.addAttribute("posts", summarizePosts(posts));
 		return "history";
 	}
 
 	@GetMapping("/about")
 	public String about(Model model) {
 		List<PostEntity> posts = postRepo.findByCategory("about");
-		model.addAttribute("posts", posts);
+		model.addAttribute("posts", summarizePosts(posts));
 		return "about";
 	}
+
 	@GetMapping("/etc")
 	public String etc(Model model, @RequestParam(required = false) Long id) {
 		List<PostEntity> posts = postRepo.findByCategory("etc");
-		model.addAttribute("posts", posts);
+		model.addAttribute("posts", summarizePosts(posts));
 		return "etc";
 	}
 
@@ -163,6 +178,7 @@ public class PostController {
 			default -> "/";
 		};
 	}
+
 	@GetMapping("/post/{id}")
 	public String detailPost(@PathVariable Long id, Model model, Authentication authentication) {
 		PostEntity post = postRepo.findById(id)
