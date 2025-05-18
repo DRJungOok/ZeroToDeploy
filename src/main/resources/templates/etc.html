@@ -5,7 +5,7 @@
 <div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
     <div th:replace="~{common::nav}"></div>
 
-    <div class="container py-5">
+    <div class="container py-5 flex-grow-1 overflow-auto" style="min-height: 0;">
         <h2 class="mb-4">기타 글 목록</h2>
         <div th:if="${#lists.isEmpty(posts)}">
             <p>작성된 글이 없습니다.</p>

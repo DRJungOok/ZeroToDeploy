@@ -474,3 +474,10 @@ body, html {
     resize: none;
     background-color: white;
 }
+
+.ql-editor img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1rem auto;
+}
