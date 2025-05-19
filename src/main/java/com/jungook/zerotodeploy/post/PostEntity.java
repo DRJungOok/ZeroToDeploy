@@ -1,5 +1,6 @@
 package com.jungook.zerotodeploy.post;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jungook.zerotodeploy.comment.CommentEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class PostEntity {
 	@Column(name = "like_count")
 	private int likeCount = 0;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<CommentEntity> comments;
 

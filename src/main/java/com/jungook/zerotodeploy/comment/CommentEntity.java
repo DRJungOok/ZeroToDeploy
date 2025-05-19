@@ -1,5 +1,6 @@
 package com.jungook.zerotodeploy.comment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jungook.zerotodeploy.post.PostEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,5 +24,6 @@ public class CommentEntity {
 	@Column(name = "created_date")
 	private LocalDateTime createdDate;
 	@ManyToOne
+	@JsonIgnore
 	private PostEntity post;
 }
