@@ -1,19 +1,49 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{common::header}"></head>
+<style>
+  .profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+  }
+</style>
 <body>
 <div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
   <div th:replace="~{common::nav}"></div>
 
-  <div class="container py-5">
+  <div class="container py-5" style="max-width: 600px;">
     <h2 class="mb-4">내 정보</h2>
 
     <div sec:authorize="isAuthenticated()">
-      <p><strong>사용자 이름:</strong> <span th:text="${user.username}">아이디</span></p>
-      <p><strong>이메일:</strong> <span th:text="${user.email}">이메일</span></p>
-      <p><strong>가입일:</strong> <span th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}">2025-01-01</span></p>
+      <!-- 프로필 이미지 -->
+      <div class="mb-4 text-center">
+        <img th:src="@{${user.profileImage != null} ? '/uploads/' + ${user.profileImage} : '/images/default-profile.png'}"
+             alt="프로필 이미지"
+             class="profile-image mb-2">
+        <form th:action="@{/myInfo/uploadProfile}" method="post" enctype="multipart/form-data">
+          <input type="file" name="profileImage" accept="image/*" class="form-control mb-2">
+          <button type="submit" class="btn btn-sm btn-outline-primary">사진 변경</button>
+        </form>
+      </div>
 
-      <a th:href="@{/myInfo/edit}" class="btn btn-primary mt-3">정보 수정</a>
+      <!-- 사용자 정보 -->
+      <div class="mb-3">
+        <label class="form-label">사용자 이름</label>
+        <input type="text" class="form-control" th:value="${user.username}" readonly>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">이메일</label>
+        <input type="email" class="form-control" th:value="${user.email}" readonly>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">가입일</label>
+        <input type="text" class="form-control" th:value="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}" readonly>
+      </div>
+
+      <a th:href="@{/myInfo/edit}" class="btn btn-primary">정보 수정</a>
     </div>
 
     <div sec:authorize="!isAuthenticated()">

@@ -11,9 +11,6 @@ import lombok.*;
 @Builder
 @Table(schema = "zerotodeploy", name = "user")
 public class JoinUserEntity {
-	public JoinUserEntity(String email, String nickname, Object o, Role role) {
-	}
-
 	public enum Role {
 		ROLE_USER, ROLE_ADMIN
 	}
@@ -35,10 +32,7 @@ public class JoinUserEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, name = "role")
 	private Role role;
-	public JoinUserEntity(String email, String nickname, Role role) {
-		this.email = email;
-		this.userName = nickname;
-		this.password = null;
-		this.role = role;
-	}
+
+	@Column(name = "profile_image")
+	private String profileImage;
 }
