@@ -83,7 +83,6 @@
     <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script th:src="@{/js/main.js}"></script>
-</div>
     <script>
         function confirmLogout() {
             if (confirm('로그아웃 하시겠습니까?')) {
@@ -153,8 +152,18 @@
             const spinner = document.getElementById('spinner');
             if (spinner) spinner.classList.remove('show');
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".post-item").forEach(function (item) {
+                item.addEventListener("click", function () {
+                    const href = item.getAttribute("data-href");
+                    if (href) {
+                        window.location.href = href;
+                    }
+                });
+            });
+        });
     </script>
 </div>
-
 </body>
 </html>

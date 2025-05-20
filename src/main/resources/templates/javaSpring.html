@@ -2,18 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="">
 <head th:replace="~{common::header}"></head>
 <body>
-<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
+<div class="container-xxl bg-white p-0 d-flex flex-column" style="height: 100vh;">
 	<div th:replace="~{common::nav}"></div>
 
-	<div class="container py-5">
-		<h2 class="mb-4">Java & Spring 글 목록</h2>
+	<div class="scrollable-list-wrapper">
+		<h2 class="mb-4">Java & Spring</h2>
 		<div th:if="${#lists.isEmpty(posts)}">
 			<p>작성된 글이 없습니다.</p>
 		</div>
 		<div th:each="post : ${posts}"
 			 class="mb-4 p-4 border rounded shadow-sm post-item"
-			 th:data-href="@{/post/{id}(id=${post.id})}"
-			 style="cursor: pointer;">
+			 th:data-href="@{/post/{id}(id=${post.id})}">
 			<h4 class="mb-2">
 				<span th:text="${post.title}" class="text-dark text-decoration-none"></span>
 			</h4>
@@ -24,10 +23,8 @@
 			<small class="text-muted" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
 		</div>
 	</div>
-
-	<footer th:replace="~{common::footer}"></footer>
+	<footer th:replace="~{common::footer}" class="mt-auto"></footer>
+	<div th:replace="~{common::script}"></div>
 </div>
-<!-- JavaScript Libraries -->
-<div th:replace="~{common::script}"></div>
 </body>
 </html>
