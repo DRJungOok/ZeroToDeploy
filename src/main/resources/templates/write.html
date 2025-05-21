@@ -3,46 +3,48 @@
 <head th:replace="~{common::header}">
 </head>
 <body>
-<div class="container-xxl bg-white p-0">
+<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
 	<div th:replace="~{common::nav}"></div>
 
-	<!-- Write Form Section Start -->
-	<div class="container py-5">
-		<h2 class="mb-4">글 작성</h2>
-		<form th:action="@{/write}" method="post" enctype="multipart/form-data" onsubmit="return prepareSubmit()">
-			<div class="mb-3">
-				<label for="title" class="form-label">제목</label>
-				<input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요" required>
-			</div>
+	<main class="flex-grow-1">
+		<div class="container py-5">
+			<h2 class="mb-4">글 작성</h2>
+			<form th:action="@{/write}" method="post" enctype="multipart/form-data" onsubmit="return prepareSubmit()">
+				<div class="mb-3">
+					<label for="title" class="form-label">제목</label>
+					<input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요" required>
+				</div>
 
-			<div class="mb-3">
-				<label for="category" class="form-label">대분류</label>
-				<select class="form-select" id="category" name="category" required>
-					<option value="" disabled selected>select category</option>
-					<option value="java&spring">java & spring</option>
-					<option value="linux">linux</option>
-					<option value="web">web</option>
-					<option value="history">history</option>
-					<option value="about">about</option>
-					<option value="etc">etc</option>
-				</select>
-			</div>
+				<div class="mb-3">
+					<label for="category" class="form-label">대분류</label>
+					<select class="form-select" id="category" name="category" required>
+						<option value="" disabled selected>select category</option>
+						<option value="java&spring">java & spring</option>
+						<option value="linux">linux</option>
+						<option value="web">web</option>
+						<option value="history">history</option>
+						<option value="about">about</option>
+						<option value="etc">etc</option>
+					</select>
+				</div>
 
-			<div class="mb-3">
-				<label for="editor" class="form-label">내용</label>
-				<div id="editor" style="height: 300px;"></div>
-				<input type="hidden" name="content" id="hidden-content" />
-			</div>
+				<div class="mb-3">
+					<label for="editor" class="form-label">내용</label>
+					<div id="editor" style="height: 300px;"></div>
+					<input type="hidden" name="content" id="hidden-content" />
+				</div>
 
-			<div class="filebox mb-3">
-				<input class="upload-name" placeholder="첨부파일" disabled>
-				<label for="files">파일찾기</label>
-				<input type="file" id="files" name="files" multiple>
-			</div>
+				<div class="filebox mb-3">
+					<input class="upload-name" placeholder="첨부파일" disabled>
+					<label for="files">파일찾기</label>
+					<input type="file" id="files" name="files" multiple>
+				</div>
 
-			<button type="submit" class="btn btn-primary">작성 완료</button>
-		</form>
-	</div>
+				<button type="submit" class="btn btn-primary">작성 완료</button>
+			</form>
+		</div>
+	</main>
+
 
 	<footer th:replace="~{common::footer}"></footer>
 </div>

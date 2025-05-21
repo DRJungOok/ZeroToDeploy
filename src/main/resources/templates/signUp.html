@@ -1,77 +1,72 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{common::header}"></head>
 <body>
 <div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
-		<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0" th:fragment="nav">
-			<div class="container-fluid d-flex align-items-center justify-content-between">
-				<a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-					<h1 class="m-0 text-primary">ZeroToDeploy</h1>
-				</a>
-
-				<div class="d-flex align-items-center gap-3">
-					<div sec:authorize="hasRole('ROLE_ADMIN')" th:if="${currentPath != '/write'}">
-						<a th:href="@{/write}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">✍ 글쓰기</a>
-					</div>
-
-					<div sec:authorize="isAuthenticated()" id="session-info" class="d-flex align-items-center border rounded px-3 py-1" style="font-size: 14px; color: #666; height: 42px;">
-						<i class="bi bi-clock me-2 text-secondary"></i>
-						<span>세션 : <span id="remaining-time">--</span></span>
-						<button onclick="extendSession()" class="btn btn-sm btn-outline-dark ms-2">연장</button>
-					</div>
+	<!-- 상단 네비게이션 -->
+	<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0" th:fragment="nav">
+		<div class="container-fluid d-flex align-items-center justify-content-between">
+			<a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
+				<h1 class="m-0 text-primary">ZeroToDeploy</h1>
+			</a>
+			<div class="d-flex align-items-center gap-3">
+				<div sec:authorize="hasRole('ROLE_ADMIN')" th:if="${currentPath != '/write'}">
+					<a th:href="@{/write}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">✍ 글쓰기</a>
 				</div>
-			</div>
-		</nav>
-
-		<div
-			class="container-xxl py-5 wow fadeInUp d-flex justify-content-center align-items-center"
-			data-wow-delay="0.1s" style="min-height: 100vh; overflow: hidden;">
-			<div class="card shadow-lg" style="max-width: 400px; width: 100%;">
-				<div class="card-header bg-primary text-white text-center py-3">
-					<h4>Sign Up</h4>
-				</div>
-				<div class="card-body">
-					<form method="post" th:action="@{/join/signUp}">
-						<div class="mb-3">
-							<label class="form-label">User name</label>
-							<input type="text" class="form-control" name="name" required />
-						</div>
-
-						<div class="mb-3">
-							<label class="form-label">User ID</label>
-							<input type="text" class="form-control" name="userId" required />
-						</div>
-
-						<div class="mb-3">
-							<label for="userEmail" class="form-label">Email</label>
-							<input type="email" id="userEmail" name="email" class="form-control" required />
-						</div>
-
-						<div class="mb-4">
-							<label for="userPwd" class="form-label">Password</label>
-							<input type="password" id="userPwd" name="password" class="form-control" required />
-						</div>
-
-						<div class="d-grid mb-3">
-							<button type="submit" class="btn btn-primary">Sign Up</button>
-						</div>
-					</form>
-				</div>
-				<div class="card-footer text-center text-muted py-2">
-					<small>Already have an account? <a href="login.html" th:href="@{/}"
-						class="text-primary">Login</a></small>
+				<div sec:authorize="isAuthenticated()" id="session-info" class="d-flex align-items-center border rounded px-3 py-1" style="font-size: 14px; color: #666; height: 42px;">
+					<i class="bi bi-clock me-2 text-secondary"></i>
+					<span>세션 : <span id="remaining-time">--</span></span>
+					<button onclick="extendSession()" class="btn btn-sm btn-outline-dark ms-2">연장</button>
 				</div>
 			</div>
 		</div>
-		<footer th:replace="~{common::footer}"></footer>
-	</div>
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+	</nav>
 
-	<script th:src="@{lib/wow/wow.js}"></script>
-	<script th:src="@{lib/easing/easing.min.js}"></script>
-	<script th:src="@{lib/waypoints/waypoints.min.js}"></script>
-	<script th:src="@{lib/owlcarousel/owl.carousel.min.js}"></script>
-	<script th:src="@{js/main.js}"></script>
+	<!-- 회원가입 폼 -->
+	<main class="flex-grow-1 d-flex justify-content-center align-items-center">
+		<div class="card shadow-lg" style="max-width: 400px; width: 100%;">
+			<div class="card-header bg-primary text-white text-center py-3">
+				<h4>Sign Up</h4>
+			</div>
+			<div class="card-body">
+				<form method="post" th:action="@{/join/signUp}">
+					<div class="mb-3">
+						<label for="name" class="form-label">User name</label>
+						<input type="text" class="form-control" id="name" name="name" required />
+					</div>
+					<div class="mb-3">
+						<label for="userId" class="form-label">User ID</label>
+						<input type="text" class="form-control" id="userId" name="userId" required />
+					</div>
+					<div class="mb-3">
+						<label for="email" class="form-label">Email</label>
+						<input type="email" class="form-control" id="email" name="email" required />
+					</div>
+					<div class="mb-4">
+						<label for="password" class="form-label">Password</label>
+						<input type="password" class="form-control" id="password" name="password" required />
+					</div>
+					<div class="d-grid mb-3">
+						<button type="submit" class="btn btn-primary">Sign Up</button>
+					</div>
+				</form>
+			</div>
+			<div class="card-footer text-center text-muted py-2">
+				<small>Already have an account? <a th:href="@{/}" class="text-primary">Login</a></small>
+			</div>
+		</div>
+	</main>
+
+	<footer th:replace="~{common::footer}"></footer>
+</div>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/lib/wow/wow.js}"></script>
+<script th:src="@{/lib/easing/easing.min.js}"></script>
+<script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+<script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
 </body>
 </html>
