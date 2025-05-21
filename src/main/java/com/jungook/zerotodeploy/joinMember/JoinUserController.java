@@ -11,7 +11,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/join")
 public class JoinUserController {
 	private final JoinUserService joinUserService;
 
@@ -27,5 +26,10 @@ public class JoinUserController {
 		joinUserService.registerUser(dto);
 		redirectAttributes.addFlashAttribute("message", "completes Join User");
 		return "redirect:/login";
+	}
+
+	@GetMapping("/login")
+	public String login() {
+		return "login";
 	}
 }

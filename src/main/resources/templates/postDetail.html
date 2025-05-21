@@ -26,12 +26,12 @@
 <div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
     <div th:replace="~{common::nav}"></div>
     <div class="container py-5" style="max-width: 900px; margin: auto;">
-        <h2>글 상세</h2>
-
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             <form th:action="@{/post/update/{id}(id=${post.id})}" method="post" onsubmit="return prepareSubmit()">
             <div class="mb-3">
-                    <label class="form-label">제목</label>
+                    <label class="form-label">
+                        <h3>제목</h3>
+                    </label>
                     <input type="text" th:value="${post.title}" name="title" class="form-control"/>
                 </div>
                 <div class="mb-3">
@@ -52,11 +52,11 @@
         <div th:if="${#authorization.expression('!hasRole(''ROLE_ADMIN'')')}">
             <div class="mb-3">
                 <label class="form-label">제목</label>
-                <p th:text="${post.title}" class="form-control-plaintext"></p>
+                <h4><p th:text="${post.title}" class="form-control-plaintext"></p></h4>
             </div>
             <div class="mb-3">
                 <label class="form-label">내용</label>
-                <p th:utext="${post.content}" class="form-control-plaintext ql-editor"></p>
+                <div th:utext="${post.content}" class="form-control-plaintext ql-editor"></div>
             </div>
         </div>
 
