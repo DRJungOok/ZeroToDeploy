@@ -76,6 +76,8 @@
 </footer>
 </div>
 <div th:fragment="script">
+    <!-- Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script th:src="@{/lib/wow/wow.js}"></script>
@@ -165,6 +167,31 @@
                 });
             });
         });
+
+        $("#files").on('change', function () {
+            let fileNames = Array.from(this.files).map(file => file.name).join(', ');
+            $(".upload-name").val(fileNames);
+        });
+
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: '내용을 입력하세요...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    ['link', 'image'],
+                    ['clean']
+                ]
+            }
+        });
+
+        function prepareSubmit() {
+            const content = document.querySelector('#hidden-content');
+            content.value = quill.root.innerHTML;
+            return true;
+        }
     </script>
 </body>
 </html>

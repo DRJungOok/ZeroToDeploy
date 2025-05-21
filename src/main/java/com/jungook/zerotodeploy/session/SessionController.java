@@ -14,7 +14,7 @@ public class SessionController {
 
 	@PostMapping("/extend")
 	public ResponseEntity<?> extendSession(HttpSession session) {
-		session.setMaxInactiveInterval(1800);
+		session.setMaxInactiveInterval(3600);
 		return ResponseEntity.ok().build();
 	}
 
@@ -24,11 +24,15 @@ public class SessionController {
 		Map<String, Object> response = new HashMap<>();
 
 		if (session != null) {
-			long currentTime = System.currentTimeMillis();
-			long lastAccessedTime = session.getLastAccessedTime();
-			int maxInactiveInterval = session.getMaxInactiveInterval();
+			Long loginTimestamp = (Long) session.getAttribute("loginTimestamp");
+			if (loginTimestamp == null) {
+				loginTimestamp = System.currentTimeMillis();
+				session.setAttribute("loginTimestamp", loginTimestamp);
+			}
 
-			long remainingTime = (lastAccessedTime + (maxInactiveInterval * 1000L) - currentTime) / 1000L;
+			long fixedTimeoutMillis = 60 * 60 * 1000L;
+			long now = System.currentTimeMillis();
+			long remainingTime = (loginTimestamp + fixedTimeoutMillis - now) / 1000L;
 			remainingTime = Math.max(remainingTime, 0);
 
 			response.put("remainingTime", remainingTime);
