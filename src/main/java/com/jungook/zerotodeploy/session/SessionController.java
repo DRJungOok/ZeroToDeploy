@@ -20,8 +20,11 @@ public class SessionController {
 
 	@GetMapping("/info")
 	public Map<String, Object> getSessionInfo(HttpServletRequest request) {
+		boolean isLoggedIn = request.getUserPrincipal() != null;
 		HttpSession session = request.getSession(false);
 		Map<String, Object> response = new HashMap<>();
+
+		response.put("isLoggedIn", isLoggedIn);
 
 		if (session != null) {
 			Long loginTimestamp = (Long) session.getAttribute("loginTimestamp");
@@ -36,8 +39,10 @@ public class SessionController {
 			remainingTime = Math.max(remainingTime, 0);
 
 			response.put("remainingTime", remainingTime);
+			response.put("isLoggedIn", true);
 		} else {
 			response.put("remainingTime", 0);
+			response.put("isLoggedIn", false);
 		}
 
 		return response;
