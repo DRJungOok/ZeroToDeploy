@@ -77,6 +77,11 @@ public class OAuthAttributes {
 		Map<String, Object> profile = (Map<String, Object>) account.get("profile");
 		String nickname = profile != null ? (String) profile.get("nickname") : null;
 
+		Object id = attributes.get("id");
+		if(id == null) {
+			log.error("not have id in attribute :: {}", attributes);
+		}
+
 		return new OAuthAttributes(nickname, email, "kakao");
 	}
 }
