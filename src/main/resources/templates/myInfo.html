@@ -32,7 +32,7 @@
       <!-- 사용자 정보 -->
       <div class="mb-3">
         <label class="form-label">사용자 이름</label>
-        <input type="text" class="form-control" th:value="${user.username}" readonly>
+        <input type="text" class="form-control" th:value="${user.userName}" readonly>
       </div>
       <div class="mb-3">
         <label class="form-label">이메일</label>
@@ -40,7 +40,7 @@
       </div>
       <div class="mb-3">
         <label class="form-label">가입일</label>
-        <input type="text" class="form-control" th:value="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}" readonly>
+        <input type="text" class="form-control" th:value="${#temporals.format(user.joinDate, 'yyyy-MM-dd')}" readonly>
       </div>
 
       <a th:href="@{/myInfo/edit}" class="btn btn-primary">정보 수정</a>

@@ -40,6 +40,10 @@
                     <a th:href="@{/write}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">✍ 글쓰기</a>
                 </div>
 
+                <div>
+                    <a th:href="@{/myInfo}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">내정보</a>
+                </div>
+
                 <!-- 로그인한 경우에만 세션 정보 표시 -->
                 <div sec:authorize="isAuthenticated()" id="session-info" class="d-flex align-items-center border rounded px-3 py-1" style="font-size: 14px; color: #666; height: 42px;">
                     <i class="bi bi-clock me-2 text-secondary"></i>
@@ -173,20 +177,6 @@
             $(".upload-name").val(fileNames);
         });
 
-        const quill = new Quill('#editor', {
-            theme: 'snow',
-            placeholder: '내용을 입력하세요...',
-            modules: {
-                toolbar: [
-                    [{ 'header': [1, 2, false] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                    ['link', 'image'],
-                    ['clean']
-                ]
-            }
-        });
-
         function prepareSubmit() {
             const content = document.querySelector('#hidden-content');
             content.value = quill.root.innerHTML;
@@ -198,6 +188,7 @@
                 .then(res => res.json())
                 .then(data => {
                     const isLoggedIn = data.isLoggedIn;
+                    const remaining = parseInt(data.remainingTime || 0);
 
                     if (!isLoggedIn) {
                         return;

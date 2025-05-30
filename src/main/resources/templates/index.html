@@ -64,6 +64,10 @@
             container.style.display = 'none';
             return;
         }
+
+        if(keyword == '') {
+            alert('검색 문자열이 비어 있습니다.');
+        }
         fetch(`/api/search?keyword=${encodeURIComponent(keyword)}&filter=${filter}`)
             .then(res => res.json())
             .then(data => {

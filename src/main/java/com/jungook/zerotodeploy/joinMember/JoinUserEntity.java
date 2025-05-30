@@ -3,6 +3,8 @@ package com.jungook.zerotodeploy.joinMember;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -35,4 +37,7 @@ public class JoinUserEntity {
 
 	@Column(name = "profile_image")
 	private String profileImage;
+
+	@Column(name = "join_date")
+	private Date joinDate;
 }

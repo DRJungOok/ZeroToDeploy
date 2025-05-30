@@ -31,7 +31,6 @@ public class MyInfoController {
 
 	@PostMapping("/uploadProfile")
 	public String mePost() {
-
 		return "myInfo";
 	};
 }
