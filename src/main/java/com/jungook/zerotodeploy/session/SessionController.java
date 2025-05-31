@@ -15,6 +15,7 @@ public class SessionController {
 	@PostMapping("/extend")
 	public ResponseEntity<?> extendSession(HttpSession session) {
 		session.setMaxInactiveInterval(3600);
+		session.setAttribute("loginTimestamp", System.currentTimeMillis());
 		return ResponseEntity.ok().build();
 	}
 

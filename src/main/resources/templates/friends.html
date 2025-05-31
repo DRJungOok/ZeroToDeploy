@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{common::header}"></head>
+<body>
+<div th:replace="~{common::navbar}"></div>
+
+<div class="container mt-5">
+    <h2>친구 목록</h2>
+    <div id="friend-list">
+    </div>
+
+    <h3 class="mt-4">받은 친구 요청</h3>
+    <div id="received-requests">
+    </div>
+
+    <h3 class="mt-4">요청 친구 요청</h3>
+    <div id="received-responses">
+    </div>
+</div>
+
+<div th:replace="~{common::footer}"></div>
+</body>
+</html>
