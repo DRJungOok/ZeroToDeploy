@@ -60,7 +60,6 @@
             </div>
         </div>
 
-        <!-- 좋아요 버튼 -->
         <div sec:authorize="isAuthenticated()" class="text-end mb-3">
             <button type="button"
                     class="btn btn-outline-primary d-flex align-items-center gap-1"
@@ -75,16 +74,27 @@
         <div th:if="${post.comments != null}">
             <h4 class="mb-3">댓글</h4>
             <div th:each="comment : ${post.comments}" th:id="'comment-box-' + ${comment.id}" class="mb-3">
-                <p><strong th:text="${comment.author}">작성자</strong></p>
-                <form th:action="@{/comment/update}" method="post" class="d-flex flex-column gap-2" onsubmit="return disableAfterSubmit([[${comment.id}]])">
-                <input type="hidden" name="commentId" th:value="${comment.id}" />
+
+                <p>
+                    <strong>
+                        <span
+                                class="user-popup-trigger text-primary"
+                                style="cursor: pointer;"
+                                th:text="${comment.author}"
+                        th:attr="data-username=${comment.author}"></span>
+                    </strong>
+                </p>
+
+                <form th:action="@{/comment/update}" method="post" class="d-flex flex-column gap-2" th:onsubmit="'return disableAfterSubmit(' + ${comment.id} + ')'">
+                    <input type="hidden" name="commentId" th:value="${comment.id}" />
                     <textarea th:id="'comment-content-' + ${comment.id}"
                               name="content"
                               class="form-control"
                               th:text="${comment.content}"
                               readonly></textarea>
-                    <div th:if="${#authentication.name == comment.author or #authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="d-flex gap-2">
-                    <button type="button"
+                    <div th:if="${#authentication.name == comment.author or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                         class="d-flex gap-2">
+                        <button type="button"
                                 th:id="'edit-btn-' + ${comment.id}"
                                 class="btn btn-outline-secondary"
                                 th:onclick="'enableEdit(' + ${comment.id} + ')'">수정</button>
@@ -98,6 +108,8 @@
                 </form>
             </div>
         </div>
+
+        <div id="user-preview-popup" style="display: none; position: absolute; z-index: 100;" class="card p-2 shadow small"></div>
 
         <!-- 댓글 작성 -->
         <form th:action="@{/comment/create}" method="post" onsubmit="return checkLoginBeforeSubmit()">
@@ -212,6 +224,47 @@
         }
         return true;
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const popup = document.getElementById('user-preview-popup');
+
+        document.querySelectorAll('.user-popup-trigger').forEach(e => {
+            e.addEventListener('mouseenter', async (ev) => {
+                const username = ev.target.dataset.username;
+
+                try {
+                    const res = await fetch(`/api/user/preview/${username}`);
+                    if (!res.ok) {
+                        console.warn('미리보기 요청 실패:', res.status);
+                        return;
+                    }
+                    const data = await res.json();
+
+                    popup.innerHTML = `
+                    <div><strong>${data.name}</strong></div>
+                    <div>${data.email}</div>
+                    <div>가입일: ${new Date(data.createdAt).toLocaleDateString()}</div>
+                `;
+
+                    const rect = ev.target.getBoundingClientRect();
+                    popup.style.left = `${rect.right + 10 + window.scrollX}px`;
+                    popup.style.top = `${rect.top + window.scrollY}px`;
+                    popup.style.display = 'block';
+                } catch (error) {
+                    console.error('팝업 로딩 중 오류:', error);
+                }
+            });
+
+            e.addEventListener('mouseleave', () => {
+                popup.style.display = 'none';
+            });
+        });
+
+        popup.addEventListener('mouseleave', () => {
+            popup.style.display = 'none';
+        });
+    });
+
 </script>
 </body>
 </html>

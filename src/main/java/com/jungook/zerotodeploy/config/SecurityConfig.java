@@ -58,7 +58,7 @@ public class SecurityConfig {
                     "/", "/signUp", "/login",
                     "/css/**", "/js/**", "/images/**",
                     "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
-                    "/swagger-resources/**", "/myInfo/**"
+                    "/swagger-resources/**", "/myInfo/**", "/api/user/preview/**"
                 ).permitAll()
                 .requestMatchers("/api/**","/post/like/**")
                 .authenticated()
