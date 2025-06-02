@@ -77,11 +77,14 @@
 
                 <p>
                     <strong>
-                        <span
-                                class="user-popup-trigger text-primary"
-                                style="cursor: pointer;"
-                                th:text="${comment.author}"
-                        th:attr="data-username=${comment.author}"></span>
+                        <a th:href="@{/api/user/myInfo/{username}(username=${comment.author})}">
+                            <span
+                                    class="user-popup-trigger text-primary"
+                                    style="cursor: pointer;"
+                                    th:text="${comment.author}"
+                                    th:attr="data-username=${comment.author}">
+                            </span>
+                        </a>
                     </strong>
                 </p>
 
@@ -111,7 +114,6 @@
 
         <div id="user-preview-popup" style="display: none; position: absolute; z-index: 100;" class="card p-2 shadow small"></div>
 
-        <!-- 댓글 작성 -->
         <form th:action="@{/comment/create}" method="post" onsubmit="return checkLoginBeforeSubmit()">
             <input type="hidden" name="postId" th:value="${post.id}" />
             <div class="mb-3">
@@ -161,7 +163,7 @@
             credentials: "include"
         })
             .then(response => {
-                if (!response.ok) throw new Error("Like 실패");
+                if (!response.ok) throw new Error("좋아요 실패");
                 return response.json();
             })
             .then(data => {
@@ -181,20 +183,10 @@
             })
             .catch(error => {
                 alert("좋아요 처리 중 오류가 발생했습니다.");
+                console.log(`like error postDetail.html :: ${error}`)
             });
     }
-    function disableAfterSubmit(commentId) {
-        const textarea = document.getElementById(`comment-content-${commentId}`);
-        const editBtn = document.getElementById(`edit-btn-${commentId}`);
-        const submitBtn = document.getElementById(`submit-btn-${commentId}`);
 
-        if (textarea && editBtn && submitBtn) {
-            textarea.setAttribute('readonly', 'readonly');
-            submitBtn.classList.add('d-none');
-            editBtn.classList.remove('d-none');
-        }
-        return true;
-    }
     document.addEventListener("DOMContentLoaded", function () {
         const editor = document.querySelector("#editor-container");
         if (editor) {
