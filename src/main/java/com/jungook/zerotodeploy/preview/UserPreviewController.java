@@ -88,8 +88,8 @@ public class UserPreviewController {
 
     @PostMapping("/myInfo/{username}/update")
     @Transactional
-    public String updateInfo(@PathVariable String username,
-                             @RequestParam String email,
+    public String updateInfo(@RequestParam("userName") String username,
+                             @RequestParam("email") String email,
                              @RequestParam(required = false) String password,
                              Authentication authentication) {
         String currentUsername = authentication.getName();
@@ -107,6 +107,7 @@ public class UserPreviewController {
             user.setPassword(passwordEncoder.encode(password));
         }
 
+        joinUserRepo.save(user);
         return "redirect:/api/user/myInfo/" + username + "?success";
     }
 }

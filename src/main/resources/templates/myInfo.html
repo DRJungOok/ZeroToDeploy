@@ -25,8 +25,8 @@
         <form th:action="@{'/api/user/myInfo/' + ${user.userName} + '/update'}" method="post">
         <div class="mb-3">
             <label class="form-label">사용자 이름</label>
-            <input type="text" th:value="${user.userName}" class="form-control" th:readonly="${! (isEditable != null and isEditable)}" />
-          </div>
+          <input type="text" th:value="${user.userName}" name="userName" class="form-control" />
+                </div>
 
           <div class="mb-3">
             <label class="form-label">이메일</label>
