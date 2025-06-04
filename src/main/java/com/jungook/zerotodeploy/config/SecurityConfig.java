@@ -4,6 +4,8 @@ import com.jungook.zerotodeploy.oauth.PrincipalOauth2UserService;
 import com.jungook.zerotodeploy.details.CustomUserDetailsService;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -24,13 +26,15 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
+
     private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         JoinUserEntity joinUserEntity = new JoinUserEntity();
-        System.out.println("result matches: " + encoder.matches("admin", joinUserEntity.getPassword()));
+        log.debug("result matches: {}", encoder.matches("admin", joinUserEntity.getPassword()));
         return encoder;
     }
 
@@ -89,9 +93,9 @@ public class SecurityConfig {
     @Bean
     public AuthenticationSuccessHandler successHandler() {
         return (request, response, authentication) -> {
-            System.out.println("✅ success Login!");
-            System.out.println("👤 user Name: " + authentication.getName());
-            System.out.println("🔑 has a Role: " + authentication.getAuthorities());
+            log.info("✅ success Login!");
+            log.info("👤 user Name: {}", authentication.getName());
+            log.info("🔑 has a Role: {}", authentication.getAuthorities());
             response.sendRedirect("/");
         };
     }

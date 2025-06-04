@@ -6,6 +6,8 @@ import com.jungook.zerotodeploy.post.PostEntity;
 import com.jungook.zerotodeploy.post.PostRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,9 +25,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LikeController {
 
-	private final LikeRepo likeRepo;
-	private final JoinUserRepo joinUserRepo;
-	private final PostRepo postRepo;
+       private static final Logger log = LoggerFactory.getLogger(LikeController.class);
+
+       private final LikeRepo likeRepo;
+       private final JoinUserRepo joinUserRepo;
+       private final PostRepo postRepo;
 
 	@PostMapping("/post/like/{id}")
 	@ResponseBody
@@ -77,9 +81,9 @@ public class LikeController {
 		response.put("likeCount", post.getLikeCount());
 		response.put("liked", likedNow);
 
-		System.out.println("좋아요 POST ID: " + post.getId());
-		System.out.println("사용자 EMAIL 또는 USERNAME: " + currentUser.getEmail());
-		System.out.println("현재 좋아요 수: " + post.getLikeCount());
+               log.info("좋아요 POST ID: {}", post.getId());
+               log.info("사용자 EMAIL 또는 USERNAME: {}", currentUser.getEmail());
+               log.info("현재 좋아요 수: {}", post.getLikeCount());
 
 		return ResponseEntity.ok(response);
 	}
