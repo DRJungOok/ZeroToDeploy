@@ -17,10 +17,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/myInfo")
 public class MyInfoController {
+
 	private final JoinUserRepo joinUserRepo;
 	private final BCryptPasswordEncoder passwordEncoder;
 
@@ -31,7 +33,7 @@ public class MyInfoController {
 
 	@GetMapping
 	public String myInfo(Model model, Authentication authentication) {
-		if(authentication == null) {
+		if (authentication == null) {
 			return "redirect:/login";
 		}
 
@@ -44,31 +46,38 @@ public class MyInfoController {
 	}
 
 	@PostMapping("/uploadProfile")
-	public String uploadProfile(Model model, Authentication authentication, @RequestParam("profileImage")MultipartFile file) throws IOException {
+	public String uploadProfile(Model model, Authentication authentication,
+								@RequestParam("profileImage") MultipartFile file) throws IOException {
+		if (authentication == null) return "redirect:/login";
+
 		String userName = authentication.getName();
 		JoinUserEntity user = joinUserRepo.findByUserName(userName)
 				.orElseThrow(() -> new UsernameNotFoundException("not found user: " + userName));
 
-		if(!file.isEmpty()) {
+		if (!file.isEmpty()) {
 			String uploadDir = getUploadDir();
-			String fileName = file.getOriginalFilename();
-			Path path = Paths.get(uploadDir, fileName).normalize();
-			Files.createDirectories(path.getParent());
-			Files.write(path, file.getBytes());
+			String originalFileName = file.getOriginalFilename();
+			String cleanedFileName = originalFileName.replaceAll("\\s+", "_");
+			String newFileName = UUID.randomUUID() + "_" + cleanedFileName;
 
-			user.setProfileImage(fileName);
+			Path uploadPath = Paths.get(uploadDir, newFileName).normalize();
+			Files.createDirectories(uploadPath.getParent());
+			Files.write(uploadPath, file.getBytes());
+
+			user.setProfileImage(newFileName);
 			joinUserRepo.save(user);
 		}
+
 		model.addAttribute("user", user);
-		return "myInfo";
-	};
+		return "redirect:/myInfo";
+	}
 
 	public String getUploadDir() {
 		String os = System.getProperty("os.name").toLowerCase();
 		if (os.contains("win")) {
 			return "C:/uploads/";
 		} else if (os.contains("mac")) {
-			return "Users/uploads/";
+			return "/Users/uploads/";
 		} else {
 			return "/home/ubuntu/uploads/";
 		}
@@ -78,16 +87,18 @@ public class MyInfoController {
 	public String updateInfo(Model model, Authentication authentication,
 							 @RequestParam("userName") String newUserName,
 							 @RequestParam("email") String newEmail,
-							 @RequestParam(value = "password", required = false) String newPassword) throws IOException {
+							 @RequestParam(value = "password", required = false) String newPassword) {
+		if (authentication == null) return "redirect:/login";
+
 		String userName = authentication.getName();
-		JoinUserEntity user = joinUserRepo.findByUserName(userName).orElseThrow(() -> new UsernameNotFoundException("not found user: " + userName));
+		JoinUserEntity user = joinUserRepo.findByUserName(userName)
+				.orElseThrow(() -> new UsernameNotFoundException("not found user: " + userName));
 
 		user.setUserName(newUserName);
 		user.setEmail(newEmail);
 
-		if(newPassword != null && !newPassword.isEmpty()) {
-			String encodedPassword = passwordEncoder.encode(newPassword);
-			user.setPassword(encodedPassword);
+		if (newPassword != null && !newPassword.isBlank()) {
+			user.setPassword(passwordEncoder.encode(newPassword));
 		}
 
 		joinUserRepo.save(user);
