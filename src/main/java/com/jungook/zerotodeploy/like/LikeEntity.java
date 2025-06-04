@@ -1,6 +1,5 @@
 package com.jungook.zerotodeploy.like;
 
-import ch.qos.logback.core.joran.spi.HttpUtil;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.post.PostEntity;
 import jakarta.persistence.*;
