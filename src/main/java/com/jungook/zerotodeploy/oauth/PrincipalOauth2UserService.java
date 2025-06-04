@@ -27,13 +27,15 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-		System.out.println("🧪 userRequest.getClientRegistration().getRegistrationId() = " + userRequest.getClientRegistration().getRegistrationId());
+               log.debug("🧪 userRequest.getClientRegistration().getRegistrationId() = {}",
+                       userRequest.getClientRegistration().getRegistrationId());
 
 		OAuth2User oAuth2User = super.loadUser(userRequest);
 		String registrationId = userRequest.getClientRegistration().getRegistrationId();
 		log.info("🟡 registrationId = {}", registrationId);
 		log.info("✅ [{}] OAuth2 attributes received: {}", userRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
-		oAuth2User.getAttributes().forEach((key, value) -> System.out.println("🔑 " + key + " : " + value));
+               oAuth2User.getAttributes().forEach((key, value) ->
+                       log.debug("🔑 {} : {}", key, value));
 
 		OAuthAttributes attributes = OAuthAttributes.of(registrationId, oAuth2User.getAttributes());
 		String email = attributes.getEmail();

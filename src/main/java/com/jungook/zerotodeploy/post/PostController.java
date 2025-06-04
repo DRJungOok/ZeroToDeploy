@@ -5,6 +5,8 @@ import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import com.jungook.zerotodeploy.like.LikeRepo;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -22,10 +24,12 @@ import java.util.List;
 @AllArgsConstructor
 public class PostController {
 
-	private PostRepo postRepo;
-	private PostService postService;
-	private JoinUserRepo joinUserRepo;
-	private LikeRepo likeRepo;
+       private static final Logger log = LoggerFactory.getLogger(PostController.class);
+
+       private PostRepo postRepo;
+       private PostService postService;
+       private JoinUserRepo joinUserRepo;
+       private LikeRepo likeRepo;
 
 	@GetMapping("write")
 	public String write() {
@@ -199,8 +203,8 @@ public class PostController {
 	@PostMapping("/post/write")
 	public String writePost(PostEntity post) {
 		PostEntity savedPost = postService.savePost(post);
-		System.out.println("🔥 savedPost id: " + savedPost.getId());
-		return "redirect:/post/" + savedPost.getId();
-	}
+               log.info("🔥 savedPost id: {}", savedPost.getId());
+               return "redirect:/post/" + savedPost.getId();
+       }
 
 }
