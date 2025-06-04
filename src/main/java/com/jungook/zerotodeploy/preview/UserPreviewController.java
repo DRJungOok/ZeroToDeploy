@@ -3,6 +3,7 @@ package com.jungook.zerotodeploy.preview;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -90,7 +92,8 @@ public class UserPreviewController {
 
     @PostMapping("/myInfo/{username}/update")
     @Transactional
-    public String updateInfo(@RequestParam("userName") String username,
+    public String updateInfo(@PathVariable String username,
+                             @RequestParam("userName") String newUserName,
                              @RequestParam("email") String email,
                              @RequestParam(required = false) String password,
                              Authentication authentication) {
@@ -102,15 +105,16 @@ public class UserPreviewController {
         if (!isAdmin && !isOwner) return "redirect:/access-denied";
 
         JoinUserEntity user = joinUserRepo.findByUserName(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
+        user.setUserName(newUserName);
         user.setEmail(email);
         if (password != null && !password.isBlank()) {
             user.setPassword(passwordEncoder.encode(password));
         }
 
         joinUserRepo.save(user);
-        return "redirect:/api/user/myInfo/" + username + "?success";
+        return "redirect:/api/user/myInfo/" + user.getUserName() + "?success";
     }
 
     private String getUploadDir() {
