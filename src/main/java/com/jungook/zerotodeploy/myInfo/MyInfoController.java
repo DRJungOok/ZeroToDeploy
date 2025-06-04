@@ -39,8 +39,9 @@ public class MyInfoController {
 		JoinUserEntity user = joinUserRepo.findByUserName(userName)
 				.orElseThrow(() -> new UsernameNotFoundException("not found user: " + userName));
 
-		model.addAttribute("user", user);
-		return "myInfo";
+                model.addAttribute("user", user);
+                model.addAttribute("isEditable", true);
+                return "myInfo";
 	}
 
 	@PostMapping("/uploadProfile")
