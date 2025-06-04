@@ -54,7 +54,7 @@
                 </div>
 
                 <div sec:authorize="isAuthenticated()">
-                    <a th:href="@{/myInfo}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">내정보</a>
+                    <a th:href="@{'/api/user/myInfo/' + ${#authentication.name}}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">내정보</a>
                 </div>
 
                 <div sec:authorize="isAuthenticated()" id="session-info" class="d-flex align-items-center border rounded px-3 py-1" style="font-size: 14px; color: #666; height: 42px;">
