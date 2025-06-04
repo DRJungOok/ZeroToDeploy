@@ -78,7 +78,9 @@ public class UserPreviewController {
 
         if (!profileImage.isEmpty()) {
             String filename = UUID.randomUUID() + "_" + profileImage.getOriginalFilename();
-            Path path = Paths.get("/home/ubuntu/uploads/" + filename);
+            String uploadDir = getUploadDir();
+            Path path = Paths.get(uploadDir + filename).normalize();
+            Files.createDirectories(path.getParent());
             Files.write(path, profileImage.getBytes());
             user.setProfileImage(filename);
         }
@@ -109,5 +111,16 @@ public class UserPreviewController {
 
         joinUserRepo.save(user);
         return "redirect:/api/user/myInfo/" + username + "?success";
+    }
+
+    private String getUploadDir() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            return "C:/uploads/";
+        } else if (os.contains("mac")) {
+            return "/Users/uploads/";
+        } else {
+            return "/home/ubuntu/uploads/";
+        }
     }
 }
