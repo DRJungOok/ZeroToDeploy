@@ -56,8 +56,7 @@ dependencies {
         implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
         implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
-        // Explicit logging dependency to ensure logback classes are packaged
-        implementation 'ch.qos.logback:logback-classic:1.4.14'
+       // Rely on Spring Boot's managed Logback version
 
 	implementation 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
