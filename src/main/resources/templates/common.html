@@ -39,8 +39,11 @@
         </div>
     </div>
 
+    <!-- nav.html -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0" th:fragment="nav">
         <div class="container-fluid d-flex align-items-center justify-content-between">
+
+            <!-- 로고 -->
             <a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
                 <h1 class="m-0 text-primary">ZeroToDeploy</h1>
             </a>
@@ -48,22 +51,23 @@
             <div class="d-flex align-items-center gap-3">
 
                 <!-- 관리자 전용: 글쓰기 버튼 -->
-                <div sec:authorize="hasRole('ROLE_ADMIN')" th:if="${currentPath != '/write'}">
-                    <a th:href="@{/write}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">✍ 글쓰기</a>
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/write}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">
+                        ✍ 글쓰기
+                    </a>
                 </div>
 
-                <!-- 로그인 상태에서만 내정보 버튼 -->
+                <!-- 로그인 후: 내정보 버튼 -->
                 <div sec:authorize="isAuthenticated()">
-                    <a th:href="@{/api/user/myInfo/${#authentication.name}}"
+                    <a th:href="@{'/api/user/myInfo/' + ${#authentication.name}}"
                        class="btn btn-outline-success d-flex align-items-center justify-content-center"
                        style="height: 42px;">
                         내정보
                     </a>
                 </div>
 
-                <!-- 로그인 상태에서만 세션 표시 -->
-                <div sec:authorize="isAuthenticated()"
-                     id="session-info"
+                <!-- 로그인 후: 세션 정보 -->
+                <div sec:authorize="isAuthenticated()" id="session-info"
                      class="d-flex align-items-center border rounded px-3 py-1"
                      style="font-size: 14px; color: #666; height: 42px;">
                     <i class="bi bi-clock me-2 text-secondary"></i>
@@ -71,7 +75,7 @@
                     <button onclick="extendSession()" class="btn btn-sm btn-outline-dark ms-2">연장</button>
                 </div>
 
-                <!-- 로그인 전: Login 버튼만 -->
+                <!-- 로그인 전: Login 버튼 -->
                 <div sec:authorize="isAnonymous()">
                     <a th:href="@{/login}"
                        class="btn btn-outline-primary d-flex align-items-center justify-content-center"
@@ -80,16 +84,14 @@
                     </a>
                 </div>
 
-                <!-- 로그인 후: Logout 버튼만 -->
+                <!-- 로그인 후: Logout 버튼 -->
                 <div sec:authorize="isAuthenticated()">
-                    <button class="btn btn-outline-danger"
-                            onclick="confirmLogout()">
-                        Logout
-                    </button>
+                    <button class="btn btn-outline-danger" onclick="confirmLogout()">Logout</button>
                 </div>
             </div>
         </div>
     </nav>
+
 
 
     <footer class="bg-dark text-white-50 footer mt-auto pt-5 wow fadeIn" data-wow-delay="0.1s" th:fragment="footer">
