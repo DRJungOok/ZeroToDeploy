@@ -27,7 +27,7 @@ public class JoinUserService {
 				.role(JoinUserEntity.Role.valueOf("ROLE_USER"))
 				.joinDate(LocalDateTime.now())
 				.build();
-
+ 
 		joinUserRepo.save(joinUserEntity);
 	}
 }
