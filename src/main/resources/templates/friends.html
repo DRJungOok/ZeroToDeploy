@@ -3,21 +3,50 @@
 <head th:replace="~{common::header}"></head>
 <body class="d-flex flex-column min-vh-100">
 <div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
-<div th:replace="~{common::nav}"></div>
+    <div th:replace="~{common::nav}"></div>
 
-<div class="container mt-5">
-    <h2>친구 목록</h2>
-    <div id="friend-list">
+    <div class="container mt-5">
+        <h2>친구 목록</h2>
+        <div id="friend-list">
+            <ul class="list-group">
+                <li class="list-group-item" th:each="friend : ${friends}">
+                    <a th:href="@{'/api/user/myInfo/' + ${#authentication.name} == ${friend.sender.userName} ? ${friend.receiver.userName} : ${friend.sender.userName} }">
+                        <span th:text="${#authentication.name} == ${friend.sender.userName} ? ${friend.receiver.userName} : ${friend.sender.userName}"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <h3 class="mt-4">받은 친구 요청</h3>
+        <div id="received-requests">
+            <ul class="list-group">
+                <li class="list-group-item" th:each="request : ${receivedRequests}">
+                    <a th:href="@{'/api/user/myInfo/' + ${request.sender.userName}}">
+                        <span th:text="${request.sender.userName}"></span>
+                    </a>
+                    <form th:action="@{'/friends/accept/' + ${request.id}}" method="post" style="display:inline;">
+                        <button class="btn btn-success btn-sm ms-2">수락</button>
+                    </form>
+                    <form th:action="@{'/friends/reject/' + ${request.id}}" method="post" style="display:inline;">
+                        <button class="btn btn-danger btn-sm ms-1">거절</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+
+        <h3 class="mt-4">요청한 친구 목록</h3>
+        <div id="received-responses">
+            <ul class="list-group">
+                <li class="list-group-item" th:each="request : ${sentRequests}">
+                    <a th:href="@{'/api/user/myInfo/' + ${request.receiver.userName}}">
+                        <span th:text="${request.receiver.userName}"></span>
+                    </a>
+                    <span class="badge bg-secondary ms-2" th:text="${request.status}"></span>
+                </li>
+            </ul>
+        </div>
     </div>
 
-    <h3 class="mt-4">받은 친구 요청</h3>
-    <div id="received-requests">
-    </div>
-
-    <h3 class="mt-4">요청 친구 요청</h3>
-    <div id="received-responses">
-    </div>
-</div>
     <footer th:replace="~{common::footer}"></footer>
     <div th:replace="~{common::script}"></div>
 </div>
