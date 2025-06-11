@@ -25,7 +25,6 @@ public class JoinUserService {
 				.email(joinUserDTO.getEmail())
 				.password(bCryptPasswordEncoder.encode(joinUserDTO.getPassword()))
 				.role(JoinUserEntity.Role.valueOf("ROLE_USER"))
-				.joinDate(LocalDateTime.now())
 				.build();
  
 		joinUserRepo.save(joinUserEntity);

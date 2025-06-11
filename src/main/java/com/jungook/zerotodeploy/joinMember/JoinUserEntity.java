@@ -40,4 +40,11 @@ public class JoinUserEntity {
 
 	@Column(name = "join_date")
 	private LocalDateTime joinDate;
+
+	@PrePersist
+	public void setJoinDate() {
+		if(this.joinDate == null){
+			this.joinDate = LocalDateTime.now();
+		}
+	}
 }

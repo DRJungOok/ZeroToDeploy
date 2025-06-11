@@ -32,6 +32,7 @@ public class PostController {
        private LikeRepo likeRepo;
 
 	@GetMapping("write")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String write() {
 		return "write";
 	}
