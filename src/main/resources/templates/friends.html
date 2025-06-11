@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{common::header}"></head>
-<body>
-<div th:replace="~{common::navbar}"></div>
+<body class="d-flex flex-column min-vh-100">
+<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
+<div th:replace="~{common::nav}"></div>
 
 <div class="container mt-5">
     <h2>친구 목록</h2>
@@ -17,7 +18,8 @@
     <div id="received-responses">
     </div>
 </div>
-
-<div th:replace="~{common::footer}"></div>
+    <footer th:replace="~{common::footer}"></footer>
+    <div th:replace="~{common::script}"></div>
+</div>
 </body>
 </html>

@@ -66,6 +66,12 @@
                     </a>
                 </div>
 
+                <div sec:authorize="isAuthenticated()">
+                    <a th:href="@{/friends}" class="btn btn-outline-primary d-flex align-items-center justify-content-center" style="height: 42px;">
+                        친구 목록
+                    </a>
+                </div>
+
                 <!-- 로그인 후: 세션 정보 -->
                 <div sec:authorize="isAuthenticated()" id="session-info"
                      class="d-flex align-items-center border rounded px-3 py-1"
