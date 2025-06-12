@@ -28,7 +28,7 @@
                         <button class="btn btn-success btn-sm ms-2">수락</button>
                     </form>
                     <form th:action="@{'/friends/reject/' + ${request.id}}" method="post" style="display:inline;">
-                        <button class="btn btn-danger btn-sm ms-1">거절</button>
+                        <button class="btn btn-danger btn-sm ms-1">취소</button>
                     </form>
                 </li>
             </ul>
@@ -42,6 +42,9 @@
                         <span th:text="${request.receiver.userName}"></span>
                     </a>
                     <span class="badge bg-secondary ms-2" th:text="${request.status}"></span>
+                    <form th:action="@{'/friends/cancel/' + ${request.id}}" method="post" style="display:inline;">
+                        <button class="btn btn-danger btn-sm ms-1">취소</button>
+                    </form>
                 </li>
             </ul>
         </div>
