@@ -12,7 +12,7 @@ import java.util.List;
 public class FriendsService {
 
     private final FriendsRepo friendsRepo;
-    private JoinUserRepo joinUserRepo;
+    private final JoinUserRepo joinUserRepo;
 
     public void sendFriendRequest(String senderUsername, String receiverUsername) {
         JoinUserEntity sender = joinUserRepo.findByUserName(senderUsername).orElseThrow();
