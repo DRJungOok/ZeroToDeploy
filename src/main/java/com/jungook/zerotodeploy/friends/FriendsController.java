@@ -14,20 +14,29 @@ public class FriendsController {
     private final FriendsService friendsService;
 
     @GetMapping
-    public String friends(Model model) {
+    public String friends(Model model, Authentication auth) {
+        String username = auth.getName();
+        model.addAttribute("friends", friendsService.getFriends(username));
+        model.addAttribute("receivedRequests", friendsService.getReceivedRequests(username));
+        model.addAttribute("sentRequests", friendsService.getSentRequests(username));
         return "friends";
     }
 
     @PostMapping("/request/{username}")
-    public String sendRuest(@PathVariable String username, Authentication authentication) {
-        String sender = authentication.getName();
-        friendsService.sendFriendRequest(sender, username);
+    public String sendRequest(@PathVariable String username, Authentication authentication) {
+        friendsService.sendFriendRequest(authentication.getName(), username);
         return "redirect:/friends";
     }
 
     @PostMapping("/accept/{id}")
     public String acceptFriend(@PathVariable Long id) {
         friendsService.acceptRequest(id);
+        return "redirect:/friends";
+    }
+
+    @PostMapping("/reject/{id}")
+    public String rejectRequest(@PathVariable Long id) {
+        friendsService.rejectRequest(id);
         return "redirect:/friends";
     }
 }

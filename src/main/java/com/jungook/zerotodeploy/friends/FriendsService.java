@@ -10,6 +10,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FriendsService {
+
     private final FriendsRepo friendsRepo;
     private JoinUserRepo joinUserRepo;
 
@@ -18,7 +19,7 @@ public class FriendsService {
         JoinUserEntity receiver = joinUserRepo.findByUserName(receiverUsername).orElseThrow();
 
         if(friendsRepo.findBySenderAndReceiver(sender, receiver).isEmpty()) {
-            FriendsEntity friendsEntity = new FriendsEntity()
+            FriendsEntity friendsEntity = FriendsEntity
                     .builder()
                     .sender(sender)
                     .receiver(receiver)
@@ -35,8 +36,22 @@ public class FriendsService {
         friendsRepo.save(request);
     }
 
+    public void rejectRequest(Long requestId) {
+        friendsRepo.deleteById(requestId);
+    }
+
     public List<FriendsEntity> getFriends(String username) {
         JoinUserEntity user = joinUserRepo.findByUserName(username).orElseThrow();
         return friendsRepo.findBySenderOrReceiverAndStatus(user, user, FriendsEntity.Status.ACCEPTED);
+    }
+
+    public List<FriendsEntity> getReceivedRequests(String username) {
+        JoinUserEntity user = joinUserRepo.findByUserName(username).orElseThrow();
+        return friendsRepo.findAllByReceiverAndStatus(user, FriendsEntity.Status.REQUESTED);
+    }
+
+    public List<FriendsEntity> getSentRequests(String username) {
+        JoinUserEntity user = joinUserRepo.findByUserName(username).orElseThrow();
+        return friendsRepo.findAllBySenderAndStatus(user, FriendsEntity.Status.REQUESTED);
     }
 }
