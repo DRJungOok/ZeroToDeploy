@@ -39,4 +39,10 @@ public class FriendsController {
         friendsService.rejectRequest(id);
         return "redirect:/friends";
     }
+
+    @PostMapping("/cancel/{id}")
+    public String cancelRequest(@PathVariable Long id) {
+        friendsService.cancelRequest(id);
+        return "redirect:/friends";
+    }
 }

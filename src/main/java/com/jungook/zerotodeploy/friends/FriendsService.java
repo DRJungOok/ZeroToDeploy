@@ -40,6 +40,10 @@ public class FriendsService {
         friendsRepo.deleteById(requestId);
     }
 
+    public void cancelRequest(Long requestId) {
+        friendsRepo.deleteById(requestId);
+    }
+
     public List<FriendsEntity> getFriends(String username) {
         JoinUserEntity user = joinUserRepo.findByUserName(username).orElseThrow();
         return friendsRepo.findBySenderOrReceiverAndStatus(user, user, FriendsEntity.Status.ACCEPTED);
