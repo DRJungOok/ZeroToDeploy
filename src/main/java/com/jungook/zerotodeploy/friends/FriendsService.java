@@ -34,7 +34,7 @@ public class FriendsService {
         FriendsEntity request = friendsRepo.findById(requestId).orElseThrow();
         request.setStatus(FriendsEntity.Status.ACCEPTED);
         friendsRepo.save(request);
-    }
+    } 
 
     public void rejectRequest(Long requestId) {
         friendsRepo.deleteById(requestId);
