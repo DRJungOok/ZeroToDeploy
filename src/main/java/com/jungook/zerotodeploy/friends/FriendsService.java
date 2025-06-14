@@ -24,7 +24,7 @@ public class FriendsService {
                     .sender(sender)
                     .receiver(receiver)
                     .status(FriendsEntity.Status.REQUESTED)
-                    .build();
+                    .build(); 
 
             friendsRepo.save(friendsEntity);
         }
