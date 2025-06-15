@@ -1,5 +1,6 @@
 package com.jungook.zerotodeploy.friends;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ public class FriendsController {
     private final FriendsService friendsService;
 
     @GetMapping
+    @Operation(summary = "friends")
     public String friends(Model model, Authentication auth) {
         String username = auth.getName();
         model.addAttribute("friends", friendsService.getFriends(username));

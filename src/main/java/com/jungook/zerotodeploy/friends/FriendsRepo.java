@@ -15,6 +15,4 @@ public interface FriendsRepo extends JpaRepository<FriendsEntity, Long> {
     List<FriendsEntity> findAllByReceiverAndStatus(JoinUserEntity receiver, FriendsEntity.Status status);
     List<FriendsEntity> findAllBySenderAndStatus(JoinUserEntity receiver, FriendsEntity.Status status);
     Optional<FriendsEntity> findBySenderAndReceiver(JoinUserEntity sender, JoinUserEntity receiver);
-    @Query("SELECT f FROM FriendsEntity f WHERE f.status = :status AND (f.sender = :user OR f.receiver = :user)")
-    List<FriendsEntity> findAllByStatusAndUser(@Param("status") FriendsEntity.Status status,@Param("user") JoinUserEntity user);
 }
