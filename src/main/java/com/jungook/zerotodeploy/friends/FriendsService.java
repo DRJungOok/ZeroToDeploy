@@ -3,6 +3,7 @@ package com.jungook.zerotodeploy.friends;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,17 +46,20 @@ public class FriendsService {
     }
 
     public List<FriendsEntity> getFriends(String username) {
-        JoinUserEntity user = joinUserRepo.findByUserName(username).orElseThrow();
+        JoinUserEntity user = joinUserRepo.findByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자 없음: " + username));
         return friendsRepo.findBySenderOrReceiverAndStatus(user, user, FriendsEntity.Status.ACCEPTED);
     }
 
     public List<FriendsEntity> getReceivedRequests(String username) {
-        JoinUserEntity user = joinUserRepo.findByUserName(username).orElseThrow();
+        JoinUserEntity user = joinUserRepo.findByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자 없음: " + username));
         return friendsRepo.findAllByReceiverAndStatus(user, FriendsEntity.Status.REQUESTED);
     }
 
     public List<FriendsEntity> getSentRequests(String username) {
-        JoinUserEntity user = joinUserRepo.findByUserName(username).orElseThrow();
+        JoinUserEntity user = joinUserRepo.findByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자 없음: " + username));
         return friendsRepo.findAllBySenderAndStatus(user, FriendsEntity.Status.REQUESTED);
     }
 }

@@ -1,5 +1,6 @@
 package com.jungook.zerotodeploy.preview;
 
+import com.jungook.zerotodeploy.details.CustomUserDetails;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -13,16 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @Controller
@@ -53,26 +48,28 @@ public class UserPreviewController {
                            Model model,
                            Authentication authentication) {
 
-        System.out.println("🔍 요청한 username: " + username);
-        System.out.println("🔐 로그인한 사용자: " + authentication.getName());
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        String currentUsername = principal.getUsername();
+
+        log.info("요청한 username: {}", username);
+        log.info("로그인한 사용자: {}", currentUsername);
 
         JoinUserEntity user = joinUserRepo.findByUserName(username)
                 .orElseThrow(() -> {
-                    UserPreviewController.log.warn("User not found for username: {}", username);
+                    log.warn("User not found for username: {}", username);
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
                 });
 
-        String currentUsername = authentication.getName();
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
         boolean isOwner = currentUsername.equals(user.getUserName());
-
 
         model.addAttribute("user", user);
         model.addAttribute("isEditable", isAdmin || isOwner);
 
         return "myInfo";
     }
+
     @PostMapping("/myInfo/{username}/update")
     @Transactional
     public String updateInfo(@PathVariable String username,
@@ -81,7 +78,8 @@ public class UserPreviewController {
                              @RequestParam(required = false) String password,
                              Authentication authentication) {
 
-        String currentUsername = authentication.getName();
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        String currentUsername = principal.getUsername();
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
         boolean isOwner = currentUsername.equals(username);
@@ -93,7 +91,6 @@ public class UserPreviewController {
         JoinUserEntity user = joinUserRepo.findByUserName(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        // 사용자명 중복 방지
         if (!user.getUserName().equals(newUserName)
                 && joinUserRepo.existsByUserName(newUserName)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 사용자명입니다.");
@@ -107,9 +104,9 @@ public class UserPreviewController {
 
         joinUserRepo.save(user);
 
-        // Security 세션 갱신
+        // ✅ CustomUserDetails로 Security 세션 갱신
         Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                user,
+                new CustomUserDetails(user),
                 user.getPassword(),
                 authentication.getAuthorities()
         );
@@ -117,5 +114,4 @@ public class UserPreviewController {
 
         return "redirect:/api/user/myInfo/" + user.getUserName() + "?success";
     }
-
 }

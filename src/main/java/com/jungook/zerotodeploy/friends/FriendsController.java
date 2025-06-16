@@ -15,7 +15,8 @@ public class FriendsController {
     private final FriendsService friendsService;
 
     @GetMapping
-    @Operation(summary = "friends")
+    @Operation(summary = "friends" +
+            "")
     public String friends(Model model, Authentication auth) {
         String username = auth.getName();
         model.addAttribute("friends", friendsService.getFriends(username));

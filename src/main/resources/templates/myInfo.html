@@ -13,29 +13,28 @@
           <img th:src="@{${#strings.isEmpty(user?.profileImage) ? '/images/default-profile.png' : '/uploads/' + user.profileImage}}"
                alt="프로필 이미지" class="profile-image mb-2"/>
 
-          <div th:if="${isEditable == true}">
-            <form th:action="@{'/api/user/myInfo/' + ${user.userName} + '/upload'}" method="post" enctype="multipart/form-data">
-            <input type="file" name="profileImage" accept="image/*" class="form-control mb-2">
+          <div th:if="${isEditable}">
+            <form th:action="@{'/myInfo/' + ${user.id} + '/upload'}" method="post" enctype="multipart/form-data">
+              <input type="file" name="profileImage" accept="image/*" class="form-control mb-2">
               <button type="submit" class="btn btn-sm btn-outline-primary">사진 변경</button>
             </form>
           </div>
         </div>
 
-
-        <form th:action="@{'/api/user/myInfo/' + ${user.userName} + '/update'}" method="post">
-        <div class="mb-3">
+        <form th:action="@{'/myInfo/' + ${user.id} + '/update'}" method="post">
+          <div class="mb-3">
             <label class="form-label">사용자 이름</label>
-          <input type="text" th:value="${user.userName}" name="userName" class="form-control" />
-                </div>
+            <input type="text" th:value="${user.userName}" name="userName" class="form-control" />
+          </div>
 
           <div class="mb-3">
             <label class="form-label">이메일</label>
-            <input type="text" th:value="${user.email}" name="email" class="form-control" th:readonly="${! (isEditable != null and isEditable)}" />
+            <input type="text" th:value="${user.email}" name="email" class="form-control" th:readonly="${!isEditable}" />
           </div>
 
           <div class="mb-3">
             <label class="form-label">새 비밀번호</label>
-            <input type="password" name="password" class="form-control" placeholder="비밀번호 변경 시에만 입력" th:readonly="${! (isEditable != null and isEditable)}" />
+            <input type="password" name="password" class="form-control" placeholder="비밀번호 변경 시에만 입력" th:readonly="${!isEditable}" />
           </div>
 
           <div class="mb-3">
@@ -45,7 +44,7 @@
 
           <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary" th:if="${isEditable}">저장</button>
-            <a th:href="@{'/api/user/myInfo/' + ${user.userName}}" class="btn btn-secondary">취소</a>
+            <a th:href="@{'/myInfo/' + ${user.id}}" class="btn btn-secondary">취소</a>
           </div>
         </form>
 

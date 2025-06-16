@@ -9,9 +9,9 @@
         <h2>친구 목록</h2>
         <div id="friend-list">
             <ul class="list-group">
-                <li class="list-group-item" th:each="friend : ${friends}">
-                    <a th:href="@{'/api/user/myInfo/' + ${#authentication.name} == ${friend.sender.userName} ? ${friend.receiver.userName} : ${friend.sender.userName} }">
-                        <span th:text="${#authentication.name} == ${friend.sender.userName} ? ${friend.receiver.userName} : ${friend.sender.userName}"></span>
+                <li class="list-group-item" th:each="friend : ${friends}" th:with="friendName=${#authentication.name == friend.sender.userName} ? ${friend.receiver.userName} : ${friend.sender.userName}">
+                    <a th:href="@{'/api/user/myInfo/' + ${friendName}}">
+                        <span th:text="${friendName}"></span>
                     </a>
                 </li>
             </ul>

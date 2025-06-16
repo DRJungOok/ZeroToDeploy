@@ -2,16 +2,17 @@ package com.jungook.zerotodeploy.myInfo;
 
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -84,26 +85,32 @@ public class MyInfoController {
 		}
 	}
 
-	@PostMapping("/update")
-	public String updateInfo(Model model, Authentication authentication,
+	@PostMapping("/{id}/update")
+	public String updateInfo(@PathVariable Long id,
 							 @RequestParam("userName") String newUserName,
 							 @RequestParam("email") String newEmail,
-							 @RequestParam(value = "password", required = false) String newPassword) {
-		if (authentication == null) return "redirect:/login";
+							 @RequestParam(value = "password", required = false) String newPassword,
+							 Authentication authentication) {
+		JoinUserEntity user = joinUserRepo.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-		String userName = authentication.getName();
-		JoinUserEntity user = joinUserRepo.findByUserName(userName)
-				.orElseThrow(() -> new UsernameNotFoundException("not found user: " + userName));
+		boolean isSelf = authentication != null && authentication.getName().equals(user.getUserName());
+		if (!isSelf) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
 		user.setUserName(newUserName);
 		user.setEmail(newEmail);
-
 		if (newPassword != null && !newPassword.isBlank()) {
 			user.setPassword(passwordEncoder.encode(newPassword));
 		}
 
 		joinUserRepo.save(user);
-		model.addAttribute("user", user);
-		return "redirect:/myInfo";
+
+		// SecurityContext 재설정
+		User updatedUserDetails = new User(user.getUserName(), user.getPassword(), authentication.getAuthorities());
+		Authentication newAuth = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+				updatedUserDetails, authentication.getCredentials(), authentication.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+		return "redirect:/myInfo/" + id;
 	}
 }
