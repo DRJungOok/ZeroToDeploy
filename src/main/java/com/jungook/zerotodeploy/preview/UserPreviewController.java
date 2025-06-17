@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,8 +48,7 @@ public class UserPreviewController {
                            Model model,
                            Authentication authentication) {
 
-        UserDetails principal = (UserDetails) authentication.getPrincipal();
-        String currentUsername = principal.getUsername();
+        String currentUsername = authentication.getName();
 
         log.info("요청한 username: {}", username);
         log.info("로그인한 사용자: {}", currentUsername);
@@ -79,8 +77,7 @@ public class UserPreviewController {
                              @RequestParam(required = false) String password,
                              Authentication authentication) {
 
-        UserDetails principal = (UserDetails) authentication.getPrincipal();
-        String currentUsername = principal.getUsername();
+        String currentUsername = authentication.getName();
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
         boolean isOwner = currentUsername.equals(username);
