@@ -31,10 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
                log.info("✅ 사용자 정보 조회됨: {}", user.getUserName());
                log.info("✅ DB에서 불러온 권한: {}", user.getRole());
-		return User.builder()
-				.username(user.getUserName())
-				.password(user.getPassword())
-				.authorities(String.valueOf(user.getRole()))
-				.build();
+
+		return new CustomUserDetails(user);
 	}
 }
