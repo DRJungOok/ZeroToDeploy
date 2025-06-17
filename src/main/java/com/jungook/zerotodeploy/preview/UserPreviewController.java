@@ -1,6 +1,5 @@
 package com.jungook.zerotodeploy.preview;
 
-import com.jungook.zerotodeploy.details.CustomUserDetails;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +48,7 @@ public class UserPreviewController {
                            Model model,
                            Authentication authentication) {
 
-        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
         String currentUsername = principal.getUsername();
 
         log.info("요청한 username: {}", username);
@@ -78,7 +78,7 @@ public class UserPreviewController {
                              @RequestParam(required = false) String password,
                              Authentication authentication) {
 
-        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
         String currentUsername = principal.getUsername();
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
