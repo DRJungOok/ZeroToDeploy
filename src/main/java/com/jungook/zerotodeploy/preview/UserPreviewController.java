@@ -1,5 +1,6 @@
 package com.jungook.zerotodeploy.preview;
 
+import com.jungook.zerotodeploy.details.CustomUserDetails;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import lombok.extern.slf4j.Slf4j;
