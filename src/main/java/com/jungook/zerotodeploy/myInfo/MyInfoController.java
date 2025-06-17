@@ -111,6 +111,7 @@ public class MyInfoController {
 				updatedUserDetails, authentication.getCredentials(), authentication.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(newAuth);
 
-		return "redirect:/myInfo/" + id;
-	}
+                // redirect to the user info page using the updated username
+                return "redirect:/api/user/myInfo/" + user.getUserName();
+        }
 }
