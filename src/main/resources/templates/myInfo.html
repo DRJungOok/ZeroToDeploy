@@ -14,7 +14,7 @@
                alt="프로필 이미지" class="profile-image mb-2"/>
 
           <div th:if="${isEditable}">
-            <form th:action="@{'/myInfo/' + ${user.id} + '/upload'}" method="post" enctype="multipart/form-data">
+            <form th:action="@{'/myInfo/uploadProfile'}" method="post" enctype="multipart/form-data">
               <input type="file" name="profileImage" accept="image/*" class="form-control mb-2">
               <button type="submit" class="btn btn-sm btn-outline-primary">사진 변경</button>
             </form>
@@ -44,7 +44,7 @@
 
           <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary" th:if="${isEditable}">저장</button>
-            <a th:href="@{'/myInfo/' + ${user.id}}" class="btn btn-secondary">취소</a>
+            <a th:href="@{'/api/user/myInfo/' + ${user.userName}}" class="btn btn-secondary">취소</a>
           </div>
         </form>
 
