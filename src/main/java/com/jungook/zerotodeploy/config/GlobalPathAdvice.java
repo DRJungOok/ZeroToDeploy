@@ -5,32 +5,40 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 
 @ControllerAdvice
 @Configuration
 public class GlobalPathAdvice {
-        private final JoinUserRepo joinUserRepo;
+    private final JoinUserRepo joinUserRepo;
 
-        public GlobalPathAdvice(JoinUserRepo joinUserRepo) {
-                this.joinUserRepo = joinUserRepo;
+    public GlobalPathAdvice(JoinUserRepo joinUserRepo) {
+        this.joinUserRepo = joinUserRepo;
+    }
+
+    @ModelAttribute("currentPath")
+    public String setCurrentPath(HttpServletRequest request) {
+        return request.getRequestURI();
+    }
+
+    @ModelAttribute("currentUserName")
+    public String currentUserName(Authentication authentication) {
+        if (authentication == null) return null;
+
+        Object principal = authentication.getPrincipal();
+        String loginId = null;
+
+        if (principal instanceof UserDetails userDetails) {
+            loginId = userDetails.getUsername();
+        } else {
+            loginId = authentication.getName();
         }
 
-        @ModelAttribute("currentPath")
-        public String setCurrentPath(HttpServletRequest request) {
-                return request.getRequestURI();
-        }
-
-        @ModelAttribute("currentUserName")
-        public String currentUserName(Authentication authentication) {
-                if (authentication == null) return null;
-
-                String loginId = authentication.getName();
-
-                return joinUserRepo.findByUserName(loginId)
-                                .or(() -> joinUserRepo.findByEmail(loginId))
-                                .map(user -> user.getUserName())
-                                .orElse(loginId);
-        }
+        return joinUserRepo.findByUserName(loginId)
+                .or(() -> joinUserRepo.findByEmail(loginId))
+                .map(user -> user.getUserName())
+                .orElse(loginId);
+    }
 }
