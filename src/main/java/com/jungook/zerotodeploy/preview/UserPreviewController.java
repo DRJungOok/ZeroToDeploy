@@ -54,14 +54,15 @@ public class UserPreviewController {
         log.info("로그인한 사용자: {}", currentUsername);
 
         JoinUserEntity user = joinUserRepo.findByUserName(username)
+                .or(() -> joinUserRepo.findByEmail(username))
                 .orElseThrow(() -> {
-                    log.warn("User not found for username: {}", username);
+                    log.warn("User not found for identifier: {}", username);
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
                 });
 
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-        boolean isOwner = currentUsername.equals(user.getUserName());
+        boolean isOwner = currentUsername.equals(user.getUserName()) || currentUsername.equals(user.getEmail());
 
         model.addAttribute("user", user);
         model.addAttribute("isEditable", isAdmin || isOwner);
@@ -80,14 +81,16 @@ public class UserPreviewController {
         String currentUsername = authentication.getName();
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-        boolean isOwner = currentUsername.equals(username);
+
+        JoinUserEntity user = joinUserRepo.findByUserName(username)
+                .or(() -> joinUserRepo.findByEmail(username))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        boolean isOwner = currentUsername.equals(user.getUserName()) || currentUsername.equals(user.getEmail());
 
         if (!isAdmin && !isOwner) {
             return "redirect:/access-denied";
         }
-
-        JoinUserEntity user = joinUserRepo.findByUserName(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         if (!user.getUserName().equals(newUserName)
                 && joinUserRepo.existsByUserName(newUserName)) {
