@@ -59,7 +59,7 @@
 
                 <!-- 로그인 후: 내정보 버튼 -->
                 <div sec:authorize="isAuthenticated()">
-                    <a th:href="@{'/api/user/myInfo/' + ${#authentication.name}}"
+                    <a th:href="@{'/api/user/myInfo/' + ${currentUserName}}"
                        class="btn btn-outline-success d-flex align-items-center justify-content-center"
                        style="height: 42px;">
                         내정보

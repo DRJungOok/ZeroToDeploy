@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,15 +34,16 @@ public class MyInfoController {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	@GetMapping
-	public String myInfo(Model model, Authentication authentication) {
-		if (authentication == null) {
-			return "redirect:/login";
-		}
+        @GetMapping
+        public String myInfo(Model model, Authentication authentication) {
+                if (authentication == null) {
+                        return "redirect:/login";
+                }
 
-		String userName = authentication.getName();
-		JoinUserEntity user = joinUserRepo.findByUserName(userName)
-				.orElseThrow(() -> new UsernameNotFoundException("not found user: " + userName));
+                String loginId = authentication.getName();
+                JoinUserEntity user = joinUserRepo.findByUserName(loginId)
+                                .or(() -> joinUserRepo.findByEmail(loginId))
+                                .orElseThrow(() -> new UsernameNotFoundException("not found user: " + loginId));
 
                 model.addAttribute("user", user);
                 model.addAttribute("isEditable", true);
@@ -52,9 +55,10 @@ public class MyInfoController {
 								@RequestParam("profileImage") MultipartFile file) throws IOException {
 		if (authentication == null) return "redirect:/login";
 
-		String userName = authentication.getName();
-		JoinUserEntity user = joinUserRepo.findByUserName(userName)
-				.orElseThrow(() -> new UsernameNotFoundException("not found user: " + userName));
+                String loginId = authentication.getName();
+                JoinUserEntity user = joinUserRepo.findByUserName(loginId)
+                                .or(() -> joinUserRepo.findByEmail(loginId))
+                                .orElseThrow(() -> new UsernameNotFoundException("not found user: " + loginId));
 
 		if (!file.isEmpty()) {
 			String uploadDir = getUploadDir();
@@ -86,15 +90,18 @@ public class MyInfoController {
 	}
 
 	@PostMapping("/{id}/update")
-	public String updateInfo(@PathVariable Long id,
-							 @RequestParam("userName") String newUserName,
-							 @RequestParam("email") String newEmail,
-							 @RequestParam(value = "password", required = false) String newPassword,
-							 Authentication authentication) {
+        public String updateInfo(@PathVariable Long id,
+                                                         @RequestParam("userName") String newUserName,
+                                                         @RequestParam("email") String newEmail,
+                                                         @RequestParam(value = "password", required = false) String newPassword,
+                                                         Authentication authentication,
+                                                         jakarta.servlet.http.HttpServletRequest request) {
 		JoinUserEntity user = joinUserRepo.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-		boolean isSelf = authentication != null && authentication.getName().equals(user.getUserName());
+                boolean isSelf = authentication != null &&
+                                (authentication.getName().equals(user.getUserName()) ||
+                                 authentication.getName().equals(user.getEmail()));
 		if (!isSelf) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
 		user.setUserName(newUserName);
@@ -109,7 +116,10 @@ public class MyInfoController {
 		User updatedUserDetails = new User(user.getUserName(), user.getPassword(), authentication.getAuthorities());
 		Authentication newAuth = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
 				updatedUserDetails, authentication.getCredentials(), authentication.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(newAuth);
+                SecurityContextHolder.getContext().setAuthentication(newAuth);
+                request.getSession().setAttribute(
+                                org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                                SecurityContextHolder.getContext());
 
                 // redirect to the user info page using the updated username
                 return "redirect:/api/user/myInfo/" + user.getUserName();
