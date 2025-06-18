@@ -12,31 +12,33 @@ import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 @ControllerAdvice
 @Configuration
 public class GlobalPathAdvice {
-        private final JoinUserRepo joinUserRepo;
+    private final JoinUserRepo joinUserRepo;
 
-        public GlobalPathAdvice(JoinUserRepo joinUserRepo) {
-                this.joinUserRepo = joinUserRepo;
+    public GlobalPathAdvice(JoinUserRepo joinUserRepo) {
+        this.joinUserRepo = joinUserRepo;
+    }
+
+    @ModelAttribute("currentPath")
+    public String setCurrentPath(HttpServletRequest request) {
+        return request.getRequestURI();
+    }
+
+    @ModelAttribute("currentUserName")
+    public String currentUserName(Authentication authentication) {
+        if (authentication == null) return null;
+
+        Object principal = authentication.getPrincipal();
+        String loginId = null;
+
+        if (principal instanceof UserDetails userDetails) {
+            loginId = userDetails.getUsername();
+        } else {
+            loginId = authentication.getName();
         }
 
-        @ModelAttribute("currentPath")
-        public String setCurrentPath(HttpServletRequest request) {
-                return request.getRequestURI();
-        }
-
-        @ModelAttribute("currentUserName")
-        public String currentUserName(Authentication authentication) {
-                if (authentication == null) return null;
-
-                Object principal = authentication.getPrincipal();
-                if (principal instanceof UserDetails userDetails) {
-                        return userDetails.getUsername();
-                }
-
-                String loginId = authentication.getName();
-
-                return joinUserRepo.findByUserName(loginId)
-                                .or(() -> joinUserRepo.findByEmail(loginId))
-                                .map(user -> user.getUserName())
-                                .orElse(loginId);
-        }
+        return joinUserRepo.findByUserName(loginId)
+                .or(() -> joinUserRepo.findByEmail(loginId))
+                .map(user -> user.getUserName())
+                .orElse(loginId);
+    }
 }
