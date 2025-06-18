@@ -95,7 +95,7 @@
                               class="form-control"
                               th:text="${comment.content}"
                               readonly></textarea>
-                    <div th:if="${#authentication.name == comment.author or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                    <div th:if="${currentUserName == comment.author or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
                          class="d-flex gap-2">
                         <button type="button"
                                 th:id="'edit-btn-' + ${comment.id}"
