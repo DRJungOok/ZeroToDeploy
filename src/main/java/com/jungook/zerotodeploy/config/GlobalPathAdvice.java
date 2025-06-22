@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 
 @ControllerAdvice
+
 @Configuration
 public class GlobalPathAdvice {
     private final JoinUserRepo joinUserRepo;
