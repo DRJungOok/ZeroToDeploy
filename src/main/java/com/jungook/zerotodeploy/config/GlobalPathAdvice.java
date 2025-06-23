@@ -25,6 +25,7 @@ public class GlobalPathAdvice {
     }
 
     @ModelAttribute("currentUserName")
+
     public String currentUserName(Authentication authentication) {
         if (authentication == null) return null;
 
