@@ -1,6 +1,8 @@
 package com.jungook.zerotodeploy.preview;
 
 import com.jungook.zerotodeploy.details.CustomUserDetails;
+import com.jungook.zerotodeploy.friends.FriendsEntity;
+import com.jungook.zerotodeploy.friends.FriendsRepo;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,10 +27,12 @@ import java.util.Map;
 public class UserPreviewController {
     private final JoinUserRepo joinUserRepo;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final FriendsRepo friendsRepo;
 
-    public UserPreviewController(JoinUserRepo joinUserRepo, BCryptPasswordEncoder passwordEncoder) {
+    public UserPreviewController(JoinUserRepo joinUserRepo, BCryptPasswordEncoder passwordEncoder, FriendsRepo friendsRepo) {
         this.joinUserRepo = joinUserRepo;
         this.passwordEncoder = passwordEncoder;
+        this.friendsRepo = friendsRepo;
     }
 
     @GetMapping("/preview/{username}")
@@ -52,6 +54,9 @@ public class UserPreviewController {
 
         String currentUsername = authentication.getName();
 
+        JoinUserEntity currentUser = joinUserRepo.findByUserName(authentication.getName()).orElseThrow();
+        JoinUserEntity targetUser = joinUserRepo.findById(id).orElseThrow();
+
         log.info("요청한 username: {}", username);
         log.info("로그인한 사용자: {}", currentUsername);
 
@@ -66,8 +71,11 @@ public class UserPreviewController {
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
         boolean isOwner = currentUsername.equals(user.getUserName()) || currentUsername.equals(user.getEmail());
 
+        boolean isFriend = friendsRepo.existsBySenderAndReceiverAndStatus(currentUser, targetUser, FriendsEntity.Status.ACCEPTED) || friendsRepo.existsBySenderAndReceiverAndStatus(targetUser, currentUser, FriendsEntity.Status.ACCEPTED);
+
         model.addAttribute("user", user);
         model.addAttribute("isEditable", isAdmin || isOwner);
+        model.addAttribute("isFriends", isFriend);
 
         return "myInfo";
     }
@@ -108,7 +116,6 @@ public class UserPreviewController {
 
         joinUserRepo.save(user);
 
-        // ✅ CustomUserDetails로 Security 세션 갱신
         Authentication newAuth = new UsernamePasswordAuthenticationToken(
                 new CustomUserDetails(user),
                 user.getPassword(),
