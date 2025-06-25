@@ -21,7 +21,7 @@
         <div id="received-requests">
             <ul class="list-group">
                 <li class="list-group-item" th:each="request : ${receivedRequests}">
-                    <a th:href="@{'/api/user/myInfo/' + ${request.sender.userName}}">
+                    <a th:href="@{'/api/user/myInfo/' + ${request.sender.getId()}}">
                         <span th:text="${request.sender.userName}"></span>
                     </a>
                     <form th:action="@{'/friends/accept/' + ${request.id}}" method="post" style="display:inline;">

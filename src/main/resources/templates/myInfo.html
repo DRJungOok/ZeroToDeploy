@@ -21,7 +21,7 @@
           </div>
         </div>
 
-        <form th:action="@{'/myInfo/' + ${user.id} + '/update'}" method="post">
+        <form th:action="@{'/api/user/myInfo/' + ${user.id} + '/update'}" method="post">
           <div class="mb-3">
             <label class="form-label">사용자 이름</label>
             <input type="text" th:value="${user.userName}" name="userName" class="form-control" />
@@ -44,12 +44,12 @@
 
           <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary" th:if="${isEditable}">저장</button>
-            <a th:href="@{'/api/user/myInfo/' + ${user.userName}}" class="btn btn-secondary">취소</a>
+            <a th:href="@{'/api/user/myInfo/' + ${user.id}}" class="btn btn-secondary">취소</a>
           </div>
         </form>
 
-        <div class="mt-3" sec:authorize="isAuthenticated()" th:if="${currentUserName} != ${user.userName} and !isFriend}">
-        <form th:action="@{'/friends/request/' + ${user.userName}}" method="post">
+        <div class="mt-3" sec:authorize="isAuthenticated()" th:if="${currentUserName != user.userName and !isFriend}">
+          <form th:action="@{'/friends/request/' + ${user.id}}" method="post">
             <button type="submit" class="btn btn-outline-primary">친구추가</button>
           </form>
         </div>
