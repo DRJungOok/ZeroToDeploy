@@ -9,9 +9,11 @@
         <h2>친구 목록</h2>
         <div id="friend-list">
             <ul class="list-group">
-                <li class="list-group-item" th:each="friend : ${friends}" th:with="friendName=${currentUserName == friend.sender.userName} ? ${friend.receiver.userName} : ${friend.sender.userName}">
-                    <a th:href="@{'/api/user/myInfo/' + ${friendName}}">
-                        <span th:text="${friendName}"></span>
+                <li class="list-group-item"
+                    th:each="friend : ${friends}"
+                    th:with="friendUser=${currentUserName == friend.sender.userName} ? ${friend.receiver} : ${friend.sender}">
+                    <a th:href="@{'/api/user/myInfo/' + ${friendUser.id}}">
+                        <span th:text="${friendUser.userName}"></span>
                     </a>
                 </li>
             </ul>
@@ -21,7 +23,7 @@
         <div id="received-requests">
             <ul class="list-group">
                 <li class="list-group-item" th:each="request : ${receivedRequests}">
-                    <a th:href="@{'/api/user/myInfo/' + ${request.sender.getId()}}">
+                    <a th:href="@{'/api/user/myInfo/' + ${request.sender.id}}">
                         <span th:text="${request.sender.userName}"></span>
                     </a>
                     <form th:action="@{'/friends/accept/' + ${request.id}}" method="post" style="display:inline;">
@@ -38,7 +40,7 @@
         <div id="received-responses">
             <ul class="list-group">
                 <li class="list-group-item" th:each="request : ${sentRequests}">
-                    <a th:href="@{'/api/user/myInfo/' + ${request.receiver.userName}}">
+                    <a th:href="@{'/api/user/myInfo/' + ${request.receiver.id}}">
                         <span th:text="${request.receiver.userName}"></span>
                     </a>
                     <span class="badge bg-secondary ms-2" th:text="${request.status}"></span>
