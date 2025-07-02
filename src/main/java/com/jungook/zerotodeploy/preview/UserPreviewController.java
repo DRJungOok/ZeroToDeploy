@@ -76,6 +76,34 @@ public class UserPreviewController {
         return "myInfo";
     }
 
+    @GetMapping("/myInfo/username/{username}")
+    public String userInfoByUsername(@PathVariable String username,
+                                     Model model,
+                                     Authentication authentication) {
+
+        String currentUsername = authentication.getName();
+
+        JoinUserEntity currentUser = joinUserRepo.findByUserName(currentUsername)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Current user not found"));
+
+        JoinUserEntity targetUser = joinUserRepo.findByUserName(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Target user not found"));
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        boolean isOwner = currentUsername.equals(targetUser.getUserName()) || currentUsername.equals(targetUser.getEmail());
+
+        boolean isFriend = friendsRepo.existsBySenderAndReceiverAndStatus(currentUser, targetUser, FriendsEntity.Status.ACCEPTED)
+                || friendsRepo.existsBySenderAndReceiverAndStatus(targetUser, currentUser, FriendsEntity.Status.ACCEPTED);
+
+        model.addAttribute("user", targetUser);
+        model.addAttribute("isEditable", isAdmin || isOwner);
+        model.addAttribute("isFriend", isFriend);
+        model.addAttribute("currentUserName", currentUsername);
+
+        return "myInfo";
+    }
+
 
     @PostMapping("/myInfo/{id}/update")
     @Transactional

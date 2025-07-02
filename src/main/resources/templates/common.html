@@ -27,7 +27,7 @@
             <strong th:text="${user.nickname}">닉네임</strong>
         </div>
         <p class="text-muted mb-0" th:text="'가입일: ' + ${user.joinDate}">가입일</p>
-        <a th:href="@{'/api/user/myInfo/' + ${user.userName}}" class="btn btn-sm btn-outline-primary mt-2">프로필 보기</a>
+        <a th:href="@{'/api/user/myInfo/username/' + ${user.userName}}" class="btn btn-sm btn-outline-primary mt-2">프로필 보기</a>
     </div>
 </div>
 
@@ -59,7 +59,7 @@
 
                 <!-- 로그인 후: 내정보 버튼 -->
                 <div sec:authorize="isAuthenticated()">
-                    <a th:href="@{'/api/user/myInfo/' + ${currentUserName}}"
+                    <a th:href="@{'/api/user/myInfo/username/' + ${currentUserName}}"
                        class="btn btn-outline-success d-flex align-items-center justify-content-center"
                        style="height: 42px;">
                         내정보
