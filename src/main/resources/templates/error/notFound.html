@@ -9,7 +9,7 @@
 <meta content="" name="description">
 
 <!-- Favicon -->
-<link href="img/favicon.ico" rel="icon">
+<link th:href="@{/img/favicon.ico}" rel="icon">
 
 <!-- Google Web Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,15 +27,15 @@
 	rel="stylesheet">
 
 <!-- Libraries Stylesheet -->
-<link href="lib/animate/animate.min.css" rel="stylesheet">
-<link href="lib/owlcarousel/assets/owl.carousel.min.css"
-	rel="stylesheet">
+<link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
+<link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}"
+        rel="stylesheet">
 
 <!-- Customized Bootstrap Stylesheet -->
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 
 <!-- Template Stylesheet -->
-<link href="css/style.css" rel="stylesheet">
+<link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -120,7 +120,7 @@
 						<p class="mb-4">We’re sorry, the page you have looked for does
 							not exist in our website! Maybe go to our home page or try to use
 							a search?</p>
-						<a class="btn btn-primary py-3 px-5" href="">Go Back To Home</a>
+                                                <a class="btn btn-primary py-3 px-5" th:href="@{/}">Go Back To Home</a>
 					</div>
 				</div>
 			</div>
@@ -162,8 +162,10 @@
 						</div>
 						<div class="col-md-6 text-center text-md-end">
 							<div class="footer-menu">
-								<a href="">Home</a> <a href="">Cookies</a> <a href="">Help</a> <a
-									href="">FQAs</a>
+                                                                <a th:href="@{/}">Home</a>
+                                                                <a href="#">Cookies</a>
+                                                                <a href="#">Help</a>
+                                                                <a href="#">FQAs</a>
 							</div>
 						</div>
 					</div>
@@ -182,13 +184,13 @@
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="lib/wow/wow.min.js"></script>
-	<script src="lib/easing/easing.min.js"></script>
-	<script src="lib/waypoints/waypoints.min.js"></script>
-	<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+        <script th:src="@{/lib/wow/wow.min.js}"></script>
+        <script th:src="@{/lib/easing/easing.min.js}"></script>
+        <script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+        <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
 
 	<!-- Template Javascript -->
-	<script src="js/main.js"></script>
+        <script th:src="@{/js/main.js}"></script>
 </body>
 
 </html>
