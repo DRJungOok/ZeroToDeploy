@@ -104,7 +104,6 @@ public class UserPreviewController {
         return "myInfo";
     }
 
-
     @PostMapping("/myInfo/{id}/update")
     @Transactional
     public String updateInfo(@PathVariable Long id,
