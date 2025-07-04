@@ -39,6 +39,7 @@ public class UserPreviewController {
     @GetMapping("/preview/{username}")
     public ResponseEntity<?> previewUser(@PathVariable("username") String username) {
         return joinUserRepo.findByUserName(username)
+                .or(() -> joinUserRepo.findByEmail(username))
                 .map(user -> {
                     Map<String, Object> preview = new HashMap<>();
                     preview.put("name", user.getUserName());
@@ -87,6 +88,7 @@ public class UserPreviewController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Current user not found"));
 
         JoinUserEntity targetUser = joinUserRepo.findByUserName(username)
+                .or(() -> joinUserRepo.findByEmail(username))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Target user not found"));
 
         boolean isAdmin = authentication.getAuthorities().stream()
