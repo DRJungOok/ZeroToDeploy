@@ -37,6 +37,7 @@ public class UserPreviewController {
     }
 
     @GetMapping("/preview/{username}")
+
     public ResponseEntity<?> previewUser(@PathVariable("username") String username) {
         return joinUserRepo.findByUserName(username)
                 .map(user -> {
