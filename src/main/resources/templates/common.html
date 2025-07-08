@@ -59,13 +59,13 @@
                 </div>
 
                 <!-- 로그인 후: 내정보 버튼 -->
-                <div sec:authorize="isAuthenticated()">
+                <div sec:authorize="isAuthenticated()" th:if="${currentUserName != null}">
                     <a th:href="@{'/api/user/myInfo/username/' + ${currentUserName}}"
-                       class="btn btn-outline-success d-flex align-items-center justify-content-center"
-                       style="height: 42px;">
+                       class="btn btn-outline-success">
                         내정보
                     </a>
                 </div>
+
 
                 <div sec:authorize="isAuthenticated()">
                     <a th:href="@{/friends}" class="btn btn-outline-primary d-flex align-items-center justify-content-center" style="height: 42px;">
