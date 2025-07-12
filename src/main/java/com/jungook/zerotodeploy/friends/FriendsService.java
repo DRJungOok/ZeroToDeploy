@@ -16,8 +16,8 @@ public class FriendsService {
     private final JoinUserRepo joinUserRepo;
 
     public void sendFriendRequest(String senderUsername, String receiverUsername) {
-        JoinUserEntity sender = joinUserRepo.findByUserName(senderUsername).orElseThrow();
-        JoinUserEntity receiver = joinUserRepo.findByUserName(receiverUsername).orElseThrow();
+        JoinUserEntity sender = joinUserRepo.findByUserName(senderUsername).orElseThrow(() -> new UsernameNotFoundException("senderUsername :: " + senderUsername + " not found"));
+        JoinUserEntity receiver = joinUserRepo.findByUserName(receiverUsername).orElseThrow(() -> new UsernameNotFoundException("receiverUsername :: " + receiverUsername + " not found"));
 
         if(friendsRepo.findBySenderAndReceiver(sender, receiver).isEmpty()) {
             FriendsEntity friendsEntity = FriendsEntity
