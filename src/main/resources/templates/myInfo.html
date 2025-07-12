@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <div sec:authorize="!isAuthenticated()">
+      <div sec:authorize = "!isAuthenticated()">
         <p>로그인이 필요한 페이지입니다. <a th:href="@{/login}">로그인</a></p>
       </div>
     </div>
