@@ -10,8 +10,8 @@ public class IndexController {
         return "index";
     }
     
-    @GetMapping("/chatRoom")
+    @GetMapping("/chat")
     public String chatRoom() {
-        return "chatRoom";
+        return "chat";
     }
 }
