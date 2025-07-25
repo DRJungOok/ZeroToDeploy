@@ -25,9 +25,9 @@ public class FriendsController {
         return "friends";
     }
 
-    @PostMapping("/request/{username}")
-    public String sendRequest(@PathVariable String username, Authentication authentication) {
-        friendsService.sendFriendRequest(authentication.getName(), username);
+    @PostMapping("/request/{id}")
+    public String sendRequest(@PathVariable("id") Long id, Authentication authentication) {
+        friendsService.sendFriendRequest(authentication.getName(), id);
         return "redirect:/friends";
     }
 

@@ -1,29 +1,38 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{common::header}"></head>
 <body>
-<div th:replace="~{common::navbar}"></div>
+<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
+    <div th:replace="~{common::nav}"></div>
+    <div class="chat-header">
+        채팅방 - <span th:text="${chatRoomName}">Room Name</span>
+    </div>
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-4">
-            <h5>채팅방</h5>
-            <ul class="list-group" id="chat-room-list">
-
-            </ul>
+    <div class="chat-messages" id="chatBox">
+        <!-- 예시 메시지 -->
+        <div class="message received">
+            <div class="sender">상대방</div>
+            <div class="text bg-light p-2 rounded">안녕하세요!</div>
         </div>
+        <div class="message sent">
+            <div class="sender">나</div>
+            <div class="text bg-primary text-white p-2 rounded">반가워요.</div>
+        </div>
+    </div>
 
-        <div class="col-md-8">
-            <div class="border rounded p-3 mb-3" style="height: 400px; overflow-y: auto;" id="chat-box">
+    <div class="chat-input">
+        <form th:action="@{/chat/send}" method="post">
+            <div class="input-group">
+                <textarea name="message" class="form-control" placeholder="메시지를 입력하세요..."></textarea>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
             </div>
-            <form id="chat-form" class="d-flex">
-                <input type="text" class="form-control me-2" placeholder="메시지를 입력하세요">
-                <button type="submit" class="btn btn-primary">전송</button>
-            </form>
-        </div>
+        </form>
     </div>
 </div>
 
-<div th:replace="~{common::footer}"></div>
+<footer th:replace="~{common::footer}"></footer>
+<!-- JavaScript Libraries -->
+<div th:replace="~{common::script}"></div>
 </body>
+
 </html>
