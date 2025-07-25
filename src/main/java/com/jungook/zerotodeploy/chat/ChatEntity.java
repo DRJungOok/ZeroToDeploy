@@ -1,7 +1,7 @@
 package com.jungook.zerotodeploy.chat;
 
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.*; 
 import lombok.*;
 
 import java.util.HashSet;
@@ -12,6 +12,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "chat")
 public class ChatEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -61,7 +61,8 @@
                 <!-- 로그인 후: 내정보 버튼 -->
                 <div sec:authorize="isAuthenticated()" th:if="${currentUserName != null}">
                     <a th:href="@{'/api/user/myInfo/username/' + ${currentUserName}}"
-                       class="btn btn-outline-success">
+                       class="btn btn-outline-success"
+                    style="height: 42px">
                         내정보
                     </a>
                 </div>
