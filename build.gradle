@@ -70,3 +70,9 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+bootRun {
+	jvmArgs = [
+			"-Dspring.config.location=classpath:/application-secret.properties"
+	]
+}
