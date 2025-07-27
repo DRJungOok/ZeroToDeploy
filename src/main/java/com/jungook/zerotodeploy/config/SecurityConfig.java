@@ -3,6 +3,8 @@ package com.jungook.zerotodeploy.config;
 import com.jungook.zerotodeploy.oauth.PrincipalOauth2UserService;
 import com.jungook.zerotodeploy.details.CustomUserDetailsService;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,7 @@ public class SecurityConfig {
     private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final ObjectProvider<ClientRegistrationRepository> clientRegistrationRepositoryProvider;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -79,13 +82,16 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .permitAll()
-            )
-            .oauth2Login(oauth2 -> oauth2
+            );
+
+        if (clientRegistrationRepositoryProvider.getIfAvailable() != null) {
+            http.oauth2Login(oauth2 -> oauth2
                 .loginPage("/login")
                 .userInfoEndpoint(userInfo -> userInfo
                     .userService(principalOauth2UserService)
                 )
             );
+        }
 
         return http.build();
     }
