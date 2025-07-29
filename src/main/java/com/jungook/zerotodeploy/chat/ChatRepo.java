@@ -8,4 +8,6 @@ import java.util.Optional;
 @Repository
 public interface ChatRepo extends JpaRepository<ChatEntity, Long> {
     Optional<ChatEntity> findByRoomKey(String roomKey);
+
+    Optional<ChatEntity> findByRoomName(String roomName);
 }
