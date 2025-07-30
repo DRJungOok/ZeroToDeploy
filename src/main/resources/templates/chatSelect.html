@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{common::header}"></head>
+<body class="d-flex flex-column min-vh-100">
+<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
+    <div th:replace="~{common::nav}"></div>
+    <div class="container mt-5">
+        <h2 th:text="${friendUserName} + '와 채팅방 생성'">채팅방 생성</h2>
+        <div class="mt-4">
+            <form th:action="@{'/chat/room/individual/' + ${friendUserName}}" method="post" class="mb-3">
+                <button type="submit" class="btn btn-primary">1:1 채팅 시작</button>
+            </form>
+            <form th:action="@{'/chat/room/several/' + ${friendUserName}}" method="get">
+                <button type="submit" class="btn btn-secondary">1:n 채팅방 만들기</button>
+            </form>
+        </div>
+    </div>
+    <footer th:replace="~{common::footer}"></footer>
+    <div th:replace="~{common::script}"></div>
+</div>
+</body>
+</html>
