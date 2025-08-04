@@ -13,7 +13,12 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "chat_entity")
+// Use the existing `chat` table so that foreign key constraints
+// in the join table `chat_room_users` reference the correct parent table.
+// The previous table name `chat_entity` caused inserts into a different
+// table than the one referenced by the foreign key, leading to
+// `SQLIntegrityConstraintViolationException` when saving participants.
+@Table(name = "chat")
 public class ChatEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
