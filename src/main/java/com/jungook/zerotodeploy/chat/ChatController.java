@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -66,6 +67,17 @@ public class ChatController {
     public String viewRoom(@PathVariable Long id, Model model) {
         ChatEntity room = chatService.getRoom(id);
         model.addAttribute("chatRoomName", room.getRoomName());
+        return "chat";
+    }
+
+    @GetMapping("/individual/{targetUserName}")
+    public String goToIndividualChat(@PathVariable String targetUserName, Principal principal, Model model) {
+        String myUserName = principal.getName();
+        ChatEntity chatRoom = chatService.findOrCreateRoom(myUserName, targetUserName);
+
+        model.addAttribute("room", chatRoom);
+        model.addAttribute("participants", chatRoom.getParticipants());
+
         return "chat";
     }
 }
