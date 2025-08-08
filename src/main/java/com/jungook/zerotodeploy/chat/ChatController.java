@@ -33,6 +33,7 @@ public class ChatController {
     @PostMapping("/room/individual/{friendName}")
     public String createIndividual(@PathVariable String friendName, Authentication auth) {
         ChatEntity room = chatService.findOrCreateRoom(auth.getName(), friendName);
+
         return "redirect:/chat/room/" + room.getId();
     }
 
