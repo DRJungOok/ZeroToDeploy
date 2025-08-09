@@ -25,7 +25,7 @@ public class ChatService {
         JoinUserEntity user1 = joinUserRepo.findByUserName(sorted.get(0)).orElseThrow();
         JoinUserEntity user2 = joinUserRepo.findByUserName(sorted.get(1)).orElseThrow();
 
-        ChatEntity chat = new ChatEntity();
+        ChatEntity chat = ChatEntity.individual(roomKey, user1, user2);
         chat.setRoomKey(roomKey);
         chat = chatRepo.save(chat);
 
