@@ -22,7 +22,7 @@ public class ChatEntity {
     @Column(unique = true)
     private String roomKey;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "room_name",unique = true, nullable = false)
     private String roomName;
 
     @ManyToMany
