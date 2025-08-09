@@ -1,38 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{common::header}"></head>
 <body>
 <div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
     <div th:replace="~{common::nav}"></div>
-    <div class="chat-header">
-        채팅방 - <span th:text="${chatRoomName}">Room Name</span>
+
+    <div class="container mt-4">
+        <div class="chat-header h4 mb-3">
+            채팅방 - <span th:text="${chatRoomName}">Room Name</span>
+        </div>
+
+        <div class="chat-messages border rounded p-3 mb-3" id="chatBox" style="height: 420px; overflow-y:auto;">
+            <!-- TODO: 실제 메시지 렌더링 영역 (추가 예정) -->
+            <div class="text-muted">메시지가 여기에 표시됩니다.</div>
+        </div>
+
+        <div class="chat-input">
+            <form th:action="@{/chat/send}" method="post">
+                <input type="hidden" name="roomId" th:value="${roomId}">
+                <div class="input-group">
+                    <textarea name="message" class="form-control" rows="2" placeholder="메시지를 입력하세요..."></textarea>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <div class="chat-messages" id="chatBox">
-        <!-- 예시 메시지 -->
-        <div class="message received">
-            <div class="sender">상대방</div>
-            <div class="text bg-light p-2 rounded">안녕하세요!</div>
-        </div>
-        <div class="message sent">
-            <div class="sender">나</div>
-            <div class="text bg-primary text-white p-2 rounded">반가워요.</div>
-        </div>
-    </div>
-
-    <div class="chat-input">
-        <form th:action="@{/chat/send}" method="post">
-            <div class="input-group">
-                <textarea name="message" class="form-control" placeholder="메시지를 입력하세요..."></textarea>
-                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
-            </div>
-        </form>
-    </div>
+    <footer th:replace="~{common::footer}"></footer>
+    <div th:replace="~{common::script}"></div>
 </div>
-
-<footer th:replace="~{common::footer}"></footer>
-<!-- JavaScript Libraries -->
-<div th:replace="~{common::script}"></div>
 </body>
-
 </html>
