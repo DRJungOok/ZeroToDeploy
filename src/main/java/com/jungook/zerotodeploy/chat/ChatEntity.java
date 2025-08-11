@@ -21,7 +21,7 @@ public class ChatEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)   // ← roomKey도 비워지지 않게 강제
+    @Column(unique = true, nullable = false)
     private String roomKey;
 
     @Column(name = "room_name", unique = true, nullable = false)
@@ -31,12 +31,11 @@ public class ChatEntity {
     @ManyToMany
     @JoinTable(
         name = "chat_room_users",
-        joinColumns = @JoinColumn(name = "chat_room_id"),     // REFERENCES chat(id)
-        inverseJoinColumns = @JoinColumn(name = "user_id")    // REFERENCES join_user(id)
+        joinColumns = @JoinColumn(name = "chat_room_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<JoinUserEntity> participants = new HashSet<>();
 
-    /** 1:1 채팅방 팩토리. 방 이름은 두 유저명을 정렬해 'A & B' 로 고정 */
     public static ChatEntity individual(String roomKey, JoinUserEntity user1, JoinUserEntity user2) {
         String n1 = user1 != null ? String.valueOf(user1.getUserName()) : "(unknown)";
         String n2 = user2 != null ? String.valueOf(user2.getUserName()) : "(unknown)";
