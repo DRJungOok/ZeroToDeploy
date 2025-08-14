@@ -11,6 +11,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "message")
+
 public class MessageEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
