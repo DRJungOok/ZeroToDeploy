@@ -11,6 +11,6 @@ public interface MessageRepo extends JpaRepository<MessageEntity, Long> {
 	List<MessageEntity> findByChatIdOrderByIdAsc(Long chatId);
 	List<MessageEntity> findByChatIdAndIdGreaterThanOrderByIdAsc(Long chatId, Long afterMessageId);
 
-	List<MessageEntity> findByChatIdAndCreatedAtAfterOrderByIdAsc(Long chatId, LocalDateTime after);
+	List<MessageEntity> findByChatIdAndCreatedAfterOrderByIdAsc(Long chatId, LocalDateTime after);
 
 }

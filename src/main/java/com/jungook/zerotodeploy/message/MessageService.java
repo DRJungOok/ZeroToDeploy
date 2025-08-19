@@ -5,9 +5,12 @@ import com.jungook.zerotodeploy.chat.ChatEntity;
 import com.jungook.zerotodeploy.chat.ChatRepo;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +35,20 @@ public class MessageService {
 				.build();
 
 		return messageRepo.save(messageEntity);
+	}
+
+	@Transactional(readOnly = true)
+	public List<MessageEntity> getAllMessages(Long chatId) {
+		return messageRepo.findByChatIdOrderByIdAsc(chatId);
+	}
+
+	@Transactional(readOnly = true)
+	public List<MessageEntity> getMessagesAfter(Long chatId, Long afterMessageId) {
+		return messageRepo.findByChatIdAndIdGreaterThanOrderByIdAsc(chatId, afterMessageId);
+	}
+
+	@Transactional(readOnly = true)
+	public List<MessageEntity> getMessagesAfterTime(Long chatId, LocalDateTime after) {
+		return messageRepo.findByChatIdAndCreatedAfterOrderByIdAsc(chatId, after);
 	}
 }
