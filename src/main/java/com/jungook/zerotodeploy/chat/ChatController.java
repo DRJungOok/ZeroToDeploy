@@ -2,6 +2,7 @@ package com.jungook.zerotodeploy.chat;
 
 import com.jungook.zerotodeploy.friends.FriendsService;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
+import com.jungook.zerotodeploy.message.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ public class ChatController {
     private final ChatService chatService;
     private final FriendsService friendsService;
     private final JoinUserRepo joinUserRepo;
+    private final MessageService messageService;
 
     @GetMapping("/room/user/{friendName}")
     public String selectType(@PathVariable String friendName, Model model) {
@@ -42,5 +44,14 @@ public class ChatController {
     public String goToIndividualChat(@PathVariable String targetUserName, Authentication auth) {
         ChatEntity room = chatService.findOrCreateRoom(auth.getName(), targetUserName);
         return "redirect:/chat/room/" + room.getId();
+    }
+
+    @PostMapping("/send")
+    public String sendMessage(@RequestParam String message, @RequestParam Long roomId, Authentication auth) {
+        if(message != null && !message.isBlank()) {
+            messageService.sendMessage(roomId, auth.getName(), message.trim());
+        }
+
+        return "redirect:/chat/room/" + roomId;
     }
 }
