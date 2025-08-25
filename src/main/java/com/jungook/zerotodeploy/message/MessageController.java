@@ -1,6 +1,5 @@
 package com.jungook.zerotodeploy.message;
 
-import com.jungook.zerotodeploy.chat.ChatService;
 import com.jungook.zerotodeploy.friends.FriendsEntity;
 import com.jungook.zerotodeploy.friends.FriendsService;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
@@ -35,7 +34,6 @@ public class MessageController {
 				.map(rel -> rel.getSender().getUserName().equals(auth.getName()) ? rel.getReceiver() : rel.getSender())
 				.filter(user -> !user.getUserName().equals(friendName))
 				.toList();
-
 		JoinUserEntity target = joinUserRepo.findByUserName(friendName).orElseThrow();
 		model.addAttribute("targetUser", target);
 		model.addAttribute("friends", friends);

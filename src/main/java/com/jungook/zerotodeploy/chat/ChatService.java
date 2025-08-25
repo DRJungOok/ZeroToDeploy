@@ -36,4 +36,11 @@ public class ChatService {
   public ChatEntity getRoom(Long id) {
     return chatRepo.findById(id).orElseThrow();
   }
+
+  @Transactional
+  public ChatEntity renameRoom(Long id, String newName) {
+    ChatEntity room = chatRepo.findById(id).orElseThrow();
+    room.setRoomName(newName);
+    return chatRepo.save(room);
+  }
 }

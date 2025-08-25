@@ -6,8 +6,15 @@
     <div th:replace="~{common::nav}"></div>
 
     <div class="container mt-4">
-        <div class="chat-header h4 mb-3">
-            채팅방 - <span th:text="${chatRoomName}">Room Name</span>
+        <div class="chat-header d-flex align-items-center gap-2 mb-3">
+            <span class="h4 mb-0">채팅방 - </span>
+            <span id="roomName" class="h4 mb-0" th:text="${chatRoomName}">Room Name</span>
+            <button id="editRoomNameBtn" class="btn btn-sm btn-outline-secondary">이름 변경</button>
+            <div id="editRoomNameBox" class="input-group input-group-sm" style="max-width: 360px; display:none;">
+                <input type="text" id="roomNameInput" class="form-control" placeholder="새 방 이름"/>
+                <button class="btn btn-primary" id="saveRoomNameBtn">저장</button>
+                <button class="btn btn-outline-secondary" id="cancelRoomNameBtn">취소</button>
+            </div>
         </div>
 
         <!-- 메시지 영역 -->
@@ -120,11 +127,84 @@
             setTimeout(poll, 2000);
         }
     }
-    setTimeout(poll, 2000);
+    // --- STOMP 클라이언트 ---
+    ;(function(){
+        const sock = new SockJS('/ws');
+        const stomp = Stomp.over(sock);
+        stomp.debug = null;
+        stomp.connect({}, () => {
+            stomp.subscribe(`/topic/chat.${roomId}`, (frame) => {
+                try {
+                    const m = JSON.parse(frame.body);
+                    appendMessage(m);
+                    scrollToBottom();
+                } catch {}
+            });
+        });
 
-    document.getElementById('sendForm').addEventListener('submit', () => {
-        msgInput.value = msgInput.value.trim();
-    });
+        function doSend() {
+            const content = msgInput.value.trim();
+            if (!content) return;
+            stomp.send('/app/chat.send', {}, JSON.stringify({ roomId, message: content }));
+            msgInput.value = '';
+        }
+
+        document.getElementById('sendForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            doSend();
+        });
+
+        msgInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                doSend();
+            }
+        });
+    })();
+
+    // --- Room name inline edit ---
+    (function(){
+        const btn = document.getElementById('editRoomNameBtn');
+        const box = document.getElementById('editRoomNameBox');
+        const nameEl = document.getElementById('roomName');
+        const input = document.getElementById('roomNameInput');
+        const save = document.getElementById('saveRoomNameBtn');
+        const cancel = document.getElementById('cancelRoomNameBtn');
+
+        if(!btn) return;
+
+        btn.addEventListener('click', () => {
+            input.value = nameEl.textContent.trim();
+            box.style.display = '';
+            btn.style.display = 'none';
+            input.focus();
+        });
+
+        cancel.addEventListener('click', () => {
+            box.style.display = 'none';
+            btn.style.display = '';
+        });
+
+        save.addEventListener('click', async () => {
+            const newName = input.value.trim();
+            if(!newName) return;
+            try {
+                const res = await fetch(`/chat/room/${roomId}/name`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ roomName: newName })
+                });
+                const data = await res.json();
+                if(data.ok) {
+                    nameEl.textContent = data.roomName;
+                    box.style.display = 'none';
+                    btn.style.display = '';
+                } else {
+                    alert(data.message || '이름 변경 실패');
+                }
+            } catch(e) { alert('네트워크 오류'); }
+        });
+    })();
     /*]]>*/
 </script>
 </body>
