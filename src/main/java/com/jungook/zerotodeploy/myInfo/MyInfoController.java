@@ -52,7 +52,7 @@ public class MyInfoController {
 	}
 
 	@GetMapping("/{userNameOrEmail}")
-	public String userInfo(@PathVariable String userNameOrEmail, Model model) {
+	public String userInfo(@PathVariable("userNameOrEmail") String userNameOrEmail, Model model) {
 		JoinUserEntity user = joinUserRepo.findByUserName(userNameOrEmail)
 				.or(() -> joinUserRepo.findByEmail(userNameOrEmail))
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
@@ -91,7 +91,7 @@ public class MyInfoController {
 	}
 
 	@PostMapping("/{id}/update")
-	public String updateInfo(@PathVariable Long id,
+	public String updateInfo(@PathVariable("id") Long id,
 							 @RequestParam("userName") String newUserName,
 							 @RequestParam("email") String newEmail,
 							 @RequestParam(value = "password", required = false) String newPassword,

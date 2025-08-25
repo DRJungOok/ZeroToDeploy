@@ -32,8 +32,10 @@
         <div class="chat-input">
             <form th:action="@{/chat/send}" method="post" id="sendForm">
                 <input type="hidden" name="roomId" th:value="${roomId}">
-                <!-- Spring Security CSRF -->
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <!-- Spring Security CSRF (보안 설정에서 활성화된 경우에만 렌더링) -->
+                <th:block th:if="${_csrf != null}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                </th:block>
 
                 <div class="input-group">
                     <textarea name="message" id="messageInput" class="form-control" rows="2"

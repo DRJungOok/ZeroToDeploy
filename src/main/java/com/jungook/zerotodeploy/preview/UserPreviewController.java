@@ -50,7 +50,7 @@ public class UserPreviewController {
     }
 
     @GetMapping("/myInfo/{id}")
-    public String userInfo(@PathVariable Long id,
+    public String userInfo(@PathVariable("id") Long id,
                            Model model,
                            Authentication authentication) {
 
@@ -78,7 +78,7 @@ public class UserPreviewController {
     }
 
     @GetMapping("/myInfo/username/{username}")
-    public String userInfoByUsername(@PathVariable String username,
+    public String userInfoByUsername(@PathVariable("username") String username,
                                      Model model,
                                      Authentication authentication) {
 

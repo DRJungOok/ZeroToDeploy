@@ -22,7 +22,7 @@ public class CommentController {
 	private PostRepo postRepo;
 
 	@PostMapping("/comment/create")
-	public String createComment(@RequestParam Long postId, @RequestParam String content, Principal principal) {
+	public String createComment(@RequestParam("postId") Long postId, @RequestParam("content") String content, Principal principal) {
 		if (principal == null) {
 			return "redirect:/login";
 		}
@@ -52,7 +52,7 @@ public class CommentController {
 
 	@GetMapping("/comment/delete/{id}")
 	@PreAuthorize("isAuthenticated()")
-	public String deleteComment(@PathVariable Long id, Principal principal) {
+	public String deleteComment(@PathVariable("id") Long id, Principal principal) {
 		CommentEntity comment = commentRepository.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 

@@ -19,19 +19,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/chat")
 public class MessageController {
-	private final ChatService chatService;
-	private final MessageService messageService;
 	private final FriendsService friendsService;
 	private final JoinUserRepo joinUserRepo;
 
 	@GetMapping("/room/message/{friendName}")
-	public String selectType(@PathVariable String friendName, Model model) {
+	public String selectType(@PathVariable("friendName") String friendName, Model model) {
 		model.addAttribute("friendName", friendName);
 		return "chatSelect";
 	}
 
 	@GetMapping("/room/several/{friends}")
-	public String groupForm(@PathVariable String friendName, Authentication auth, Model model) {
+	public String groupForm(@PathVariable("friends") String friendName, Authentication auth, Model model) {
 		List<FriendsEntity> relations = friendsService.getFriends(auth.getName());
 		List<JoinUserEntity> friends = relations.stream()
 				.map(rel -> rel.getSender().getUserName().equals(auth.getName()) ? rel.getReceiver() : rel.getSender())

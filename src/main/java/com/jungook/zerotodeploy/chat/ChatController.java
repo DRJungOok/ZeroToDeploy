@@ -20,19 +20,19 @@ public class ChatController {
     private final MessageService messageService;
 
     @GetMapping("/room/user/{friendName}")
-    public String selectType(@PathVariable String friendName, Model model) {
+    public String selectType(@PathVariable("friendName") String friendName, Model model) {
         model.addAttribute("friendUserName", friendName);
         return "chatSelect";
     }
 
     @PostMapping("/room/individual/{friendName}")
-    public String createChatRoom(@PathVariable String friendName, Authentication auth) {
+    public String createChatRoom(@PathVariable("friendName") String friendName, Authentication auth) {
         ChatEntity room = chatService.findOrCreateRoom(auth.getName(), friendName);
         return "redirect:/chat/room/" + room.getId();
     }
 
     @GetMapping("/room/{id}")
-    public String viewRoom(@PathVariable Long id, Model model) {
+    public String viewRoom(@PathVariable("id") Long id, Model model) {
         ChatEntity room = chatService.getRoom(id);
         model.addAttribute("chatRoomName", room.getRoomName());
         model.addAttribute("participants", room.getParticipants());
@@ -41,13 +41,13 @@ public class ChatController {
     }
 
     @GetMapping("/individual/{targetUserName}")
-    public String goToIndividualChat(@PathVariable String targetUserName, Authentication auth) {
+    public String goToIndividualChat(@PathVariable("targetUserName") String targetUserName, Authentication auth) {
         ChatEntity room = chatService.findOrCreateRoom(auth.getName(), targetUserName);
         return "redirect:/chat/room/" + room.getId();
     }
 
     @PostMapping("/send")
-    public String sendMessage(@RequestParam String message, @RequestParam Long roomId, Authentication auth) {
+    public String sendMessage(@RequestParam("message") String message, @RequestParam("roomId") Long roomId, Authentication auth) {
         if(message != null && !message.isBlank()) {
             messageService.sendMessage(roomId, auth.getName(), message.trim());
         }
