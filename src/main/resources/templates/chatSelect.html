@@ -10,13 +10,97 @@
             <form th:action="@{'/chat/room/individual/' + ${friendUserName}}" method="post" class="mb-3">
                 <button type="submit" class="btn btn-primary">1:1 채팅 시작</button>
             </form>
-            <form th:action="@{'/chat/room/several/' + ${friendUserName}}" method="get">
-                <button type="submit" class="btn btn-secondary">1:n 채팅방 만들기</button>
-            </form>
+            <button type="button" class="btn btn-secondary" id="openGroupModal">1:n 채팅방 만들기</button>
+        </div>
+    </div>
+
+    <!-- 1:n 초대 모달 -->
+    <div class="modal fade" id="groupModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">친구 초대하여 그룹 채팅 만들기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="groupForm" th:action="@{/chat/room/several}" method="post">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="roomName" class="form-label">방 이름</label>
+                            <input type="text" id="roomName" name="roomName" class="form-control" placeholder="예) 스터디방" required>
+                        </div>
+                        <div class="mb-2">초대할 친구 선택</div>
+                        <div id="friendListBox" class="border rounded p-2" style="max-height: 260px; overflow-y: auto;"></div>
+                        <th:block th:if="${_csrf != null}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        </th:block>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary">방 만들기</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <footer th:replace="~{common::footer}"></footer>
     <div th:replace="~{common::script}"></div>
 </div>
+<script th:inline="javascript">
+/*<![CDATA[*/
+const targetUserName = /*[[${friendUserName}]]*/ '';
+
+const groupModalEl = document.getElementById('groupModal');
+let groupModal;
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.bootstrap) {
+        groupModal = new bootstrap.Modal(groupModalEl);
+    }
+    document.getElementById('openGroupModal')?.addEventListener('click', async () => {
+        await loadFriends();
+        groupModal?.show();
+    });
+});
+
+async function loadFriends() {
+    const box = document.getElementById('friendListBox');
+    box.innerHTML = '<div class="text-muted">불러오는 중...</div>';
+    try {
+        const res = await fetch('/chat/friends', { cache: 'no-store' });
+        if (!res.ok) throw new Error('network');
+        const friends = await res.json(); // [{id, userName}]
+        if (!Array.isArray(friends) || friends.length === 0) {
+            box.innerHTML = '<div class="text-muted">친구가 없습니다.</div>';
+            return;
+        }
+        const frag = document.createDocumentFragment();
+        friends.forEach(f => {
+            const id = String(f.id);
+            const div = document.createElement('div');
+            div.className = 'form-check';
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.className = 'form-check-input';
+            input.name = 'userIds';
+            input.value = id;
+            input.id = 'friend' + id;
+            if (String(f.userName) === String(targetUserName)) {
+                input.checked = true; // 대상 친구는 기본 선택
+            }
+            const label = document.createElement('label');
+            label.className = 'form-check-label';
+            label.setAttribute('for', 'friend' + id);
+            label.textContent = f.userName;
+            div.appendChild(input);
+            div.appendChild(label);
+            frag.appendChild(div);
+        });
+        box.innerHTML = '';
+        box.appendChild(frag);
+    } catch (e) {
+        box.innerHTML = '<div class="text-danger">친구 목록을 불러오지 못했습니다.</div>';
+    }
+}
+/*]]>*/
+</script>
 </body>
 </html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{common::header}"></head>
+<body class="d-flex flex-column min-vh-100">
+<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
+    <div th:replace="~{common::nav}"></div>
+
+    <div class="container mt-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h3 class="mb-0">내 채팅방</h3>
+            <a th:href="@{/friends}" class="btn btn-sm btn-outline-secondary">친구로 채팅 시작</a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(rooms)}" class="text-muted">참여 중인 채팅방이 없습니다.</div>
+        <ul class="list-group" th:if="${!#lists.isEmpty(rooms)}">
+            <li class="list-group-item d-flex align-items-center justify-content-between"
+                th:each="r : ${rooms}">
+                <a th:href="@{'/chat/room/' + ${r.id}}" th:text="${r.roomName}"></a>
+                <span class="badge bg-light text-dark" th:text="${#lists.size(r.participants)} + '명'">0명</span>
+            </li>
+        </ul>
+    </div>
+
+    <footer th:replace="~{common::footer}"></footer>
+    <div th:replace="~{common::script}"></div>
+</div>
+</body>
+</html>
+

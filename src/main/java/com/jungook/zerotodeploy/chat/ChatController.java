@@ -6,7 +6,6 @@ import com.jungook.zerotodeploy.message.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -36,6 +36,55 @@ public class ChatController {
         return "chatSelect";
     }
 
+    // 내 채팅방 목록 페이지
+    @GetMapping
+    public String chatHome(Model model, Authentication auth) {
+        String me = auth.getName();
+        var rooms = chatService.listMyRooms(me);
+        model.addAttribute("rooms", rooms);
+        return "chatList";
+    }
+
+    // 내 채팅방 목록 JSON
+    @GetMapping("/rooms")
+    @ResponseBody
+    public List<Map<String, Object>> myRooms(Authentication auth) {
+        String me = auth.getName();
+        return chatService.listMyRooms(me).stream().map(r -> {
+            java.util.HashMap<String, Object> m = new java.util.HashMap<>();
+            m.put("id", r.getId());
+            m.put("roomName", r.getRoomName());
+            return m;
+        }).collect(Collectors.toList());
+    }
+
+    // 친구 목록 JSON (수락된 친구만)
+    @GetMapping("/friends")
+    @ResponseBody
+    public List<Map<String, Object>> myFriends(Authentication auth) {
+        String me = auth.getName();
+        var relations = friendsService.getFriends(me);
+        return relations.stream().map(rel -> {
+            var other = rel.getSender().getUserName().equals(me) ? rel.getReceiver() : rel.getSender();
+            java.util.HashMap<String, Object> m = new java.util.HashMap<>();
+            m.put("id", other.getId());
+            m.put("userName", other.getUserName());
+            return m;
+        }).collect(Collectors.toList());
+    }
+
+    // 그룹방 생성
+    @PostMapping("/room/several")
+    public String createGroupRoom(@RequestParam("userIds") Set<Long> userIds,
+                                  @RequestParam(value = "roomName", required = false) String roomName,
+                                  Authentication auth) {
+        // 본인도 포함되도록 보장
+        var me = joinUserRepo.findByUserName(auth.getName()).orElseThrow();
+        userIds.add(me.getId());
+        ChatEntity room = chatService.createGroupRoom(userIds, roomName);
+        return "redirect:/chat/room/" + room.getId();
+    }
+
     @PostMapping("/room/individual/{friendName}")
     public String createChatRoom(@PathVariable("friendName") String friendName, Authentication auth) {
         ChatEntity room = chatService.findOrCreateRoom(auth.getName(), friendName);
@@ -51,7 +100,6 @@ public class ChatController {
 
         // 초기 메시지 제공 (템플릿이 기대하는 키에 맞춤: sender.userName, content, createdAt)
         var all = messageService.getAllMessages(id);
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         List<Map<String, Object>> initialMessages = all.stream().map(m -> {
             java.util.HashMap<String, Object> outer = new java.util.HashMap<>();
             outer.put("id", m.getId());

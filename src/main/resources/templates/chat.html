@@ -6,6 +6,17 @@
     <div th:replace="~{common::nav}"></div>
 
     <div class="container mt-4">
+        <div class="row">
+            <aside class="col-md-3 mb-3">
+                <div class="border rounded p-2">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <strong>내 채팅방</strong>
+                        <a class="small" th:href="@{/chat}">모두 보기</a>
+                    </div>
+                    <div id="roomList" class="list-group small" style="max-height: 420px; overflow-y: auto;"></div>
+                </div>
+            </aside>
+            <main class="col-md-9">
         <div class="chat-header d-flex align-items-center gap-2 mb-3">
             <span class="h4 mb-0">채팅방 - </span>
             <span id="roomName" class="h4 mb-0" th:text="${chatRoomName}">Room Name</span>
@@ -54,6 +65,8 @@
                 </div>
             </form>
         </div>
+            </main>
+        </div>
     </div>
 
     <footer th:replace="~{common::footer}"></footer>
@@ -66,6 +79,7 @@
     const me = /*[[${me}]]*/ '';
     const chatBox = document.getElementById('chatBox');
     const msgInput = document.getElementById('messageInput');
+    const roomList = document.getElementById('roomList');
 
     function getLastId() {
         const items = chatBox.querySelectorAll('[data-mid]');
@@ -108,6 +122,36 @@
     }
 
     scrollToBottom();
+
+    // 내 채팅방 목록 불러오기
+    async function loadMyRooms() {
+        if (!roomList) return;
+        try {
+            const res = await fetch('/chat/rooms', { cache: 'no-store' });
+            if (!res.ok) throw new Error('network');
+            const rooms = await res.json(); // [{id, roomName}]
+            if (!Array.isArray(rooms) || rooms.length === 0) {
+                roomList.innerHTML = '<div class="list-group-item text-muted">채팅방 없음</div>';
+                return;
+            }
+            const frag = document.createDocumentFragment();
+            rooms.forEach(r => {
+                const a = document.createElement('a');
+                a.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+                a.href = `/chat/room/${r.id}`;
+                a.textContent = r.roomName;
+                if (Number(r.id) === Number(roomId)) {
+                    a.classList.add('active');
+                }
+                frag.appendChild(a);
+            });
+            roomList.innerHTML = '';
+            roomList.appendChild(frag);
+        } catch (e) {
+            roomList.innerHTML = '<div class="list-group-item text-danger">목록 로드 실패</div>';
+        }
+    }
+    loadMyRooms();
 
     async function poll() {
         try {
