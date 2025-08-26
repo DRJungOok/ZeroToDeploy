@@ -64,6 +64,12 @@ public class ChatService {
         .toList();
     String roomKey = String.join("_", sortedNames);
 
+    // 중복 그룹방 방지: 동일 참여자 세트 roomKey 존재 시 해당 방 재사용
+    var existing = chatRepo.findByRoomKey(roomKey);
+    if (existing.isPresent()) {
+      return existing.get();
+    }
+
     ChatEntity chat = new ChatEntity();
     chat.setRoomKey(roomKey);
     chat.setRoomName(roomName != null && !roomName.isBlank() ? roomName.trim() : String.join(", ", sortedNames));

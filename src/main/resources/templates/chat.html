@@ -64,6 +64,12 @@
                     </button>
                 </div>
             </form>
+            <form th:action="@{'/chat/room/' + ${roomId} + '/upload'}" method="post" enctype="multipart/form-data" class="mt-2 d-flex align-items-center gap-2">
+                <input type="file" name="file" class="form-control" style="max-width: 70%;" accept="image/*,application/pdf,application/zip,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain">
+                <button type="submit" class="btn btn-outline-secondary">
+                    첨부 업로드
+                </button>
+            </form>
         </div>
             </main>
         </div>
@@ -104,7 +110,24 @@
         meta.textContent = m.sender;
 
         const text = document.createElement('div');
-        text.textContent = m.content;
+        if (m.attachmentUrl) {
+            if (m.contentType && m.contentType.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = m.attachmentUrl;
+                img.alt = m.fileName || 'image';
+                img.style.maxWidth = '240px';
+                img.style.borderRadius = '8px';
+                text.appendChild(img);
+            } else {
+                const a = document.createElement('a');
+                a.href = m.attachmentUrl;
+                a.textContent = m.fileName || '첨부 파일';
+                a.target = '_blank';
+                text.appendChild(a);
+            }
+        } else {
+            text.textContent = m.content;
+        }
 
         const time = document.createElement('div');
         time.className = 'small text-muted mt-1 text-end';
@@ -153,24 +176,7 @@
     }
     loadMyRooms();
 
-    async function poll() {
-        try {
-            const res = await fetch(`/chat/room/${roomId}/messages?afterId=${lastId}`, { cache: 'no-store' });
-            if (!res.ok) throw new Error('network');
-            const data = await res.json(); // [{id, sender, content, createdAt}]
-            if (Array.isArray(data) && data.length > 0) {
-                const atBottom = Math.abs(chatBox.scrollHeight - chatBox.scrollTop - chatBox.clientHeight) < 8;
-                data.forEach(m => {
-                    appendMessage(m);
-                    lastId = Math.max(lastId, Number(m.id) || 0);
-                });
-                if (atBottom) scrollToBottom();
-            }
-        } catch (e) {
-        } finally {
-            setTimeout(poll, 2000);
-        }
-    }
+    // 폴링 제거: STOMP 실시간만 사용
     // --- STOMP 클라이언트 ---
     ;(function(){
         const sock = new SockJS('/ws');

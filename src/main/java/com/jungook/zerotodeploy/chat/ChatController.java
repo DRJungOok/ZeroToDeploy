@@ -14,6 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,7 +44,19 @@ public class ChatController {
     public String chatHome(Model model, Authentication auth) {
         String me = auth.getName();
         var rooms = chatService.listMyRooms(me);
-        model.addAttribute("rooms", rooms);
+        // 최근 메시지 미리보기 포함
+        List<Map<String, Object>> roomDTOs = rooms.stream().map(r -> {
+            var last = messageService.getLastMessage(r.getId());
+            java.util.HashMap<String, Object> m = new java.util.HashMap<>();
+            m.put("id", r.getId());
+            m.put("roomName", r.getRoomName());
+            if (last != null) {
+                m.put("lastContent", last.getAttachmentUrl() != null && !last.getAttachmentUrl().isBlank() ? "[파일] " + (last.getOriginalFileName() == null ? "첨부" : last.getOriginalFileName()) : last.getContent());
+                m.put("lastTime", last.getCreated());
+            }
+            return m;
+        }).collect(Collectors.toList());
+        model.addAttribute("rooms", roomDTOs);
         return "chatList";
     }
 
@@ -54,6 +69,11 @@ public class ChatController {
             java.util.HashMap<String, Object> m = new java.util.HashMap<>();
             m.put("id", r.getId());
             m.put("roomName", r.getRoomName());
+            var last = messageService.getLastMessage(r.getId());
+            if (last != null) {
+                m.put("lastContent", last.getAttachmentUrl() != null && !last.getAttachmentUrl().isBlank() ? "[파일] " + (last.getOriginalFileName() == null ? "첨부" : last.getOriginalFileName()) : last.getContent());
+                m.put("lastTime", last.getCreated() == null ? "" : last.getCreated().toString());
+            }
             return m;
         }).collect(Collectors.toList());
     }
@@ -94,6 +114,11 @@ public class ChatController {
     @GetMapping("/room/{id}")
     public String viewRoom(@PathVariable("id") Long id, Model model, Authentication auth) {
         ChatEntity room = chatService.getRoom(id);
+        String me = auth.getName();
+        boolean allowed = room.getParticipants().stream().anyMatch(u -> me.equals(u.getUserName()));
+        if (!allowed) {
+            return "redirect:/chat";
+        }
         model.addAttribute("chatRoomName", room.getRoomName());
         model.addAttribute("participants", room.getParticipants());
         model.addAttribute("roomId", room.getId());
@@ -141,10 +166,25 @@ public class ChatController {
     @ResponseBody
     public List<Map<String, Object>> fetchMessages(
             @PathVariable("id") Long id,
-            @RequestParam(name = "afterId", defaultValue = "0") Long afterId) {
-        var list = afterId != null && afterId > 0
-                ? messageService.getMessagesAfter(id, afterId)
-                : messageService.getAllMessages(id);
+            @RequestParam(name = "afterId", defaultValue = "0") Long afterId,
+            @RequestParam(name = "query", required = false) String query,
+            @RequestParam(name = "from", required = false) String fromStr,
+            @RequestParam(name = "to", required = false) String toStr) {
+        var list = java.util.Collections.<com.jungook.zerotodeploy.message.MessageEntity>emptyList();
+        if ((query != null && !query.isBlank()) || (fromStr != null && toStr != null)) {
+            LocalDateTime from = null, to = null;
+            if (fromStr != null && toStr != null) {
+                LocalDate fromD = LocalDate.parse(fromStr);
+                LocalDate toD = LocalDate.parse(toStr);
+                from = fromD.atStartOfDay();
+                to = toD.atTime(LocalTime.MAX);
+            }
+            list = messageService.searchMessages(id, query, from, to);
+        } else if (afterId != null && afterId > 0) {
+            list = messageService.getMessagesAfter(id, afterId);
+        } else {
+            list = messageService.getAllMessages(id);
+        }
 
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return list.stream().map(m -> {
@@ -152,9 +192,47 @@ public class ChatController {
             json.put("id", m.getId());
             json.put("sender", m.getSender().getUserName());
             json.put("content", m.getContent());
+            json.put("attachmentUrl", m.getAttachmentUrl());
+            json.put("contentType", m.getContentType());
+            json.put("fileName", m.getOriginalFileName());
             json.put("createdAt", m.getCreated() == null ? "" : m.getCreated().format(fmt));
             return json;
         }).collect(Collectors.toList());
+    }
+
+    // 파일 업로드 (이미지/파일)
+    @PostMapping("/room/{id}/upload")
+    public String upload(@PathVariable("id") Long id,
+                         @RequestParam("file") org.springframework.web.multipart.MultipartFile file,
+                         Authentication auth) throws java.io.IOException {
+        if (file == null || file.isEmpty()) {
+            return "redirect:/chat/room/" + id;
+        }
+        // 저장 경로: resources/static/uploads
+        String basePath = new java.io.File("src/main/resources/static/uploads").getPath();
+        java.io.File dir = new java.io.File(basePath);
+        if (!dir.exists()) dir.mkdirs();
+
+        String ext = org.springframework.util.StringUtils.getFilenameExtension(file.getOriginalFilename());
+        String uuid = java.util.UUID.randomUUID().toString().replace("-", "");
+        String fileName = uuid + (ext == null ? "" : ("." + ext));
+        java.io.File dest = new java.io.File(dir, fileName);
+        file.transferTo(dest);
+
+        String url = "/uploads/" + fileName;
+        var saved = messageService.sendAttachment(id, auth.getName(), url, file.getContentType(), file.getOriginalFilename());
+
+        var out = new java.util.HashMap<String, Object>();
+        out.put("id", saved.getId());
+        out.put("sender", saved.getSender().getUserName());
+        out.put("content", "");
+        out.put("attachmentUrl", saved.getAttachmentUrl());
+        out.put("contentType", saved.getContentType());
+        out.put("fileName", saved.getOriginalFileName());
+        out.put("createdAt", saved.getCreated() == null ? "" : saved.getCreated().toString());
+        simpMessagingTemplate.convertAndSend("/topic/chat." + id, out);
+
+        return "redirect:/chat/room/" + id;
     }
 
     @GetMapping("/individual/{targetUserName}")

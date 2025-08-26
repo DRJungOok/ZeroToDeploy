@@ -13,4 +13,12 @@ public interface MessageRepo extends JpaRepository<MessageEntity, Long> {
 
 	List<MessageEntity> findByChatIdAndCreatedAfterOrderByIdAsc(Long chatId, LocalDateTime after);
 
+	MessageEntity findTopByChatIdOrderByIdDesc(Long chatId);
+
+	List<MessageEntity> findByChatIdAndContentContainingIgnoreCaseOrderByIdAsc(Long chatId, String query);
+
+	List<MessageEntity> findByChatIdAndCreatedBetweenOrderByIdAsc(Long chatId, LocalDateTime from, LocalDateTime to);
+
+	List<MessageEntity> findByChatIdAndContentContainingIgnoreCaseAndCreatedBetweenOrderByIdAsc(Long chatId, String query, LocalDateTime from, LocalDateTime to);
+
 }

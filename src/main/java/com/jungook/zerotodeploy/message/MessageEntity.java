@@ -33,6 +33,16 @@ public class MessageEntity {
 	@Column(nullable = false, length = 2000)
 	private String content;
 
+	// 첨부 파일(이미지/파일) 지원
+	@Column(name = "attachment_url")
+	private String attachmentUrl;
+
+	@Column(name = "content_type")
+	private String contentType;
+
+	@Column(name = "file_name")
+	private String originalFileName;
+
 	@CreationTimestamp
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime created;

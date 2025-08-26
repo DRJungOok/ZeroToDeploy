@@ -13,10 +13,15 @@
 
         <div th:if="${#lists.isEmpty(rooms)}" class="text-muted">참여 중인 채팅방이 없습니다.</div>
         <ul class="list-group" th:if="${!#lists.isEmpty(rooms)}">
-            <li class="list-group-item d-flex align-items-center justify-content-between"
+            <li class="list-group-item"
                 th:each="r : ${rooms}">
-                <a th:href="@{'/chat/room/' + ${r.id}}" th:text="${r.roomName}"></a>
-                <span class="badge bg-light text-dark" th:text="${#lists.size(r.participants)} + '명'">0명</span>
+                <a class="text-decoration-none" th:href="@{'/chat/room/' + ${r.id}}">
+                    <div class="d-flex justify-content-between">
+                        <strong th:text="${r.roomName}">room</strong>
+                        <small class="text-muted" th:text="${r.lastTime}"></small>
+                    </div>
+                    <div class="text-muted text-truncate" style="max-width: 100%;" th:text="${r.lastContent}">미리보기</div>
+                </a>
             </li>
         </ul>
     </div>
