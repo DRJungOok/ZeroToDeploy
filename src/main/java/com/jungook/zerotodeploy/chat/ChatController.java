@@ -208,7 +208,7 @@ public class ChatController {
         if (file == null || file.isEmpty()) {
             return "redirect:/chat/room/" + id;
         }
-        // 저장 경로: resources/static/uploads
+        
         String basePath = new java.io.File("src/main/resources/static/uploads").getPath();
         java.io.File dir = new java.io.File(basePath);
         if (!dir.exists()) dir.mkdirs();
