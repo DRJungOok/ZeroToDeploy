@@ -26,6 +26,13 @@
                 <button class="btn btn-primary" id="saveRoomNameBtn">저장</button>
                 <button class="btn btn-outline-secondary" id="cancelRoomNameBtn">취소</button>
             </div>
+            <button id="deleteRoomBtn" class="btn btn-sm btn-outline-danger ms-auto">방 삭제</button>
+        </div>
+
+        <!-- 참여자 목록 -->
+        <div class="mb-3">
+            <small class="text-muted">참여자:</small>
+            <span th:each="p : ${participants}" class="badge bg-light text-dark me-1" th:text="${p.userName}">user</span>
         </div>
 
         <!-- 메시지 영역 -->

@@ -82,4 +82,15 @@ public class ChatService {
   public List<ChatEntity> listMyRooms(String userName) {
     return chatRepo.findByParticipants_UserNameOrderByIdDesc(userName);
   }
+
+  @Transactional
+  public void deleteRoom(Long roomId, String userName) {
+    ChatEntity room = chatRepo.findById(roomId).orElseThrow();
+    boolean isParticipant = room.getParticipants().stream()
+        .anyMatch(u -> userName.equals(u.getUserName()));
+    if (!isParticipant) {
+      throw new IllegalArgumentException("방에 참여하고 있지 않습니다.");
+    }
+    chatRepo.delete(room);
+  }
 }

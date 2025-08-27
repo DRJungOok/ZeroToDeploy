@@ -270,4 +270,16 @@ public class ChatController {
 
         simpMessagingTemplate.convertAndSend("/topic/chat." + roomId, out);
     }
+
+    // 방 삭제
+    @DeleteMapping("/room/{id}")
+    @ResponseBody
+    public Map<String, Object> deleteRoom(@PathVariable("id") Long id, Authentication auth) {
+        try {
+            chatService.deleteRoom(id, auth.getName());
+            return java.util.Map.of("ok", true, "message", "방이 삭제되었습니다.");
+        } catch (Exception e) {
+            return java.util.Map.of("ok", false, "message", e.getMessage());
+        }
+    }
 }
