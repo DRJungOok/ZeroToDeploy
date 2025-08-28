@@ -219,7 +219,7 @@ public class ChatController {
         java.io.File dest = new java.io.File(dir, fileName);
         file.transferTo(dest);
 
-        String url = "/uploads/" + fileName;
+        String url = "/uploads/" + fileName;    
         var saved = messageService.sendAttachment(id, auth.getName(), url, file.getContentType(), file.getOriginalFilename());
 
         var out = new java.util.HashMap<String, Object>();

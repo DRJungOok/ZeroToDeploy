@@ -25,6 +25,8 @@ public class PostEntity {
 	private String content;
 	@Column(name = "category")
 	private String category;
+	@Column(name = "author")
+	private String author;
 	private LocalDateTime createdAt = LocalDateTime.now();
 	@Column(name = "file_name")
 	private String fileName;
