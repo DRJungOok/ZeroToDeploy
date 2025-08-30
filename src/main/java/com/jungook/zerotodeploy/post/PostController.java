@@ -1,6 +1,5 @@
 package com.jungook.zerotodeploy.post;
 
-import com.jungook.zerotodeploy.comment.CommentRepository;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import com.jungook.zerotodeploy.like.LikeRepo;

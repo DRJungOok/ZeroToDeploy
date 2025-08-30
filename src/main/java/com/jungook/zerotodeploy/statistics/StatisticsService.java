@@ -6,7 +6,6 @@ import com.jungook.zerotodeploy.comment.CommentEntity;
 import com.jungook.zerotodeploy.comment.CommentRepository;
 import com.jungook.zerotodeploy.like.LikeEntity;
 import com.jungook.zerotodeploy.like.LikeRepo;
-import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

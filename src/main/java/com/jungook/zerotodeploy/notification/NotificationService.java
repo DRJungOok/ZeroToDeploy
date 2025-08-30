@@ -1,9 +1,6 @@
 package com.jungook.zerotodeploy.notification;
 
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
-import com.jungook.zerotodeploy.post.PostEntity;
-import com.jungook.zerotodeploy.comment.CommentEntity;
-import com.jungook.zerotodeploy.like.LikeEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
