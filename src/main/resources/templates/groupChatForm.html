@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{common::header}"></head>
+<body class="d-flex flex-column min-vh-100">
+<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
+    <div th:replace="~{common::nav}"></div>
+    <div class="container mt-5">
+        <h2>1:n 채팅방 생성</h2>
+        <form th:action="@{/chat/room/several}" method="post">
+            <input type="hidden" name="userIds" th:value="${targetUser.id}" />
+            <div class="mb-3">
+                <label for="roomName" class="form-label">방 이름</label>
+                <input type="text" id="roomName" name="roomName" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">초대할 친구</label>
+                <div th:each="f : ${friends}" class="form-check">
+                    <input class="form-check-input" type="checkbox" name="userIds" th:id="${'friend' + f.id}" th:value="${f.id}" />
+                    <label class="form-check-label" th:for="${'friend' + f.id}" th:text="${f.userName}"></label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">방 만들기</button>
+        </form>
+    </div>
+    <footer th:replace="~{common::footer}"></footer>
+    <div th:replace="~{common::script}"></div>
+</div>
+</body>
+</html>

@@ -17,6 +17,7 @@
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
+
 <body>
 
 <!--userPopup-->
@@ -27,7 +28,7 @@
             <strong th:text="${user.nickname}">닉네임</strong>
         </div>
         <p class="text-muted mb-0" th:text="'가입일: ' + ${user.joinDate}">가입일</p>
-        <a th:href="@{'/api/user/myInfo/' + ${user.userName}}" class="btn btn-sm btn-outline-primary mt-2">프로필 보기</a>
+        <a th:href="@{'/api/user/myInfo/username/' + ${user.userName}}" class="btn btn-sm btn-outline-primary mt-2">프로필 보기</a>
     </div>
 </div>
 
@@ -58,13 +59,14 @@
                 </div>
 
                 <!-- 로그인 후: 내정보 버튼 -->
-                <div sec:authorize="isAuthenticated()">
-                    <a th:href="@{'/api/user/myInfo/' + ${currentUserName}}"
-                       class="btn btn-outline-success d-flex align-items-center justify-content-center"
-                       style="height: 42px;">
+                <div sec:authorize="isAuthenticated()" th:if="${currentUserName != null}">
+                    <a th:href="@{'/api/user/myInfo/username/' + ${currentUserName}}"
+                       class="btn btn-outline-success"
+                    style="height: 42px">
                         내정보
                     </a>
                 </div>
+
 
                 <div sec:authorize="isAuthenticated()">
                     <a th:href="@{/friends}" class="btn btn-outline-primary d-flex align-items-center justify-content-center" style="height: 42px;">
@@ -72,7 +74,14 @@
                     </a>
                 </div>
 
+                <div sec:authorize="isAuthenticated()">
+                    <a th:href="@{/chat}" class="btn btn-outline-primary d-flex align-items-center justify-content-center" style="height: 42px;">
+                        채팅
+                    </a>
+                </div>
+
                 <!-- 로그인 후: 세션 정보 -->
+
                 <div sec:authorize="isAuthenticated()" id="session-info"
                      class="d-flex align-items-center border rounded px-3 py-1"
                      style="font-size: 14px; color: #666; height: 42px;">
@@ -123,6 +132,8 @@
     <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script th:src="@{/js/main.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 </div>
 <script>
     function confirmLogout() {

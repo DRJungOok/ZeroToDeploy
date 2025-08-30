@@ -34,7 +34,7 @@ public class LikeController {
 	@PostMapping("/post/like/{id}")
 	@ResponseBody
 	@Transactional
-	public ResponseEntity<Map<String, Object>> toggleLike(@PathVariable Long id, Authentication authentication) {
+	public ResponseEntity<Map<String, Object>> toggleLike(@PathVariable("id") Long id, Authentication authentication) {
 
 		if (authentication == null || !authentication.isAuthenticated()) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

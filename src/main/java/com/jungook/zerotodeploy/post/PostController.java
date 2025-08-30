@@ -1,6 +1,5 @@
 package com.jungook.zerotodeploy.post;
 
-import com.jungook.zerotodeploy.comment.CommentRepository;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 import com.jungook.zerotodeploy.like.LikeRepo;
@@ -105,7 +104,7 @@ public class PostController {
 
 	@GetMapping("/api/search")
 	@ResponseBody
-	public List<PostEntity> searchApi(@RequestParam String keyword, @RequestParam(defaultValue = "all") String filter) {
+	public List<PostEntity> searchApi(@RequestParam("keyword") String keyword, @RequestParam(name = "filter", defaultValue = "all") String filter) {
 		return postService.searchPosts(keyword, filter);
 	}
 
@@ -145,7 +144,7 @@ public class PostController {
 	}
 
 	@GetMapping("/etc")
-	public String etc(Model model, @RequestParam(required = false) Long id) {
+	public String etc(Model model, @RequestParam(name = "id", required = false) Long id) {
 		List<PostEntity> posts = postRepo.findByCategory("etc");
 		model.addAttribute("posts", summarizePosts(posts));
 		return "etc";
@@ -153,7 +152,7 @@ public class PostController {
 
 	@PostMapping("/post/update/{id}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public String update(@PathVariable Long id, @RequestParam String title, @RequestParam String content) {
+	public String update(@PathVariable("id") Long id, @RequestParam("title") String title, @RequestParam("content") String content) {
 		PostEntity post = postRepo.findById(id).orElseThrow();
 		post.setTitle(title);
 		post.setContent(content);
@@ -164,7 +163,7 @@ public class PostController {
 
 	@GetMapping("/post/delete/{id}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public String delete(@PathVariable Long id) {
+	public String delete(@PathVariable("id") Long id) {
 		PostEntity post = postRepo.findById(id).orElseThrow();
 		String category = post.getCategory();
 
@@ -185,7 +184,7 @@ public class PostController {
 	}
 
 	@GetMapping("/post/{id}")
-	public String detailPost(@PathVariable Long id, Model model, Authentication authentication) {
+	public String detailPost(@PathVariable("id") Long id, Model model, Authentication authentication) {
 		PostEntity post = postRepo.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글 없음"));
 
