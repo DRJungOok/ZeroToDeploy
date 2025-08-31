@@ -14,8 +14,20 @@ public class IndexController {
     
     // 메인 페이지에서 검색 시 검색 페이지로 리다이렉트
     @GetMapping("/main-search")
-    public String searchFromMain(@RequestParam String keyword, RedirectAttributes redirectAttributes) {
+    public String searchFromMain(@RequestParam(name = "keyword") String keyword, 
+                                @RequestParam(name = "filter", required = false) String filter,
+                                @RequestParam(name = "sortBy", required = false) String sortBy,
+                                RedirectAttributes redirectAttributes) {
         redirectAttributes.addAttribute("keyword", keyword);
+        
+        if (filter != null && !filter.isEmpty() && !"all".equals(filter)) {
+            redirectAttributes.addAttribute("filter", filter);
+        }
+        
+        if (sortBy != null && !sortBy.isEmpty() && !"latest".equals(sortBy)) {
+            redirectAttributes.addAttribute("sortBy", sortBy);
+        }
+        
         return "redirect:/search";
     }
 }

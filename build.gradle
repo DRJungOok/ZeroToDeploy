@@ -19,6 +19,11 @@ java {
 	}
 }
 
+// 컴파일러 옵션 추가
+compileJava {
+	options.compilerArgs += ['-parameters']
+}
+
 springBoot {
 	mainClass = 'com.jungook.zerotodeploy.ZeroToDeployApplication'
 }
