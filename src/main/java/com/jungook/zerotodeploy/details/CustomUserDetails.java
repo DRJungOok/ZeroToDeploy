@@ -21,6 +21,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
     private final String username;
     private final String password;
     private final String role;
+    private final String profileImage; // 프로필 이미지 추가
 
     // 필요 시 런타임 참조용(세션 직렬화 제외)
     private transient JoinUserEntity user;
@@ -30,6 +31,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
         this.username = user.getUserName();
         this.password = user.getPassword();
         this.role = user.getRole().name();
+        this.profileImage = user.getProfileImage(); // 프로필 이미지 초기화
         this.user = user;
     }
 

@@ -3,21 +3,17 @@
 <head th:replace="~{common::header}"></head>
 <body>
 <div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
-	<!-- 상단 네비게이션 -->
-	<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0" th:fragment="nav">
+	<!-- 회원가입 페이지 전용 간단한 네비게이션 -->
+	<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
 		<div class="container-fluid d-flex align-items-center justify-content-between">
 			<a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
 				<h1 class="m-0 text-primary">ZeroToDeploy</h1>
 			</a>
 			<div class="d-flex align-items-center gap-3">
-				<div sec:authorize="hasRole('ROLE_ADMIN')" th:if="${currentPath != '/write'}">
-					<a th:href="@{/write}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">✍ 글쓰기</a>
-				</div>
-				<div sec:authorize="isAuthenticated()" id="session-info" class="d-flex align-items-center border rounded px-3 py-1" style="font-size: 14px; color: #666; height: 42px;">
-					<i class="bi bi-clock me-2 text-secondary"></i>
-					<span>세션 : <span id="remaining-time">--</span></span>
-					<button onclick="extendSession()" class="btn btn-sm btn-outline-dark ms-2">연장</button>
-				</div>
+				<!-- 홈으로 돌아가기 버튼만 표시 -->
+				<a th:href="@{/}" class="btn btn-outline-secondary d-flex align-items-center justify-content-center" style="height: 42px;">
+					<i class="fas fa-home me-2"></i> 홈으로
+				</a>
 			</div>
 		</div>
 	</nav>
@@ -51,7 +47,7 @@
 				</form>
 			</div>
 			<div class="card-footer text-center text-muted py-2">
-				<small>Already have an account? <a th:href="@{/}" class="text-primary">Login</a></small>
+				<small>Already have an account? <a th:href="@{/login}" class="text-primary">Login</a></small>
 			</div>
 		</div>
 	</main>

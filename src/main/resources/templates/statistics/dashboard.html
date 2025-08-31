@@ -2,47 +2,279 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>활동 통계 대시보드</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* 모바일 최적화 스타일 */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+            }
+            
+            .user-profile-header {
+                padding: 20px 15px !important;
+                margin-bottom: 20px !important;
+            }
+            
+            .profile-image {
+                width: 60px !important;
+                height: 60px !important;
+            }
+            
+            .stat-card {
+                padding: 15px !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .stat-card h3 {
+                font-size: 1.8rem !important;
+            }
+            
+            .chart-container {
+                padding: 15px !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .chart-container h4 {
+                font-size: 1.1rem !important;
+            }
+            
+            .activity-item {
+                padding: 12px !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .achievement-badge {
+                padding: 6px 12px !important;
+                font-size: 0.8rem !important;
+                margin: 3px !important;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+            
+            .user-profile-header {
+                padding: 15px 10px !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .profile-image {
+                width: 50px !important;
+                height: 50px !important;
+            }
+            
+            .stat-card {
+                padding: 12px !important;
+                margin-bottom: 10px !important;
+            }
+            
+            .stat-card h3 {
+                font-size: 1.5rem !important;
+            }
+            
+            .stat-card p {
+                font-size: 0.9rem !important;
+            }
+            
+            .chart-container {
+                padding: 12px !important;
+                margin-bottom: 10px !important;
+            }
+            
+            .chart-container h4 {
+                font-size: 1rem !important;
+            }
+            
+            .activity-item {
+                padding: 10px !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .activity-item h6 {
+                font-size: 0.95rem !important;
+            }
+            
+            .achievement-badge {
+                padding: 5px 10px !important;
+                font-size: 0.75rem !important;
+                margin: 2px !important;
+            }
+            
+            .btn {
+                font-size: 0.85rem !important;
+                padding: 0.4rem 0.6rem !important;
+            }
+        }
+        
+        /* 기본 스타일 */
+        .user-profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .profile-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+        }
+        
         .stat-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
+            transition: transform 0.3s ease;
         }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
         .chart-container {
             background: white;
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .chart-container:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .activity-item {
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 0 10px 10px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .achievement-badge {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin: 5px;
+            display: inline-block;
+        }
+        
+        /* 차트 반응형 설정 */
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+        
+        @media (max-width: 768px) {
+            .chart-wrapper {
+                height: 250px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .chart-wrapper {
+                height: 200px;
+            }
         }
     </style>
 </head>
 <body class="bg-light">
     <div class="container mt-4">
-        <h1 class="text-center mb-4">📊 내 활동 통계</h1>
+        <!-- 사용자 프로필 헤더 -->
+        <div class="user-profile-header">
+            <div class="row align-items-center">
+                <div class="col-md-2 col-4 text-center">
+                    <img th:if="${userProfileImage != null and userProfileImage != ''}" 
+                         th:src="${userProfileImage}" 
+                         alt="프로필" 
+                         class="profile-image">
+                    <img th:unless="${userProfileImage != null and userProfileImage != ''}" 
+                         src="https://via.placeholder.com/80x80/6c757d/ffffff?text=U" 
+                         alt="프로필" 
+                         class="profile-image">
+                </div>
+                <div class="col-md-8 col-8">
+                    <h2 class="mb-2" th:text="${currentUser.username}">사용자명</h2>
+                    <p class="mb-1 d-none d-md-block" th:text="${currentUser.email}">이메일</p>
+                    <p class="mb-0">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        가입일: <span th:text="${#temporals.format(currentUser.user.joinDate, 'yyyy년 MM월 dd일')}">가입일</span>
+                    </p>
+                </div>
+                <div class="col-md-2 col-12 text-center text-md-end mt-3 mt-md-0">
+                    <a href="/" class="btn btn-outline-light">
+                        <i class="fas fa-home me-2"></i><span class="d-none d-sm-inline">홈으로</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 성취 배지 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="chart-container text-center">
+                    <h4><i class="fas fa-trophy text-warning me-2"></i>성취 배지</h4>
+                    <div class="achievement-badge" th:if="${totalPosts >= 1}">
+                        <i class="fas fa-pen-fancy me-1"></i>첫 글쓰기
+                    </div>
+                    <div class="achievement-badge" th:if="${totalPosts >= 5}">
+                        <i class="fas fa-pen-fancy me-1"></i>열심히 글쓰기
+                    </div>
+                    <div class="achievement-badge" th:if="${totalComments >= 10}">
+                        <i class="fas fa-comments me-1"></i>댓글왕
+                    </div>
+                    <div class="achievement-badge" th:if="${totalLikes >= 20}">
+                        <i class="fas fa-heart me-1"></i>인기작가
+                    </div>
+                    <div class="achievement-badge" th:if="${totalPosts >= 10 and totalComments >= 20}">
+                        <i class="fas fa-star me-1"></i>커뮤니티 리더
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <!-- 기본 통계 카드 -->
         <div class="row mb-4">
-            <div class="col-md-4">
+            <div class="col-md-4 col-12 mb-3">
                 <div class="stat-card text-center">
+                    <i class="fas fa-pen-fancy fa-2x mb-3"></i>
                     <h3 th:text="${totalPosts}">0</h3>
                     <p class="mb-0">작성한 게시글</p>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-12 mb-3">
                 <div class="stat-card text-center">
+                    <i class="fas fa-comments fa-2x mb-3"></i>
                     <h3 th:text="${totalComments}">0</h3>
                     <p class="mb-0">작성한 댓글</p>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-12 mb-3">
                 <div class="stat-card text-center">
+                    <i class="fas fa-heart fa-2x mb-3"></i>
                     <h3 th:text="${totalLikes}">0</h3>
                     <p class="mb-0">받은 좋아요</p>
                 </div>
@@ -51,40 +283,75 @@
         
         <!-- 차트 영역 -->
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-6 col-12 mb-4">
                 <div class="chart-container">
-                    <h4>📈 월별 게시글 작성 현황</h4>
-                    <canvas id="postsChart"></canvas>
+                    <h4><i class="fas fa-chart-line text-primary me-2"></i>월별 게시글 작성 현황</h4>
+                    <div class="chart-wrapper">
+                        <canvas id="postsChart"></canvas>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-lg-6 col-12 mb-4">
                 <div class="chart-container">
-                    <h4>💬 월별 댓글 작성 현황</h4>
-                    <canvas id="commentsChart"></canvas>
+                    <h4><i class="fas fa-chart-bar text-success me-2"></i>월별 댓글 작성 현황</h4>
+                    <div class="chart-wrapper">
+                        <canvas id="commentsChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
         
         <!-- 최근 활동 목록 -->
-        <div class="row mt-4">
-            <div class="col-md-6">
+        <div class="row">
+            <div class="col-lg-6 col-12 mb-4">
                 <div class="chart-container">
-                    <h4>📝 최근 작성한 게시글</h4>
-                    <div class="list-group">
-                        <div th:each="post : ${userPosts}" class="list-group-item">
-                            <h6 th:text="${post.title}">제목</h6>
-                            <small class="text-muted" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</small>
+                    <h4><i class="fas fa-pen-fancy text-primary me-2"></i>최근 작성한 게시글</h4>
+                    <div th:if="${#lists.isEmpty(userPosts)}" class="text-center py-4 text-muted">
+                        <i class="fas fa-pen-fancy fa-2x mb-2"></i>
+                        <p>아직 작성한 게시글이 없습니다.</p>
+                        <a href="/write" class="btn btn-outline-primary">첫 게시글 작성하기</a>
+                    </div>
+                    <div th:each="post : ${userPosts}" class="activity-item">
+                        <h6 th:text="${post.title}">제목</h6>
+                        <small class="text-muted" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</small>
+                        <div class="mt-2">
+                            <span class="badge bg-primary me-2" th:text="${post.category}">카테고리</span>
+                            <span class="badge bg-danger">
+                                <i class="fas fa-heart me-1"></i>
+                                <span th:text="${post.likeCount}">0</span>
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-lg-6 col-12 mb-4">
                 <div class="chart-container">
-                    <h4>💭 최근 작성한 댓글</h4>
-                    <div class="list-group">
-                        <div th:each="comment : ${userComments}" class="list-group-item">
-                            <p th:text="${comment.content}">댓글 내용</p>
-                            <small class="text-muted" th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</small>
+                    <h4><i class="fas fa-comments text-success me-2"></i>최근 작성한 댓글</h4>
+                    <div th:if="${#lists.isEmpty(userComments)}" class="text-center py-4 text-muted">
+                        <i class="fas fa-comments fa-2x mb-2"></i>
+                        <p>아직 작성한 댓글이 없습니다.</p>
+                    </div>
+                    <div th:each="comment : ${userComments}" class="activity-item">
+                        <p th:text="${comment.content}">댓글 내용</p>
+                        <small class="text-muted" th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 활동 요약 -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="chart-container">
+                    <h4><i class="fas fa-info-circle text-info me-2"></i>활동 요약</h4>
+                    <div class="row">
+                        <div class="col-md-6 col-12 mb-3">
+                            <p><strong>가입 기간:</strong> <span th:text="${#temporals.between(currentUser.user.joinDate, #temporals.createNow()).days}">0</span>일</p>
+                            <p><strong>평균 게시글:</strong> <span th:text="${totalPosts > 0 ? #numbers.formatDecimal(totalPosts / #temporals.between(currentUser.user.joinDate, #temporals.createNow()).days, 1, 2) : '0'}">0</span>개/일</p>
+                        </div>
+                        <div class="col-md-6 col-12 mb-3">
+                            <p><strong>평균 댓글:</strong> <span th:text="${totalComments > 0 ? #numbers.formatDecimal(totalComments / #temporals.between(currentUser.user.joinDate, #temporals.createNow()).days, 1, 2) : '0'}">0</span>개/일</p>
+                            <p><strong>활동 점수:</strong> <span th:text="${totalPosts * 10 + totalComments * 5 + totalLikes * 2}">0</span>점</p>
                         </div>
                     </div>
                 </div>
@@ -108,11 +375,18 @@
                     data: Object.values(postsData),
                     borderColor: 'rgb(75, 192, 192)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    tension: 0.1
+                    tension: 0.1,
+                    fill: true
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -140,6 +414,12 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
