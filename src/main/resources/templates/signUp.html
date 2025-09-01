@@ -1,67 +1,313 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{common::header}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>회원가입 - ZeroToDeploy</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/mobile-responsive.css}" rel="stylesheet">
+</head>
 <body>
-<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
-	<!-- 회원가입 페이지 전용 간단한 네비게이션 -->
-	<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-		<div class="container-fluid d-flex align-items-center justify-content-between">
-			<a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-				<h1 class="m-0 text-primary">ZeroToDeploy</h1>
-			</a>
-			<div class="d-flex align-items-center gap-3">
-				<!-- 홈으로 돌아가기 버튼만 표시 -->
-				<a th:href="@{/}" class="btn btn-outline-secondary d-flex align-items-center justify-content-center" style="height: 42px;">
-					<i class="fas fa-home me-2"></i> 홈으로
-				</a>
-			</div>
-		</div>
-	</nav>
+<div class="container-xxl bg-white p-0 d-flex flex-column" style="height: 100vh;">
+    <!-- 네비게이션 -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <!-- 로고 -->
+            <a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
+                <h1 class="m-0 text-primary">ZeroToDeploy</h1>
+            </a>
 
-	<main class="flex-grow-1 d-flex justify-content-center align-items-center">
-		<div class="card shadow-lg" style="max-width: 400px; width: 100%;">
-			<div class="card-header bg-primary text-white text-center py-3">
-				<h4>Sign Up</h4>
-			</div>
-			<div class="card-body">
-				<form method="post" th:action="@{/signUp}">
-					<div class="mb-3">
-						<label for="name" class="form-label">User name</label>
-						<input type="text" class="form-control" id="name" name="name" required />
-					</div>
-					<div class="mb-3">
-						<label for="userId" class="form-label">User ID</label>
-						<input type="text" class="form-control" id="userId" name="userId" required />
-					</div>
-					<div class="mb-3">
-						<label for="email" class="form-label">Email</label>
-						<input type="email" class="form-control" id="email" name="email" required />
-					</div>
-					<div class="mb-4">
-						<label for="password" class="form-label">Password</label>
-						<input type="password" class="form-control" id="password" name="password" required />
-					</div>
-					<div class="d-grid mb-3">
-						<button type="submit" class="btn btn-primary">Sign Up</button>
-					</div>
-				</form>
-			</div>
-			<div class="card-footer text-center text-muted py-2">
-				<small>Already have an account? <a th:href="@{/login}" class="text-primary">Login</a></small>
-			</div>
-		</div>
-	</main>
+            <div class="d-flex align-items-center gap-3">
+                <!-- 홈 버튼 -->
+                <a th:href="@{/}" class="btn btn-outline-primary d-flex align-items-center justify-content-center" style="height: 42px;">
+                    홈으로
+                </a>
+            </div>
+        </div>
+    </nav>
 
-	<footer th:replace="~{common::footer}"></footer>
+    <!-- 회원가입 폼 -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow">
+                    <div class="card-body p-5">
+                        <h2 class="text-center mb-4">회원가입</h2>
+                        
+                        <!-- 에러 메시지 표시 -->
+                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span th:text="${error}">에러 메시지</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        
+                        <form th:action="@{/signUp}" method="post" th:object="${joinUserDTO}" onsubmit="return validateForm()">
+                            <div class="mb-3">
+                                <label for="userName" class="form-label">사용자명</label>
+                                <input type="text" class="form-control" id="userName" name="userName" th:field="*{userName}" 
+                                       placeholder="사용자명을 입력하세요" required>
+                                <div class="invalid-feedback" id="userName-error"></div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="nickname" class="form-label">닉네임</label>
+                                <input type="text" class="form-control" id="nickname" name="nickname" th:field="*{nickname}" 
+                                       placeholder="닉네임을 입력하세요" required>
+                                <div class="invalid-feedback" id="nickname-error"></div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">이메일</label>
+                                <input type="email" class="form-control" id="email" name="email" th:field="*{email}" 
+                                       placeholder="이메일을 입력하세요" required>
+                                <div class="invalid-feedback" id="email-error"></div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">비밀번호</label>
+                                <input type="password" class="form-control" id="password" name="password" th:field="*{password}" 
+                                       placeholder="비밀번호를 입력하세요" required>
+                                <div class="invalid-feedback" id="password-error"></div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="confirmPassword" class="form-label">비밀번호 확인</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" 
+                                       placeholder="비밀번호를 다시 입력하세요" required>
+                                <div class="invalid-feedback" id="confirmPassword-error"></div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary w-100 mb-3" id="submitBtn">
+                                회원가입
+                            </button>
+                        </form>
+
+                        <div class="text-center">
+                            <p class="mb-0">이미 계정이 있으신가요? <a th:href="@{/login}" class="text-decoration-none">로그인</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 푸터 -->
+    <footer class="bg-dark text-white-50 footer mt-auto pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" th:href="@{/}">ZeroToDeploy</a>, All Rights Reserved. Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
 
-<!-- JS -->
+<!-- 스크립트 -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/lib/wow/wow.js}"></script>
 <script th:src="@{/lib/easing/easing.min.js}"></script>
 <script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
 <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script th:src="@{/js/main.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+<script>
+    window.addEventListener('load', function () {
+        const spinner = document.getElementById('spinner');
+        if (spinner) spinner.classList.remove('show');
+    });
+
+    // 폼 검증
+    function validateForm() {
+        let isValid = true;
+        
+        // 사용자명 검증
+        const userName = document.getElementById('userName').value.trim();
+        if (userName.length < 3) {
+            showError('userName', '사용자명은 3자 이상이어야 합니다.');
+            isValid = false;
+        } else {
+            clearError('userName');
+        }
+        
+        // 닉네임 검증
+        const nickname = document.getElementById('nickname').value.trim();
+        if (nickname.length < 2) {
+            showError('nickname', '닉네임은 2자 이상이어야 합니다.');
+            isValid = false;
+        } else {
+            clearError('nickname');
+        }
+        
+        // 이메일 검증
+        const email = document.getElementById('email').value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showError('email', '올바른 이메일 형식을 입력하세요.');
+            isValid = false;
+        } else {
+            clearError('email');
+        }
+        
+        // 비밀번호 검증
+        const password = document.getElementById('password').value;
+        if (password.length < 6) {
+            showError('password', '비밀번호는 6자 이상이어야 합니다.');
+            isValid = false;
+        } else {
+            clearError('password');
+        }
+        
+        // 비밀번호 확인 검증
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        if (password !== confirmPassword) {
+            showError('confirmPassword', '비밀번호가 일치하지 않습니다.');
+            isValid = false;
+        } else {
+            clearError('confirmPassword');
+        }
+        
+        if (isValid) {
+            // 회원가입 폼 제출 시 로딩 표시
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>가입 중...';
+            submitBtn.disabled = true;
+        }
+        
+        return isValid;
+    }
+    
+    function showError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        const errorDiv = document.getElementById(fieldId + '-error');
+        
+        field.classList.add('is-invalid');
+        errorDiv.textContent = message;
+    }
+    
+    function clearError(fieldId) {
+        const field = document.getElementById(fieldId);
+        const errorDiv = document.getElementById(fieldId + '-error');
+        
+        field.classList.remove('is-invalid');
+        errorDiv.textContent = '';
+    }
+    
+    // 실시간 검증
+    document.getElementById('userName').addEventListener('blur', function() {
+        if (this.value.trim().length < 3) {
+            showError('userName', '사용자명은 3자 이상이어야 합니다.');
+        } else {
+            clearError('userName');
+        }
+    });
+    
+    document.getElementById('nickname').addEventListener('blur', function() {
+        if (this.value.trim().length < 2) {
+            showError('nickname', '닉네임은 2자 이상이어야 합니다.');
+        } else {
+            clearError('nickname');
+        }
+    });
+    
+    document.getElementById('email').addEventListener('blur', function() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(this.value.trim())) {
+            showError('email', '올바른 이메일 형식을 입력하세요.');
+        } else {
+            clearError('email');
+        }
+    });
+    
+    document.getElementById('password').addEventListener('blur', function() {
+        if (this.value.length < 6) {
+            showError('password', '비밀번호는 6자 이상이어야 합니다.');
+        } else {
+            clearError('password');
+        }
+    });
+    
+    document.getElementById('confirmPassword').addEventListener('blur', function() {
+        const password = document.getElementById('password').value;
+        if (this.value !== password) {
+            showError('confirmPassword', '비밀번호가 일치하지 않습니다.');
+        } else {
+            clearError('confirmPassword');
+        }
+    });
+</script>
+
+<style>
+/* 회원가입 폼 모바일 최적화 */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .form-label {
+        font-size: 0.9rem !important;
+    }
+    
+    .form-control {
+        font-size: 0.9rem !important;
+        padding: 0.6rem !important;
+    }
+    
+    .btn {
+        font-size: 0.9rem !important;
+        padding: 0.7rem !important;
+    }
+    
+    .card {
+        margin: 1rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .card-body {
+        padding: 2rem !important;
+    }
+    
+    .form-control {
+        font-size: 1rem !important;
+    }
+}
+
+/* 폼 검증 스타일 */
+.form-control.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.invalid-feedback {
+    display: block !important;
+    font-size: 0.875rem !important;
+    margin-top: 0.25rem !important;
+}
+
+/* 로딩 스피너 */
+.spinner-border-sm {
+    width: 1rem !important;
+    height: 1rem !important;
+}
+</style>
 </body>
 </html>

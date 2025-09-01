@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
-    <title>403 Forbidden - ZeroToDeploy</title>
+    <title>500 Internal Server Error - ZeroToDeploy</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,20 +36,20 @@
         </div>
     </nav>
 
-    <!-- 403 에러 내용 -->
+    <!-- 500 에러 내용 -->
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6 text-center">
                 <div class="error-page">
-                    <h1 class="display-1 text-danger">403</h1>
-                    <h2 class="mb-4">접근 권한이 없습니다</h2>
-                    <p class="lead mb-4">요청하신 페이지에 접근할 권한이 없습니다.</p>
+                    <h1 class="display-1 text-danger">500</h1>
+                    <h2 class="mb-4">서버 내부 오류</h2>
+                    <p class="lead mb-4">서버에서 예상치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</p>
                     <div class="mb-4">
-                        <i class="fas fa-lock fa-3x text-muted"></i>
+                        <i class="fas fa-exclamation-triangle fa-3x text-muted"></i>
                     </div>
                     <div class="d-grid gap-2 d-md-block">
                         <a th:href="@{/}" class="btn btn-primary me-md-2">홈으로 돌아가기</a>
-                        <a th:href="@{/login}" class="btn btn-outline-secondary">로그인</a>
+                        <button onclick="location.reload()" class="btn btn-outline-secondary">새로고침</button>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,217 @@
+/* 모바일 반응형 스타일 */
+
+/* 작은 모바일 (320px ~ 480px) */
+@media (max-width: 480px) {
+    .navbar-brand h1 {
+        font-size: 1.2rem !important;
+    }
+    
+    .nav-link {
+        font-size: 0.7rem !important;
+        padding: 0.3rem 0.2rem !important;
+        min-width: 45px !important;
+        height: 30px !important;
+    }
+    
+    .nav-link i {
+        font-size: 0.8rem !important;
+    }
+    
+    .search-form {
+        padding: 1rem !important;
+    }
+    
+    .search-form .form-control-lg {
+        font-size: 0.9rem !important;
+        padding: 0.5rem !important;
+    }
+    
+    .search-form .form-select {
+        font-size: 0.8rem !important;
+        padding: 0.4rem !important;
+    }
+    
+    .search-form .btn-lg {
+        font-size: 0.9rem !important;
+        padding: 0.5rem !important;
+    }
+    
+    .category-card .card-title {
+        font-size: 0.8rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    .category-card .fa-2x {
+        font-size: 1.2rem !important;
+    }
+    
+    .category-card .card-body {
+        padding: 0.8rem !important;
+    }
+    
+    .btn {
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.6rem !important;
+    }
+    
+    .btn-sm {
+        font-size: 0.7rem !important;
+        padding: 0.3rem 0.5rem !important;
+    }
+}
+
+/* 중간 모바일 (481px ~ 576px) */
+@media (min-width: 481px) and (max-width: 576px) {
+    .navbar-brand h1 {
+        font-size: 1.4rem !important;
+    }
+    
+    .nav-link {
+        font-size: 0.75rem !important;
+        padding: 0.4rem 0.25rem !important;
+        min-width: 50px !important;
+        height: 32px !important;
+    }
+    
+    .search-form .form-control-lg {
+        font-size: 0.95rem !important;
+    }
+    
+    .category-card .card-title {
+        font-size: 0.85rem !important;
+    }
+}
+
+/* 큰 모바일 (577px ~ 768px) */
+@media (min-width: 577px) and (max-width: 768px) {
+    .navbar-brand h1 {
+        font-size: 1.6rem !important;
+    }
+    
+    .nav-link {
+        font-size: 0.8rem !important;
+        padding: 0.45rem 0.3rem !important;
+        min-width: 55px !important;
+        height: 35px !important;
+    }
+    
+    .search-form .form-control-lg {
+        font-size: 1rem !important;
+    }
+    
+    .category-card .card-title {
+        font-size: 0.9rem !important;
+    }
+}
+
+/* 태블릿 (769px ~ 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .navbar-brand h1 {
+        font-size: 1.8rem !important;
+    }
+    
+    .nav-link {
+        font-size: 0.85rem !important;
+        padding: 0.5rem 0.35rem !important;
+        min-width: 58px !important;
+        height: 38px !important;
+    }
+}
+
+/* 데스크톱 (1025px 이상) */
+@media (min-width: 1025px) {
+    .navbar-brand h1 {
+        font-size: 2rem !important;
+    }
+    
+    .nav-link {
+        font-size: 0.9rem !important;
+        padding: 0.5rem 0.4rem !important;
+        min-width: 60px !important;
+        height: 40px !important;
+    }
+}
+
+/* 세션 타이머 모바일 최적화 */
+@media (max-width: 768px) {
+    #mobileSessionTimer {
+        font-size: 0.75rem !important;
+    }
+    
+    .d-md-none .fas {
+        font-size: 0.8rem !important;
+    }
+}
+
+/* 검색 폼 모바일 최적화 */
+@media (max-width: 576px) {
+    .search-form .row .col-6 {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .search-form .row .col-6:last-child {
+        margin-bottom: 0 !important;
+    }
+}
+
+/* 카테고리 그리드 모바일 최적화 */
+@media (max-width: 576px) {
+    .category-card .card {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .category-card .card-body {
+        min-height: 80px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+}
+
+/* 네비게이션 모바일 최적화 */
+@media (max-width: 768px) {
+    .navbar-nav {
+        gap: 0.3rem !important;
+    }
+    
+    .navbar .container-fluid {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+}
+
+/* 버튼 텍스트 줄바꿈 방지 */
+.nav-link span {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* 아이콘과 텍스트 정렬 */
+.nav-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+/* 호버 효과 모바일에서 비활성화 */
+@media (hover: none) {
+    .category-card:hover .card,
+    .navbar-nav .nav-link:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+}
+
+/* 터치 최적화 */
+@media (max-width: 768px) {
+    .btn, .nav-link, .category-card {
+        -webkit-tap-highlight-color: transparent !important;
+        touch-action: manipulation !important;
+    }
+    
+    .btn:active, .nav-link:active {
+        transform: scale(0.95) !important;
+    }
+}

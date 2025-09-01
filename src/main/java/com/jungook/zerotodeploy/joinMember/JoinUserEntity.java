@@ -25,6 +25,9 @@ public class JoinUserEntity {
 	@Column(nullable = false, unique = true, name = "user_name")
 	private String userName;
 
+	@Column(nullable = false, unique = true, name = "nickname")
+	private String nickname;
+
 	@Column(nullable = false, unique = true, name = "email")
 	private String email;
 
