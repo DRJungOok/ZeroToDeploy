@@ -38,7 +38,7 @@ public class StatisticsController {
         if (userDetails == null) {
             return "redirect:/login";
         }
-
+        
         // 사용자 활동 통계 수집
         List<PostEntity> userPosts = postRepo.findByAuthor(userDetails.getUsername());
         List<CommentEntity> userComments = commentRepo.findByAuthor(userDetails.getUsername());
