@@ -54,14 +54,15 @@
 
             <!-- 사용자 정보 및 세션 -->
             <div class="d-flex align-items-center gap-2">
-                <div class="d-none d-md-flex align-items-center me-3">
+                <!-- 로그인한 사용자에게만 세션 타이머 표시 -->
+                <div class="d-none d-md-flex align-items-center me-3" sec:authorize="isAuthenticated()">
                     <i class="fas fa-clock text-primary me-1"></i>
                     <span class="text-muted small">세션: <span id="sessionTimer">59:59</span></span>
                     <button class="btn btn-sm btn-outline-primary ms-2" onclick="extendSession()">연장</button>
                 </div>
                 
-                <!-- 모바일에서만 세션 표시 -->
-                <div class="d-md-none d-flex align-items-center me-2">
+                <!-- 모바일에서만 세션 표시 (로그인한 사용자만) -->
+                <div class="d-md-none d-flex align-items-center me-2" sec:authorize="isAuthenticated()">
                     <i class="fas fa-clock text-primary me-1"></i>
                     <span class="text-muted small" id="mobileSessionTimer">59:59</span>
                 </div>
@@ -240,16 +241,25 @@
         if (spinner) spinner.classList.remove('show');
     });
 
-    // 세션 타이머
+    // 세션 타이머 (로그인한 사용자만)
     let sessionTime = 59 * 60 + 59; // 59분 59초
+    let sessionInterval = null;
     
     function updateSessionTimer() {
+        // 세션 타이머 요소가 존재하는지 확인 (로그인한 사용자만)
+        const sessionTimer = document.getElementById('sessionTimer');
+        const mobileSessionTimer = document.getElementById('mobileSessionTimer');
+        
+        if (!sessionTimer || !mobileSessionTimer) {
+            return; // 로그인하지 않은 사용자는 타이머 실행하지 않음
+        }
+        
         const minutes = Math.floor(sessionTime / 60);
         const seconds = sessionTime % 60;
         const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         
-        document.getElementById('sessionTimer').textContent = timeString;
-        document.getElementById('mobileSessionTimer').textContent = timeString;
+        sessionTimer.textContent = timeString;
+        mobileSessionTimer.textContent = timeString;
         
         if (sessionTime > 0) {
             sessionTime--;
@@ -261,9 +271,18 @@
         alert('세션이 연장되었습니다.');
     }
     
-    // 1초마다 타이머 업데이트
-    setInterval(updateSessionTimer, 1000);
-    updateSessionTimer(); // 초기 실행
+    // 로그인한 사용자에게만 세션 타이머 실행
+    function initSessionTimer() {
+        const sessionTimer = document.getElementById('sessionTimer');
+        if (sessionTimer) {
+            // 세션 타이머 요소가 존재하면 타이머 시작
+            sessionInterval = setInterval(updateSessionTimer, 1000);
+            updateSessionTimer(); // 초기 실행
+        }
+    }
+    
+    // 페이지 로드 시 세션 타이머 초기화
+    document.addEventListener('DOMContentLoaded', initSessionTimer);
 </script>
 
 <style>
