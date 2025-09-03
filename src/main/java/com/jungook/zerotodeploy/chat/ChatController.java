@@ -42,6 +42,9 @@ public class ChatController {
     // 내 채팅방 목록 페이지
     @GetMapping
     public String chatHome(Model model, Authentication auth) {
+        if (auth == null) {
+            return "redirect:/login";
+        }
         String me = auth.getName();
         var rooms = chatService.listMyRooms(me);
         // 최근 메시지 미리보기 포함
@@ -64,6 +67,9 @@ public class ChatController {
     @GetMapping("/rooms")
     @ResponseBody
     public List<Map<String, Object>> myRooms(Authentication auth) {
+        if (auth == null) {
+            return java.util.Collections.emptyList();
+        }
         String me = auth.getName();
         return chatService.listMyRooms(me).stream().map(r -> {
             java.util.HashMap<String, Object> m = new java.util.HashMap<>();
@@ -82,6 +88,9 @@ public class ChatController {
     @GetMapping("/friends")
     @ResponseBody
     public List<Map<String, Object>> myFriends(Authentication auth) {
+        if (auth == null) {
+            return java.util.Collections.emptyList();
+        }
         String me = auth.getName();
         var relations = friendsService.getFriends(me);
         return relations.stream().map(rel -> {
@@ -98,6 +107,9 @@ public class ChatController {
     public String createGroupRoom(@RequestParam("userIds") Set<Long> userIds,
                                   @RequestParam(value = "roomName", required = false) String roomName,
                                   Authentication auth) {
+        if (auth == null) {
+            return "redirect:/login";
+        }
         // 본인도 포함되도록 보장
         var me = joinUserRepo.findByUserName(auth.getName()).orElseThrow();
         userIds.add(me.getId());
@@ -107,12 +119,18 @@ public class ChatController {
 
     @PostMapping("/room/individual/{friendName}")
     public String createChatRoom(@PathVariable("friendName") String friendName, Authentication auth) {
+        if (auth == null) {
+            return "redirect:/login";
+        }
         ChatEntity room = chatService.findOrCreateRoom(auth.getName(), friendName);
         return "redirect:/chat/room/" + room.getId();
     }
 
     @GetMapping("/room/{id}")
     public String viewRoom(@PathVariable("id") Long id, Model model, Authentication auth) {
+        if (auth == null) {
+            return "redirect:/login";
+        }
         ChatEntity room = chatService.getRoom(id);
         String me = auth.getName();
         boolean allowed = room.getParticipants().stream().anyMatch(u -> me.equals(u.getUserName()));
@@ -148,6 +166,9 @@ public class ChatController {
     public Map<String, Object> renameRoom(@PathVariable("id") Long id,
                                           @RequestParam("roomName") String roomName,
                                           Authentication auth) {
+        if (auth == null) {
+            return java.util.Map.of("ok", false, "message", "로그인이 필요합니다.");
+        }
         if (roomName == null || roomName.isBlank()) {
             return java.util.Map.of("ok", false, "message", "방 이름을 입력하세요.");
         }
@@ -205,6 +226,9 @@ public class ChatController {
     public String upload(@PathVariable("id") Long id,
                          @RequestParam("file") org.springframework.web.multipart.MultipartFile file,
                          Authentication auth) throws java.io.IOException {
+        if (auth == null) {
+            return "redirect:/login";
+        }
         if (file == null || file.isEmpty()) {
             return "redirect:/chat/room/" + id;
         }
@@ -237,12 +261,18 @@ public class ChatController {
 
     @GetMapping("/individual/{targetUserName}")
     public String goToIndividualChat(@PathVariable("targetUserName") String targetUserName, Authentication auth) {
+        if (auth == null) {
+            return "redirect:/login";
+        }
         ChatEntity room = chatService.findOrCreateRoom(auth.getName(), targetUserName);
         return "redirect:/chat/room/" + room.getId();
     }
 
     @PostMapping("/send")
     public String sendMessage(@RequestParam("message") String message, @RequestParam("roomId") Long roomId, Authentication auth) {
+        if (auth == null) {
+            return "redirect:/login";
+        }
         if(message != null && !message.isBlank()) {
             messageService.sendMessage(roomId, auth.getName(), message.trim());
         }
@@ -253,6 +283,7 @@ public class ChatController {
     // STOMP 수신 → 저장 → 브로드캐스트
     @MessageMapping("/chat.send")
     public void handleStompSend(@Payload Map<String, Object> payload, Authentication auth) {
+        if (auth == null) return;
         Object rid = payload.get("roomId");
         Object msg = payload.get("message");
         if (rid == null || msg == null) return;
@@ -275,6 +306,9 @@ public class ChatController {
     @DeleteMapping("/room/{id}")
     @ResponseBody
     public Map<String, Object> deleteRoom(@PathVariable("id") Long id, Authentication auth) {
+        if (auth == null) {
+            return java.util.Map.of("ok", false, "message", "로그인이 필요합니다.");
+        }
         try {
             chatService.deleteRoom(id, auth.getName());
             return java.util.Map.of("ok", true, "message", "방이 삭제되었습니다.");
