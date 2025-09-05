@@ -27,89 +27,64 @@
                 <h1 class="m-0 text-primary">ZeroToDeploy</h1>
             </a>
 
-            <div class="d-flex align-items-center gap-3">
-                <!-- 관리자 전용: 글쓰기 버튼 (로그인한 사용자만) -->
-                <div sec:authorize="isAuthenticated() and hasRole('ROLE_ADMIN')">
-                    <a th:href="@{/write}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">
-                        ✍ 글쓰기
-                    </a>
+            <!-- 네비게이션 메뉴 -->
+            <div class="navbar-nav d-flex flex-row gap-2 me-auto">
+                <a th:href="@{/write}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-pen me-1"></i>
+                    <span class="d-none d-sm-inline">글쓰기</span>
+                    <span class="d-sm-none">글쓰</span>
+                </a>
+                <a th:href="@{/myInfo}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-user me-1"></i>
+                    <span class="d-none d-sm-inline">내정보</span>
+                    <span class="d-sm-none">내정</span>
+                </a>
+                <a th:href="@{/friends}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-users me-1"></i>
+                    <span class="d-none d-sm-inline">구독목록</span>
+                    <span class="d-sm-none">구목</span>
+                </a>
+                <a th:href="@{/chat}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-comments me-1"></i>
+                    <span class="d-none d-sm-inline">채팅</span>
+                    <span class="d-sm-none">채팅</span>
+                </a>
+            </div>
+
+            <!-- 사용자 정보 및 세션 -->
+            <div class="d-flex align-items-center gap-2">
+                <!-- 로그인한 사용자에게만 세션 타이머 표시 -->
+                <div class="d-none d-md-flex align-items-center me-3" sec:authorize="isAuthenticated()">
+                    <i class="fas fa-clock text-primary me-1"></i>
+                    <span class="text-muted small">세션: <span id="sessionTimer">59:59</span></span>
+                    <button class="btn btn-sm btn-outline-primary ms-2" onclick="extendSession()">연장</button>
+                </div>
+                
+                <!-- 모바일에서만 세션 표시 (로그인한 사용자만) -->
+                <div class="d-md-none d-flex align-items-center me-2" sec:authorize="isAuthenticated()">
+                    <i class="fas fa-clock text-primary me-1"></i>
+                    <span class="text-muted small" id="mobileSessionTimer">59:59</span>
                 </div>
 
-                <!-- 로그인 후: 내정보 버튼 (로그인한 사용자만) -->
-                <div sec:authorize="isAuthenticated()" th:if="${currentUserName != null}">
-                    <a th:href="@{'/api/user/myInfo/username/' + ${currentUserName}}"
-                       class="btn btn-outline-success"
-                       style="height: 42px">
-                        내정보
-                    </a>
-                </div>
-
-                <!-- 로그인 후: 친구 목록 (로그인한 사용자만) -->
-                <div sec:authorize="isAuthenticated()">
-                    <a th:href="@{/friends}" class="btn btn-outline-primary d-flex align-items-center justify-content-center" style="height: 42px;">
-                        친구 목록
-                    </a>
-                </div>
-
-                <!-- 로그인 후: 채팅 (로그인한 사용자만) -->
-                <div sec:authorize="isAuthenticated()">
-                    <a th:href="@{/chat}" class="btn btn-outline-primary d-flex align-items-center justify-content-center" style="height: 42px;">
-                        채팅
-                    </a>
-                </div>
-
-                <!-- 로그인 후: 세션 정보 (로그인한 사용자만) -->
-                <div sec:authorize="isAuthenticated()" id="session-info"
-                     class="d-flex align-items-center border rounded px-3 py-1"
-                     style="font-size: 14px; color: #666; height: 42px;">
-                    <i class="bi bi-clock me-2 text-secondary"></i>
-                    <span>세션 : <span id="remaining-time">--</span></span>
-                    <button onclick="extendSession()" class="btn btn-sm btn-outline-dark ms-2">연장</button>
-                </div>
-
-                <!-- 로그인 전: Login 버튼 (로그인하지 않은 사용자만) -->
-                <div sec:authorize="isAnonymous()">
-                    <a th:href="@{/login}"
-                       class="btn btn-outline-primary d-flex align-items-center justify-content-center"
-                       style="height: 42px;">
-                        Login
-                    </a>
-                </div>
-
-                <!-- 로그인 후: 사용자 메뉴 (로그인한 사용자만) -->
-                <div sec:authorize="isAuthenticated()" class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center" 
-                            type="button" id="userDropdown" data-bs-toggle="dropdown" 
-                            aria-expanded="false" style="height: 42px;">
-                        <!-- 프로필 이미지 -->
-                        <img th:if="${#authentication.principal.profileImage != null and #authentication.principal.profileImage != ''}" 
-                             th:src="${#authentication.principal.profileImage}" 
-                             alt="프로필" 
-                             class="rounded-circle me-2" 
-                             width="24" 
-                             height="24"
-                             style="object-fit: cover;">
-                        <img th:unless="${#authentication.principal.profileImage != null and #authentication.principal.profileImage != ''}" 
-                             src="https://via.placeholder.com/24x24/6c757d/ffffff?text=U" 
-                             alt="프로필" 
-                             class="rounded-circle me-2" 
-                             width="24" 
-                             height="24"
-                             style="object-fit: cover;">
-                        <span sec:authentication="name">사용자</span>
+                <!-- 사용자 메뉴 -->
+                <div class="dropdown" sec:authorize="isAuthenticated()">
+                    <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" style="height: 40px;">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span class="d-none d-sm-inline" sec:authentication="name">사용자</span>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="/statistics/dashboard">
-                            <i class="fas fa-chart-bar me-2"></i>활동 통계
-                        </a></li>
-                        <li><a class="dropdown-item" href="/notifications">
-                            <i class="fas fa-bell me-2"></i>알림
-                        </a></li>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/myInfo}"><i class="fas fa-user me-2"></i>내정보</a></li>
+                        <li><a class="dropdown-item" th:href="@{/statistics/dashboard}"><i class="fas fa-chart-bar me-2"></i>활동통계</a></li>
+                        <li><a class="dropdown-item" th:href="@{/notification/list}"><i class="fas fa-bell me-2"></i>알림</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/logout">
-                            <i class="fas fa-sign-out-alt me-2"></i>로그아웃
-                        </a></li>
+                        <li><a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt me-2"></i>로그아웃</a></li>
                     </ul>
+                </div>
+
+                <!-- 로그인/회원가입 버튼 -->
+                <div sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}" class="btn btn-outline-primary me-2" style="height: 40px;">로그인</a>
+                    <a th:href="@{/signUp}" class="btn btn-primary" style="height: 40px;">회원가입</a>
                 </div>
             </div>
         </div>
@@ -168,7 +143,48 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    // 세션 타이머 (로그인한 사용자만)
+    let sessionTime = 59 * 60 + 59; // 59분 59초
+    let sessionInterval = null;
+    
+    function updateSessionTimer() {
+        // 세션 타이머 요소가 존재하는지 확인 (로그인한 사용자만)
+        const sessionTimer = document.getElementById('sessionTimer');
+        const mobileSessionTimer = document.getElementById('mobileSessionTimer');
+        
+        if (!sessionTimer || !mobileSessionTimer) {
+            return; // 로그인하지 않은 사용자는 타이머 실행하지 않음
+        }
+        
+        const minutes = Math.floor(sessionTime / 60);
+        const seconds = sessionTime % 60;
+        const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        sessionTimer.textContent = timeString;
+        mobileSessionTimer.textContent = timeString;
+        
+        if (sessionTime > 0) {
+            sessionTime--;
+        }
+    }
+    
+    function extendSession() {
+        sessionTime = 59 * 60 + 59; // 59분 59초로 리셋
+        alert('세션이 연장되었습니다.');
+    }
+    
+    // 로그인한 사용자에게만 세션 타이머 실행
+    function initSessionTimer() {
+        const sessionTimer = document.getElementById('sessionTimer');
+        if (sessionTimer) {
+            // 세션 타이머 요소가 존재하면 타이머 시작
+            sessionInterval = setInterval(updateSessionTimer, 1000);
+            updateSessionTimer(); // 초기 실행
+        }
+    }
+    
+    // 페이지 로드 시 세션 타이머 초기화
+    document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.post-item').forEach(function (div) {
             div.addEventListener('click', function () {
                 const url = div.getAttribute('data-href');
@@ -177,53 +193,9 @@
                 }
             });
         });
-
-        // 로그인 상태일 때만 세션 타이머 실행
-        if (document.getElementById('remaining-time')) {
-            updateRemainingTime();
-        }
+        
+        initSessionTimer();
     });
-
-    let remainingSeconds = 0;
-    let countdownInterval = null;
-
-    function updateRemainingTime() {
-        fetch('/session/info')
-            .then(res => res.json())
-            .then(data => {
-                remainingSeconds = parseInt(data.remainingTime || 0);
-                updateTimerDisplay();
-                if (countdownInterval) clearInterval(countdownInterval);
-                countdownInterval = setInterval(() => {
-                    remainingSeconds--;
-                    if (remainingSeconds <= 0) {
-                        clearInterval(countdownInterval);
-                        document.getElementById('remaining-time').innerText = "만료됨";
-                    } else {
-                        updateTimerDisplay();
-                    }
-                }, 1000);
-            })
-            .catch(err => console.error("세션 정보 조회 실패", err));
-    }
-
-    function updateTimerDisplay() {
-        const timeElement = document.getElementById('remaining-time');
-        if (!timeElement) return;
-
-        timeElement.innerText = formatTime(remainingSeconds);
-    }
-
-    function extendSession() {
-        fetch('/session/extend', { method: 'POST' })
-            .then(() => updateRemainingTime());
-    }
-
-    function formatTime(seconds) {
-        const m = Math.floor(seconds / 60);
-        const s = seconds % 60;
-        return `${m}:${s < 10 ? '0' : ''}${s}`;
-    }
 
     window.addEventListener('load', function () {
         const spinner = document.getElementById('spinner');
