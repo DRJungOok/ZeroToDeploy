@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(schema = "zerotodeploy", name = "user")
+@Table(schema = "zerotodeploy", name = "join_user")
 public class JoinUserEntity {
 	public enum Role {
 		ROLE_USER, ROLE_ADMIN
@@ -24,6 +24,9 @@ public class JoinUserEntity {
 
 	@Column(nullable = false, unique = true, name = "user_name")
 	private String userName;
+
+	@Column(nullable = false, unique = true, name = "nickname")
+	private String nickname;
 
 	@Column(nullable = false, unique = true, name = "email")
 	private String email;

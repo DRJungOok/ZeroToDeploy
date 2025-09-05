@@ -1,136 +1,359 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{common::header}"></head>
-<body class="d-flex flex-column min-vh-100">
-<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
-    <div th:replace="~{common::nav}"></div>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>ZeroToDeploy - 커뮤니티 플랫폼</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <div class="container-fluid bg-primary wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/mobile-responsive.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container-xxl bg-white p-0 d-flex flex-column" style="height: 100vh;">
+    <!-- 네비게이션 -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <!-- 로고 -->
+            <a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
+                <h1 class="m-0 text-primary">ZeroToDeploy</h1>
+            </a>
+
+            <!-- 네비게이션 메뉴 -->
+            <div class="navbar-nav d-flex flex-row gap-2 me-auto">
+                <a th:href="@{/write}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-pen me-1"></i>
+                    <span class="d-none d-sm-inline">글쓰기</span>
+                    <span class="d-sm-none">글쓰</span>
+                </a>
+                <a th:href="@{/myInfo}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-user me-1"></i>
+                    <span class="d-none d-sm-inline">내정보</span>
+                    <span class="d-sm-none">내정</span>
+                </a>
+                <a th:href="@{/friends}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-users me-1"></i>
+                    <span class="d-none d-sm-inline">구독목록</span>
+                    <span class="d-sm-none">구목</span>
+                </a>
+                <a th:href="@{/chat}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-comments me-1"></i>
+                    <span class="d-none d-sm-inline">채팅</span>
+                    <span class="d-sm-none">채팅</span>
+                </a>
+            </div>
+
+            <!-- 사용자 정보 및 세션 -->
+            <div class="d-flex align-items-center gap-2">
+                <!-- 로그인한 사용자에게만 세션 타이머 표시 -->
+                <div class="d-none d-md-flex align-items-center me-3" sec:authorize="isAuthenticated()">
+                    <i class="fas fa-clock text-primary me-1"></i>
+                    <span class="text-muted small">세션: <span id="sessionTimer">59:59</span></span>
+                    <button class="btn btn-sm btn-outline-primary ms-2" onclick="extendSession()">연장</button>
+                </div>
+                
+                <!-- 모바일에서만 세션 표시 (로그인한 사용자만) -->
+                <div class="d-md-none d-flex align-items-center me-2" sec:authorize="isAuthenticated()">
+                    <i class="fas fa-clock text-primary me-1"></i>
+                    <span class="text-muted small" id="mobileSessionTimer">59:59</span>
+                </div>
+
+                <!-- 사용자 메뉴 -->
+                <div class="dropdown" sec:authorize="isAuthenticated()">
+                    <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" style="height: 40px;">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span class="d-none d-sm-inline" sec:authentication="name">사용자</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/myInfo}"><i class="fas fa-user me-2"></i>내정보</a></li>
+                        <li><a class="dropdown-item" th:href="@{/statistics/dashboard}"><i class="fas fa-chart-bar me-2"></i>활동통계</a></li>
+                        <li><a class="dropdown-item" th:href="@{/notification/list}"><i class="fas fa-bell me-2"></i>알림</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt me-2"></i>로그아웃</a></li>
+                    </ul>
+                </div>
+
+                <!-- 로그인/회원가입 버튼 -->
+                <div sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}" class="btn btn-outline-primary me-2" style="height: 40px;">로그인</a>
+                    <a th:href="@{/signUp}" class="btn btn-primary" style="height: 40px;">회원가입</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 검색 섹션 -->
+    <div class="bg-primary py-4">
         <div class="container">
-            <div class="row justify-content-center align-items-center g-2">
-                <div class="col-md-4 position-relative">
-                    <input id="keywordInput" type="text" class="form-control border-0 w-100" placeholder="Keyword" />
-                    <div id="searchResults" class="search-dropdown shadow-sm" style="display: none;"></div>
-                </div>
-                <div class="col-md-3">
-                    <select id="filterSelect" class="form-select border-0 w-100">
-                        <option value="all">전체</option>
-                        <option value="title">제목</option>
-                        <option value="content">내용</option>
-                    </select>
-                </div>
-                <div class="col-md-2 text-center">
-                    <button class="btn btn-dark border-0 w-100 fw-bold" onclick="performSearch()">Search</button>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <form th:action="@{/search}" method="get" class="search-form">
+                        <div class="mb-3">
+                            <input type="text" class="form-control form-control-lg" name="keyword" 
+                                   placeholder="검색어를 입력하세요..." required>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <select class="form-select" name="category">
+                                    <option value="">전체</option>
+                                    <option value="java">Java & Spring</option>
+                                    <option value="linux">Linux</option>
+                                    <option value="web">Web</option>
+                                    <option value="history">History</option>
+                                    <option value="about">About</option>
+                                    <option value="etc">기타</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <select class="form-select" name="sort">
+                                    <option value="latest">최신순</option>
+                                    <option value="oldest">오래된순</option>
+                                    <option value="popular">인기순</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-lg w-100">
+                            <i class="fas fa-search me-2"></i>검색
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <section class="menu-section flex-grow-1">
-        <div class="container-fluid px-0 h-100">
-            <div class="row g-0 h-100">
-                <div class="col-4 d-flex">
-                    <a th:href="@{javaSpring}" class="btn btn-outline-primary w-100 h-100 rounded-0 d-flex align-items-center justify-content-center fw-bold">java & spring</a>
-                </div>
-                <div class="col-4 d-flex">
-                    <a th:href="@{linux}" class="btn btn-outline-primary w-100 h-100 rounded-0 d-flex align-items-center justify-content-center fw-bold">linux</a>
-                </div>
-                <div class="col-4 d-flex">
-                    <a th:href="@{web}" class="btn btn-outline-primary w-100 h-100 rounded-0 d-flex align-items-center justify-content-center fw-bold">web</a>
-                </div>
-                <div class="col-4 d-flex">
-                    <a th:href="@{history}" class="btn btn-outline-primary w-100 h-100 rounded-0 d-flex align-items-center justify-content-center fw-bold">history</a>
-                </div>
-                <div class="col-4 d-flex">
-                    <a th:href="@{about}" class="btn btn-outline-primary w-100 h-100 rounded-0 d-flex align-items-center justify-content-center fw-bold">about</a>
-                </div>
-                <div class="col-4 d-flex">
-                    <a th:href="@{/etc}" class="btn btn-outline-primary w-100 h-100 rounded-0 d-flex align-items-center justify-content-center fw-bold">etc</a>
+    <!-- 카테고리 그리드 -->
+    <div class="container py-5">
+        <div class="row g-4">
+            <div class="col-6 col-md-4">
+                <a th:href="@{/javaSpring}" class="category-card d-block text-decoration-none">
+                    <div class="card h-100 border-primary text-primary text-center">
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <div>
+                                <i class="fas fa-code fa-2x mb-2"></i>
+                                <h5 class="card-title mb-0">Java & Spring</h5>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4">
+                <a th:href="@{/linux}" class="category-card d-block text-decoration-none">
+                    <div class="card h-100 border-primary text-primary text-center">
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <div>
+                                <i class="fab fa-linux fa-2x mb-2"></i>
+                                <h5 class="card-title mb-0">Linux</h5>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4">
+                <a th:href="@{/web}" class="category-card d-block text-decoration-none">
+                    <div class="card h-100 border-primary text-primary text-center">
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <div>
+                                <i class="fas fa-globe fa-2x mb-2"></i>
+                                <h5 class="card-title mb-0">Web</h5>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4">
+                <a th:href="@{/history}" class="category-card d-block text-decoration-none">
+                    <div class="card h-100 border-primary text-primary text-center">
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <div>
+                                <i class="fas fa-history fa-2x mb-2"></i>
+                                <h5 class="card-title mb-0">History</h5>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4">
+                <a th:href="@{/about}" class="category-card d-block text-decoration-none">
+                    <div class="card h-100 border-primary text-primary text-center">
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <div>
+                                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                                <h5 class="card-title mb-0">About</h5>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4">
+                <a th:href="@{/etc}" class="category-card d-block text-decoration-none">
+                    <div class="card h-100 border-primary text-primary text-center">
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <div>
+                                <i class="fas fa-ellipsis-h fa-2x mb-2"></i>
+                                <h5 class="card-title mb-0">기타</h5>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 푸터 -->
+    <footer class="bg-dark text-white-50 footer mt-auto pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" th:href="@{/}">ZeroToDeploy</a>, All Rights Reserved. Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
-    <footer th:replace="~{common::footer}"></footer>
+    </footer>
 </div>
-<div th:replace="~{common::script}"></div>
+
+<!-- 스크립트 -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/lib/wow/wow.js}"></script>
+<script th:src="@{/lib/easing/easing.min.js}"></script>
+<script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+<script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
 <script>
-    let results = [];
-
-    function performSearch() {
-        const keyword = document.getElementById('keywordInput').value.trim();
-        const filter = document.getElementById('filterSelect').value;
-        const container = document.getElementById('searchResults');
-        if (!keyword) {
-            container.style.display = 'none';
-            return;
-        }
-
-        if(keyword == '') {
-            alert('검색 문자열이 비어 있습니다.');
-        }
-        fetch(`/api/search?keyword=${encodeURIComponent(keyword)}&filter=${filter}`)
-            .then(res => res.json())
-            .then(data => {
-                if (Array.isArray(data)) {
-                    results = data;
-                } else if (data && Array.isArray(data.data)) {
-                    results = data.data;
-                } else {
-                    results = [];
-                }
-                currentPage = 0;
-                showResults();
-            });
-
-    }
-
-    function showResults() {
-        const container = document.getElementById('searchResults');
-        container.innerHTML = '';
-
-        if (results.length > 0) {
-            results.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'search-result-item';
-                div.textContent = item.title;
-                div.onclick = () => {
-                    window.location.href = `/post/${item.id}`;
-                };
-                container.appendChild(div);
-            });
-            container.style.display = 'block';
-        } else {
-            container.innerHTML = '<div class="p-2 text-muted">검색 결과가 없습니다.</div>';
-            container.style.display = 'block';
-        }
-    }
-    function nextPage() {
-        if ((currentPage + 1) * pageSize < results.length) {
-            currentPage++;
-            showResults();
-        }
-    }
-    function prevPage() {
-        if (currentPage > 0) {
-            currentPage--;
-            showResults();
-        }
-    }
-    document.getElementById('keywordInput').addEventListener('keydown', function (e) {
-        let debounceTimer = null;
-        if (e.key === 'Enter') {
-            performSearch();
-        }
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-            performSearch();
-        }, 100);
+    window.addEventListener('load', function () {
+        const spinner = document.getElementById('spinner');
+        if (spinner) spinner.classList.remove('show');
     });
-    document.getElementById('keywordInput').addEventListener('keyup', function (e) {
-        if (this.value.trim() === '') {
-            document.getElementById('searchResults').style.display = 'none';
+
+    // 세션 타이머 (로그인한 사용자만)
+    let sessionTime = 59 * 60 + 59; // 59분 59초
+    let sessionInterval = null;
+    
+    function updateSessionTimer() {
+        // 세션 타이머 요소가 존재하는지 확인 (로그인한 사용자만)
+        const sessionTimer = document.getElementById('sessionTimer');
+        const mobileSessionTimer = document.getElementById('mobileSessionTimer');
+        
+        if (!sessionTimer || !mobileSessionTimer) {
+            return; // 로그인하지 않은 사용자는 타이머 실행하지 않음
         }
-    });
+        
+        const minutes = Math.floor(sessionTime / 60);
+        const seconds = sessionTime % 60;
+        const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        sessionTimer.textContent = timeString;
+        mobileSessionTimer.textContent = timeString;
+        
+        if (sessionTime > 0) {
+            sessionTime--;
+        }
+    }
+    
+    function extendSession() {
+        sessionTime = 59 * 60 + 59; // 59분 59초로 리셋
+        alert('세션이 연장되었습니다.');
+    }
+    
+    // 로그인한 사용자에게만 세션 타이머 실행
+    function initSessionTimer() {
+        const sessionTimer = document.getElementById('sessionTimer');
+        if (sessionTimer) {
+            // 세션 타이머 요소가 존재하면 타이머 시작
+            sessionInterval = setInterval(updateSessionTimer, 1000);
+            updateSessionTimer(); // 초기 실행
+        }
+    }
+    
+    // 페이지 로드 시 세션 타이머 초기화
+    document.addEventListener('DOMContentLoaded', initSessionTimer);
 </script>
+
+<style>
+/* 모바일 반응형 스타일 */
+@media (max-width: 576px) {
+    .navbar-brand h1 {
+        font-size: 1.5rem;
+    }
+    
+    .nav-link {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.3rem;
+    }
+    
+    .search-form .form-control-lg {
+        font-size: 1rem;
+    }
+    
+    .category-card .card-title {
+        font-size: 0.9rem;
+    }
+    
+    .category-card .fa-2x {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-nav {
+        gap: 0.5rem;
+    }
+    
+    .nav-link {
+        min-width: 50px !important;
+        height: 35px !important;
+    }
+    
+    .search-form .row .col-6 {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* 카테고리 카드 호버 효과 */
+.category-card .card {
+    transition: all 0.3s ease;
+}
+
+.category-card:hover .card {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+/* 검색 폼 스타일 */
+.search-form {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+/* 네비게이션 버튼 스타일 */
+.navbar-nav .nav-link {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+</style>
 </body>
 </html>
+
+

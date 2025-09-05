@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,6 +24,8 @@ public class PostEntity {
 	private String content;
 	@Column(name = "category")
 	private String category;
+	@Column(name = "author")
+	private String author;
 	private LocalDateTime createdAt = LocalDateTime.now();
 	@Column(name = "file_name")
 	private String fileName;

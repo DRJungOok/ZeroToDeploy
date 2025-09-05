@@ -1,57 +1,208 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{common::header}"></head>
-<body class="d-flex flex-column min-vh-100">
-<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
-    <div th:replace="~{common::nav}"></div>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>친구 목록 - ZeroToDeploy</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container-xxl bg-white p-0 d-flex flex-column" style="height: 100vh;">
+    <!-- 네비게이션 -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <!-- 로고 -->
+            <a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
+                <h1 class="m-0 text-primary">ZeroToDeploy</h1>
+            </a>
+
+            <!-- 네비게이션 메뉴 -->
+            <div class="navbar-nav d-flex flex-row gap-2 me-auto">
+                <a th:href="@{/write}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-pen me-1"></i>
+                    <span class="d-none d-sm-inline">글쓰기</span>
+                    <span class="d-sm-none">글쓰</span>
+                </a>
+                <a th:href="@{/myInfo}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-user me-1"></i>
+                    <span class="d-none d-sm-inline">내정보</span>
+                    <span class="d-sm-none">내정</span>
+                </a>
+                <a th:href="@{/friends}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-users me-1"></i>
+                    <span class="d-none d-sm-inline">구독목록</span>
+                    <span class="d-sm-none">구목</span>
+                </a>
+                <a th:href="@{/chat}" class="nav-link btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="min-width: 60px; height: 40px;">
+                    <i class="fas fa-comments me-1"></i>
+                    <span class="d-none d-sm-inline">채팅</span>
+                    <span class="d-sm-none">채팅</span>
+                </a>
+            </div>
+
+            <!-- 사용자 정보 및 세션 -->
+            <div class="d-flex align-items-center gap-2">
+                <!-- 로그인한 사용자에게만 세션 타이머 표시 -->
+                <div class="d-none d-md-flex align-items-center me-3" sec:authorize="isAuthenticated()">
+                    <i class="fas fa-clock text-primary me-1"></i>
+                    <span class="text-muted small">세션: <span id="sessionTimer">59:59</span></span>
+                    <button class="btn btn-sm btn-outline-primary ms-2" onclick="extendSession()">연장</button>
+                </div>
+                
+                <!-- 모바일에서만 세션 표시 (로그인한 사용자만) -->
+                <div class="d-md-none d-flex align-items-center me-2" sec:authorize="isAuthenticated()">
+                    <i class="fas fa-clock text-primary me-1"></i>
+                    <span class="text-muted small" id="mobileSessionTimer">59:59</span>
+                </div>
+
+                <!-- 사용자 메뉴 -->
+                <div class="dropdown" sec:authorize="isAuthenticated()">
+                    <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" style="height: 40px;">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span class="d-none d-sm-inline" sec:authentication="name">사용자</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/myInfo}"><i class="fas fa-user me-2"></i>내정보</a></li>
+                        <li><a class="dropdown-item" th:href="@{/statistics/dashboard}"><i class="fas fa-chart-bar me-2"></i>활동통계</a></li>
+                        <li><a class="dropdown-item" th:href="@{/notification/list}"><i class="fas fa-bell me-2"></i>알림</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt me-2"></i>로그아웃</a></li>
+                    </ul>
+                </div>
+
+                <!-- 로그인/회원가입 버튼 -->
+                <div sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}" class="btn btn-outline-primary me-2" style="height: 40px;">로그인</a>
+                    <a th:href="@{/signUp}" class="btn btn-primary" style="height: 40px;">회원가입</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <div class="container mt-5">
         <h2>친구 목록</h2>
-        <div id="friend-list">
-            <ul class="list-group">
-                <li class="list-group-item" th:each="friend : ${friends}" th:with="friendName=${currentUserName == friend.sender.userName} ? ${friend.receiver.userName} : ${friend.sender.userName}">
-                    <a th:href="@{'/api/user/myInfo/' + ${friendName}}">
-                        <span th:text="${friendName}"></span>
-                    </a>
-                </li>
-            </ul>
+        <div th:if="${#lists.isEmpty(friends)}">
+            <p>친구가 없습니다.</p>
         </div>
-
-        <h3 class="mt-4">받은 친구 요청</h3>
-        <div id="received-requests">
-            <ul class="list-group">
-                <li class="list-group-item" th:each="request : ${receivedRequests}">
-                    <a th:href="@{'/api/user/myInfo/' + ${request.sender.userName}}">
-                        <span th:text="${request.sender.userName}"></span>
-                    </a>
-                    <form th:action="@{'/friends/accept/' + ${request.id}}" method="post" style="display:inline;">
-                        <button class="btn btn-success btn-sm ms-2">수락</button>
-                    </form>
-                    <form th:action="@{'/friends/reject/' + ${request.id}}" method="post" style="display:inline;">
-                        <button class="btn btn-danger btn-sm ms-1">취소</button>
-                    </form>
-                </li>
-            </ul>
-        </div>
-
-        <h3 class="mt-4">요청한 친구 목록</h3>
-        <div id="received-responses">
-            <ul class="list-group">
-                <li class="list-group-item" th:each="request : ${sentRequests}">
-                    <a th:href="@{'/api/user/myInfo/' + ${request.receiver.userName}}">
-                        <span th:text="${request.receiver.userName}"></span>
-                    </a>
-                    <span class="badge bg-secondary ms-2" th:text="${request.status}"></span>
-                    <form th:action="@{'/friends/cancel/' + ${request.id}}" method="post" style="display:inline;">
-                        <button class="btn btn-danger btn-sm ms-1">취소</button>
-                    </form>
-                </li>
-            </ul>
+        <div th:each="friend : ${friends}" class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${friend.userName}">친구 이름</h5>
+                <p class="card-text" th:text="${friend.email}">친구 이메일</p>
+            </div>
         </div>
     </div>
-
-    <footer th:replace="~{common::footer}"></footer>
-    <div th:replace="~{common::script}"></div>
+    
+    <!-- 푸터 -->
+    <footer class="bg-dark text-white-50 footer mt-auto pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" th:href="@{/}">ZeroToDeploy</a>, All Rights Reserved. Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
+
+<!-- 스크립트 -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/lib/wow/wow.js}"></script>
+<script th:src="@{/lib/easing/easing.min.js}"></script>
+<script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+<script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+<script>
+    function confirmLogout() {
+        if (confirm('로그아웃 하시겠습니까?')) {
+            window.location.href = '/logout';
+        }
+    }
+
+    // 세션 타이머 (로그인한 사용자만)
+    let sessionTime = 59 * 60 + 59; // 59분 59초
+    let sessionInterval = null;
+    
+    function updateSessionTimer() {
+        // 세션 타이머 요소가 존재하는지 확인 (로그인한 사용자만)
+        const sessionTimer = document.getElementById('sessionTimer');
+        const mobileSessionTimer = document.getElementById('mobileSessionTimer');
+        
+        if (!sessionTimer || !mobileSessionTimer) {
+            return; // 로그인하지 않은 사용자는 타이머 실행하지 않음
+        }
+        
+        const minutes = Math.floor(sessionTime / 60);
+        const seconds = sessionTime % 60;
+        const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        sessionTimer.textContent = timeString;
+        mobileSessionTimer.textContent = timeString;
+        
+        if (sessionTime > 0) {
+            sessionTime--;
+        }
+    }
+    
+    function extendSession() {
+        sessionTime = 59 * 60 + 59; // 59분 59초로 리셋
+        alert('세션이 연장되었습니다.');
+    }
+    
+    // 로그인한 사용자에게만 세션 타이머 실행
+    function initSessionTimer() {
+        const sessionTimer = document.getElementById('sessionTimer');
+        if (sessionTimer) {
+            // 세션 타이머 요소가 존재하면 타이머 시작
+            sessionInterval = setInterval(updateSessionTimer, 1000);
+            updateSessionTimer(); // 초기 실행
+        }
+    }
+    
+    // 페이지 로드 시 세션 타이머 초기화
+    document.addEventListener('DOMContentLoaded', initSessionTimer);
+
+    window.addEventListener('load', function () {
+        const spinner = document.getElementById('spinner');
+        if (spinner) spinner.classList.remove('show');
+    });
+
+    function checkSessionTime() {
+        fetch('/session/info')
+            .then(res => res.json())
+            .then(data => {
+                const isLoggedIn = data.isLoggedIn;
+                const remaining = parseInt(data.remainingTime || 0);
+
+                if (!isLoggedIn) {
+                    return;
+                }
+
+                if (remaining <= 0) {
+                    alert("세션이 만료되어 자동 로그아웃됩니다.");
+                    window.location.href = "/login?expired=true";
+                }
+            });
+    }
+    setInterval(checkSessionTime, 1000);
+</script>
 </body>
 </html>

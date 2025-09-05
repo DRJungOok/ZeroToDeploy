@@ -1,262 +1,300 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{common::header}"></head>
-<style>
-    #like-button {
-        transition: all 0.2s ease-in-out;
-    }
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>게시글 상세 - ZeroToDeploy</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    #like-button:hover {
-        transform: scale(1.05);
-    }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    #like-icon {
-        transition: color 0.2s ease-in-out;
-    }
+    <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container-xxl bg-white p-0 d-flex flex-column" style="height: 100vh;">
+    <!-- 네비게이션 -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <!-- 로고 -->
+            <a th:href="@{/}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
+                <h1 class="m-0 text-primary">ZeroToDeploy</h1>
+            </a>
 
-    .ql-editor img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 1rem auto;
-    }
-</style>
-<body th:attr="data-authenticated=${#authorization.expression('isAuthenticated()')}" style="overflow-y: scroll">
-<div class="container-xxl bg-white p-0 d-flex flex-column min-vh-100">
-    <div th:replace="~{common::nav}"></div>
-    <div class="container py-5" style="max-width: 900px; margin: auto;">
-        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-            <form th:action="@{/post/update/{id}(id=${post.id})}" method="post" onsubmit="return prepareSubmit()">
-            <div class="mb-3">
-                    <label class="form-label">
-                        <h3>제목</h3>
-                    </label>
-                    <input type="text" th:value="${post.title}" name="title" class="form-control"/>
+            <div class="d-flex align-items-center gap-3">
+                <!-- 관리자 전용: 글쓰기 버튼 (로그인한 사용자만) -->
+                <div sec:authorize="isAuthenticated() and hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/write}" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 42px;">
+                        ✍ 글쓰기
+                    </a>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">내용</label>
-                    <div id="editor-container" th:attr="data-content=${post.content}"></div>
-                    <input type="hidden" name="content" id="hidden-content">
+
+                <!-- 로그인 후: 내정보 버튼 (로그인한 사용자만) -->
+                <div sec:authorize="isAuthenticated()" th:if="${currentUserName != null}">
+                    <a th:href="@{'/api/user/myInfo/username/' + ${currentUserName}}"
+                       class="btn btn-outline-success"
+                       style="height: 42px">
+                        내정보
+                    </a>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div>
-                        <button type="submit" class="btn btn-success me-2">💾 저장</button>
-                        <a th:href="@{/post/delete/{id}(id=${post.id})}" class="btn btn-danger"
-                           onclick="return confirm('정말 삭제하시겠습니까?')">🗑 삭제</a>
+
+                <!-- 로그인 후: 친구 목록 (로그인한 사용자만) -->
+                <div sec:authorize="isAuthenticated()">
+                    <a th:href="@{/friends}" class="btn btn-outline-primary d-flex align-items-center justify-content-center" style="height: 42px;">
+                        친구 목록
+                    </a>
+                </div>
+
+                <!-- 로그인 후: 채팅 (로그인한 사용자만) -->
+                <div sec:authorize="isAuthenticated()">
+                    <a th:href="@{/chat}" class="btn btn-outline-primary d-flex align-items-center justify-content-center" style="height: 42px;">
+                        채팅
+                    </a>
+                </div>
+
+                <!-- 로그인 후: 세션 정보 (로그인한 사용자만) -->
+                <div sec:authorize="isAuthenticated()" id="session-info"
+                     class="d-flex align-items-center border rounded px-3 py-1"
+                     style="font-size: 14px; color: #666; height: 42px;">
+                    <i class="bi bi-clock me-2 text-secondary"></i>
+                    <span>세션 : <span id="remaining-time">--</span></span>
+                    <button onclick="extendSession()" class="btn btn-sm btn-outline-dark ms-2">연장</button>
+                </div>
+
+                <!-- 로그인 후: 사용자 메뉴 (로그인한 사용자만) -->
+                <div sec:authorize="isAuthenticated()" class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center" 
+                            type="button" id="userDropdown" data-bs-toggle="dropdown" 
+                            aria-expanded="false" style="height: 42px;">
+                        <!-- 프로필 이미지 -->
+                        <img th:if="${#authentication.principal.profileImage != null and #authentication.principal.profileImage != ''}" 
+                             th:src="${#authentication.principal.profileImage}" 
+                             alt="프로필" 
+                             class="rounded-circle me-2" 
+                             width="24" 
+                             height="24"
+                             style="object-fit: cover;">
+                        <img th:unless="${#authentication.principal.profileImage != null and #authentication.principal.profileImage != ''}" 
+                             src="https://via.placeholder.com/24x24/6c757d/ffffff?text=U" 
+                             alt="프로필" 
+                             class="rounded-circle me-2" 
+                             width="24" 
+                             height="24"
+                             style="object-fit: cover;">
+                        <span sec:authentication="name">사용자</span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="/statistics/dashboard">
+                            <i class="fas fa-chart-bar me-2"></i>활동 통계
+                        </a></li>
+                        <li><a class="dropdown-item" href="/notifications">
+                            <i class="fas fa-bell me-2"></i>알림
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/logout">
+                            <i class="fas fa-sign-out-alt me-2"></i>로그아웃
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 게시글 상세 내용 -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- 게시글 -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h1 class="card-title" th:text="${post.title}">게시글 제목</h1>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <span class="text-muted">작성자: </span>
+                                <span th:text="${post.author}">작성자</span>
+                                <span class="text-muted ms-3">카테고리: </span>
+                                <span th:text="${post.category}">카테고리</span>
+                            </div>
+                            <small class="text-muted" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</small>
+                        </div>
+                        <div class="card-text" th:utext="${post.content}">게시글 내용</div>
+                        
+                        <!-- 좋아요 버튼 -->
+                        <div class="mt-3">
+                            <button class="btn btn-outline-primary" onclick="toggleLike()">
+                                <i class="fas fa-heart" th:class="${isLiked ? 'text-danger' : ''}"></i>
+                                <span th:text="${post.likeCount}">0</span> 좋아요
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </form>
-        </div>
 
-        <div th:if="${#authorization.expression('!hasRole(''ROLE_ADMIN'')')}">
-            <div class="mb-3">
-                <label class="form-label">제목</label>
-                <h4><p th:text="${post.title}" class="form-control-plaintext"></p></h4>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">내용</label>
-                <div th:utext="${post.content}" class="form-control-plaintext ql-editor"></div>
-            </div>
-        </div>
-
-        <div sec:authorize="isAuthenticated()" class="text-end mb-3">
-            <button type="button"
-                    class="btn btn-outline-primary d-flex align-items-center gap-1"
-                    th:attr="data-post-id=${post.id}"
-                    onclick="likePost(this)"
-                    id="like-button">
-                <span id="like-icon" th:style="'font-size: 1.2rem; color: ' + (${post.likedByCurrentUser} ? 'red' : 'black')" th:text="${post.likedByCurrentUser} ? '♥' : '♡'"></span>
-                <span id="like-count">[[${post.likeCount}]]</span>
-            </button>
-        </div>
-
-        <div th:if="${post.comments != null}">
-            <h4 class="mb-3">댓글</h4>
-            <div th:each="comment : ${post.comments}" th:id="'comment-box-' + ${comment.id}" class="mb-3">
-
-                <p>
-                    <strong>
-                        <a th:href="@{/api/user/myInfo/{username}(username=${comment.author})}">
-                            <span
-                                    class="user-popup-trigger text-primary"
-                                    style="cursor: pointer;"
-                                    th:text="${comment.author}"
-                                    th:attr="data-username=${comment.author}">
-                            </span>
-                        </a>
-                    </strong>
-                </p>
-
-                <form th:action="@{/comment/update}" method="post" class="d-flex flex-column gap-2" th:onsubmit="'return disableAfterSubmit(' + ${comment.id} + ')'">
-                    <input type="hidden" name="commentId" th:value="${comment.id}" />
-                    <textarea th:id="'comment-content-' + ${comment.id}"
-                              name="content"
-                              class="form-control"
-                              th:text="${comment.content}"
-                              readonly></textarea>
-                    <div th:if="${currentUserName == comment.author or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
-                         class="d-flex gap-2">
-                        <button type="button"
-                                th:id="'edit-btn-' + ${comment.id}"
-                                class="btn btn-outline-secondary"
-                                th:onclick="'enableEdit(' + ${comment.id} + ')'">수정</button>
-                        <button type="submit"
-                                th:id="'submit-btn-' + ${comment.id}"
-                                class="btn btn-outline-primary d-none">수정완료</button>
-                        <a th:href="@{/comment/delete/{id}(id=${comment.id})}"
-                           class="btn btn-outline-danger"
-                           onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+                <!-- 댓글 목록 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>댓글</h5>
                     </div>
-                </form>
+                    <div class="card-body">
+                        <div th:each="comment : ${comments}" class="comment mb-3 p-3 border rounded">
+                            <div class="d-flex justify-content-between">
+                                <strong th:text="${comment.author}">댓글 작성자</strong>
+                                <small class="text-muted" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</small>
+                            </div>
+                            <p class="mb-0 mt-2" th:text="${comment.content}">댓글 내용</p>
+                        </div>
+                        
+                        <!-- 댓글 작성 폼 -->
+                        <div sec:authorize="isAuthenticated()" class="mt-4">
+                            <form th:action="@{/comment/add}" method="post">
+                                <input type="hidden" name="postId" th:value="${post.id}">
+                                <div class="mb-3">
+                                    <textarea class="form-control" name="content" rows="3" placeholder="댓글을 입력하세요..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">댓글 작성</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 사이드바 -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>관련 게시글</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:each="relatedPost : ${relatedPosts}" class="mb-2">
+                            <a th:href="@{'/post/' + ${relatedPost.id}}" th:text="${relatedPost.title}" class="text-decoration-none">관련 게시글 제목</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div id="user-preview-popup" style="display: none; position: absolute; z-index: 100;" class="card p-2 shadow small"></div>
-
-        <form th:action="@{/comment/create}" method="post" onsubmit="return checkLoginBeforeSubmit()">
-            <input type="hidden" name="postId" th:value="${post.id}" />
-            <div class="mb-3">
-                <textarea name="content" class="form-control" rows="3" placeholder="댓글을 입력하세요."></textarea>
-            </div>
-            <div class="text-end">
-                <button type="submit" class="btn btn-success">댓글 작성</button>
-            </div>
-        </form>
     </div>
-
-    <div th:replace="~{common::footer}"></div>
-    <div th:replace="~{common::script}"></div>
+    
+    <!-- 푸터 -->
+    <footer class="bg-dark text-white-50 footer mt-auto pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" th:href="@{/}">ZeroToDeploy</a>, All Rights Reserved. Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
+
+<!-- 스크립트 -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/lib/wow/wow.js}"></script>
+<script th:src="@{/lib/easing/easing.min.js}"></script>
+<script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+<script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
 <script>
-    let quill;
-
-    function enableEdit(commentId) {
-        const textarea = document.getElementById(`comment-content-${commentId}`);
-        const editBtn = document.getElementById(`edit-btn-${commentId}`);
-        const submitBtn = document.getElementById(`submit-btn-${commentId}`);
-
-        if (textarea && editBtn && submitBtn) {
-            textarea.removeAttribute('readonly');
-            textarea.focus();
-            editBtn.classList.add('d-none');
-            submitBtn.classList.remove('d-none');
+    function confirmLogout() {
+        if (confirm('로그아웃 하시겠습니까?')) {
+            window.location.href = '/logout';
         }
     }
 
-    function checkLoginBeforeSubmit() {
-        const isAuthenticated = document.body.dataset.authenticated === 'true';
-        if (!isAuthenticated) {
-            alert("로그인 후 댓글을 작성하실 수 있습니다.");
-            window.location.href = "/login";
-            return false;
+    document.addEventListener('DOMContentLoaded', function () {
+        // 로그인 상태일 때만 세션 타이머 실행
+        if (document.getElementById('remaining-time')) {
+            updateRemainingTime();
         }
-        return true;
-    }
+    });
 
-    function likePost(button) {
-        const postId = button.getAttribute("data-post-id");
+    let remainingSeconds = 0;
+    let countdownInterval = null;
 
-        fetch(location.origin + `/post/like/${postId}`, {
-            method: "POST",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-            credentials: "include"
-        })
-            .then(response => {
-                if (!response.ok) throw new Error("좋아요 실패");
-                return response.json();
-            })
+    function updateRemainingTime() {
+        fetch('/session/info')
+            .then(res => res.json())
             .then(data => {
-                const likeCountElement = document.getElementById("like-count");
-                const likeIcon = document.getElementById("like-icon");
-
-                if (likeCountElement && likeIcon) {
-                    likeCountElement.innerText = data.likeCount;
-                    if (data.liked === true) {
-                        likeIcon.innerText = "♥";
-                        likeIcon.style.color = "red";
+                remainingSeconds = parseInt(data.remainingTime || 0);
+                updateTimerDisplay();
+                if (countdownInterval) clearInterval(countdownInterval);
+                countdownInterval = setInterval(() => {
+                    remainingSeconds--;
+                    if (remainingSeconds <= 0) {
+                        clearInterval(countdownInterval);
+                        document.getElementById('remaining-time').innerText = "만료됨";
                     } else {
-                        likeIcon.innerText = "♡";
-                        likeIcon.style.color = "black";
+                        updateTimerDisplay();
                     }
-                }
+                }, 1000);
             })
-            .catch(error => {
-                alert("좋아요 처리 중 오류가 발생했습니다.");
-                console.log(`like error postDetail.html :: ${error}`)
+            .catch(err => console.error("세션 정보 조회 실패", err));
+    }
+
+    function updateTimerDisplay() {
+        const timeElement = document.getElementById('remaining-time');
+        if (!timeElement) return;
+
+        timeElement.innerText = formatTime(remainingSeconds);
+    }
+
+    function extendSession() {
+        fetch('/session/extend', { method: 'POST' })
+            .then(() => updateRemainingTime());
+    }
+
+    function formatTime(seconds) {
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function toggleLike() {
+        const postId = document.querySelector('input[name="postId"]').value;
+        fetch(`/post/${postId}/like`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
             });
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const editor = document.querySelector("#editor-container");
-        if (editor) {
-            quill = new Quill("#editor-container", {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        ['link', 'image'],
-                        ['clean']
-                    ]
-                }
-            });
-            const contentHtml = editor.dataset.content;
-            if (contentHtml) {
-                quill.clipboard.dangerouslyPasteHTML(contentHtml);
-            }
-        }
+    window.addEventListener('load', function () {
+        const spinner = document.getElementById('spinner');
+        if (spinner) spinner.classList.remove('show');
     });
 
-    function prepareSubmit() {
-        const hiddenInput = document.querySelector('#hidden-content');
-        if (quill && hiddenInput) {
-            hiddenInput.value = quill.root.innerHTML;
-        }
-        return true;
+    function checkSessionTime() {
+        fetch('/session/info')
+            .then(res => res.json())
+            .then(data => {
+                const isLoggedIn = data.isLoggedIn;
+                const remaining = parseInt(data.remainingTime || 0);
+
+                if (!isLoggedIn) {
+                    return;
+                }
+
+                if (remaining <= 0) {
+                    alert("세션이 만료되어 자동 로그아웃됩니다.");
+                    window.location.href = "/login?expired=true";
+                }
+            });
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const popup = document.getElementById('user-preview-popup');
-
-        document.querySelectorAll('.user-popup-trigger').forEach(e => {
-            e.addEventListener('mouseenter', async (ev) => {
-                const username = ev.target.dataset.username;
-
-                try {
-                    const res = await fetch(`/api/user/preview/${username}`);
-                    if (!res.ok) {
-                        console.warn('미리보기 요청 실패:', res.status);
-                        return;
-                    }
-                    const data = await res.json();
-
-                    popup.innerHTML = `
-                    <div><strong>${data.name}</strong></div>
-                    <div>${data.email}</div>
-                    <div>가입일: ${new Date(data.createdAt).toLocaleDateString()}</div>
-                `;
-
-                    const rect = ev.target.getBoundingClientRect();
-                    popup.style.left = `${rect.right + 10 + window.scrollX}px`;
-                    popup.style.top = `${rect.top + window.scrollY}px`;
-                    popup.style.display = 'block';
-                } catch (error) {
-                    console.error('팝업 로딩 중 오류:', error);
-                }
-            });
-
-            e.addEventListener('mouseleave', () => {
-                popup.style.display = 'none';
-            });
-        });
-
-        popup.addEventListener('mouseleave', () => {
-            popup.style.display = 'none';
-        });
-    });
-
+    setInterval(checkSessionTime, 1000);
 </script>
 </body>
 </html>

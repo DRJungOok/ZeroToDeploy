@@ -1,8 +1,11 @@
 package com.jungook.zerotodeploy.preview;
 
 import com.jungook.zerotodeploy.details.CustomUserDetails;
+import com.jungook.zerotodeploy.friends.FriendsEntity;
+import com.jungook.zerotodeploy.friends.FriendsRepo;
 import com.jungook.zerotodeploy.joinMember.JoinUserEntity;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -15,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,13 +28,16 @@ import java.util.Map;
 public class UserPreviewController {
     private final JoinUserRepo joinUserRepo;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final FriendsRepo friendsRepo;
 
-    public UserPreviewController(JoinUserRepo joinUserRepo, BCryptPasswordEncoder passwordEncoder) {
+    public UserPreviewController(JoinUserRepo joinUserRepo, BCryptPasswordEncoder passwordEncoder, FriendsRepo friendsRepo) {
         this.joinUserRepo = joinUserRepo;
         this.passwordEncoder = passwordEncoder;
+        this.friendsRepo = friendsRepo;
     }
 
     @GetMapping("/preview/{username}")
+
     public ResponseEntity<?> previewUser(@PathVariable("username") String username) {
         return joinUserRepo.findByUserName(username)
                 .map(user -> {
@@ -45,48 +49,76 @@ public class UserPreviewController {
                 }).orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/myInfo/{username}")
-    public String userInfo(@PathVariable String username,
+    @GetMapping("/myInfo/{id}")
+    public String userInfo(@PathVariable("id") Long id,
                            Model model,
                            Authentication authentication) {
 
         String currentUsername = authentication.getName();
 
-        log.info("요청한 username: {}", username);
-        log.info("로그인한 사용자: {}", currentUsername);
+        JoinUserEntity currentUser = joinUserRepo.findByUserName(currentUsername)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Current user not found"));
 
-        JoinUserEntity user = joinUserRepo.findByUserName(username)
-                .or(() -> joinUserRepo.findByEmail(username))
-                .orElseThrow(() -> {
-                    log.warn("User not found for identifier: {}", username);
-                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-                });
+        JoinUserEntity targetUser = joinUserRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Target user not found"));
 
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-        boolean isOwner = currentUsername.equals(user.getUserName()) || currentUsername.equals(user.getEmail());
+        boolean isOwner = currentUsername.equals(targetUser.getUserName()) || currentUsername.equals(targetUser.getEmail());
 
-        model.addAttribute("user", user);
+        boolean isFriend = friendsRepo.existsBySenderAndReceiverAndStatus(currentUser, targetUser, FriendsEntity.Status.ACCEPTED)
+                || friendsRepo.existsBySenderAndReceiverAndStatus(targetUser, currentUser, FriendsEntity.Status.ACCEPTED);
+
+        model.addAttribute("user", targetUser);
         model.addAttribute("isEditable", isAdmin || isOwner);
+        model.addAttribute("isFriend", isFriend);
+        model.addAttribute("currentUserName", currentUsername);
 
         return "myInfo";
     }
 
-    @PostMapping("/myInfo/{username}/update")
+    @GetMapping("/myInfo/username/{username}")
+    public String userInfoByUsername(@PathVariable("username") String username,
+                                     Model model,
+                                     Authentication authentication) {
+
+        String currentUsername = authentication.getName();
+
+        JoinUserEntity currentUser = joinUserRepo.findByUserName(currentUsername)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Current user not found"));
+
+        JoinUserEntity targetUser = joinUserRepo.findByUserName(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Target user not found"));
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        boolean isOwner = currentUsername.equals(targetUser.getUserName()) || currentUsername.equals(targetUser.getEmail());
+
+        boolean isFriend = friendsRepo.existsBySenderAndReceiverAndStatus(currentUser, targetUser, FriendsEntity.Status.ACCEPTED)
+                || friendsRepo.existsBySenderAndReceiverAndStatus(targetUser, currentUser, FriendsEntity.Status.ACCEPTED);
+
+        model.addAttribute("user", targetUser);
+        model.addAttribute("isEditable", isAdmin || isOwner);
+        model.addAttribute("isFriend", isFriend);
+        model.addAttribute("currentUserName", currentUsername);
+
+        return "myInfo";
+    }
+
+    @PostMapping("/myInfo/{id}/update")
     @Transactional
-    public String updateInfo(@PathVariable String username,
+    public String updateInfo(@PathVariable Long id,
                              @RequestParam("userName") String newUserName,
                              @RequestParam("email") String email,
                              @RequestParam(required = false) String password,
                              Authentication authentication,
-                             jakarta.servlet.http.HttpServletRequest request) {
+                             HttpServletRequest request) {
 
         String currentUsername = authentication.getName();
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
 
-        JoinUserEntity user = joinUserRepo.findByUserName(username)
-                .or(() -> joinUserRepo.findByEmail(username))
+        JoinUserEntity user = joinUserRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         boolean isOwner = currentUsername.equals(user.getUserName()) || currentUsername.equals(user.getEmail());
@@ -108,7 +140,6 @@ public class UserPreviewController {
 
         joinUserRepo.save(user);
 
-        // ✅ CustomUserDetails로 Security 세션 갱신
         Authentication newAuth = new UsernamePasswordAuthenticationToken(
                 new CustomUserDetails(user),
                 user.getPassword(),
@@ -119,6 +150,7 @@ public class UserPreviewController {
                 org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                 SecurityContextHolder.getContext());
 
-        return "redirect:/api/user/myInfo/" + user.getUserName() + "?success";
+        return "redirect:/api/user/myInfo/" + user.getId() + "?success";
     }
+
 }

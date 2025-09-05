@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.jungook.zerotodeploy.joinMember.JoinUserRepo;
 
 @ControllerAdvice
+
 @Configuration
 public class GlobalPathAdvice {
     private final JoinUserRepo joinUserRepo;
@@ -24,17 +25,14 @@ public class GlobalPathAdvice {
     }
 
     @ModelAttribute("currentUserName")
+
     public String currentUserName(Authentication authentication) {
         if (authentication == null) return null;
 
         Object principal = authentication.getPrincipal();
-        String loginId = null;
-
-        if (principal instanceof UserDetails userDetails) {
-            loginId = userDetails.getUsername();
-        } else {
-            loginId = authentication.getName();
-        }
+        final String loginId = (principal instanceof UserDetails userDetails)
+                ? userDetails.getUsername()
+                : authentication.getName();
 
         return joinUserRepo.findByUserName(loginId)
                 .or(() -> joinUserRepo.findByEmail(loginId))
