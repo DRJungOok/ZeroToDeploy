@@ -1,3 +1,7 @@
+select 1;
+
+/*
+
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS message;
@@ -138,3 +142,4 @@ CREATE TABLE message (
                          FOREIGN KEY(room_id) REFERENCES chat_room(id) ON DELETE CASCADE,
                          FOREIGN KEY(sender_id) REFERENCES users(id) ON DELETE CASCADE
 );
+*/
