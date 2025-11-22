@@ -35,7 +35,7 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         JoinUserEntity joinUserEntity = new JoinUserEntity();
-        log.debug("result matches: {}", encoder.matches("admin", joinUserEntity.getPassword()));
+        log.debug(":: result matches: {}", encoder.matches("admin", joinUserEntity.getPassword()));
         return encoder;
     }
 
@@ -99,9 +99,9 @@ public class SecurityConfig {
     @Bean
     public AuthenticationSuccessHandler successHandler() {
         return (request, response, authentication) -> {
-            log.info("✅ success Login!");
-            log.info("👤 user Name: {}", authentication.getName());
-            log.info("🔑 has a Role: {}", authentication.getAuthorities());
+            log.info(":: success Login!");
+            log.info(":: user Name: {}", authentication.getName());
+            log.info(":: has a Role: {}", authentication.getAuthorities());
             response.sendRedirect("/");
         };
     }
