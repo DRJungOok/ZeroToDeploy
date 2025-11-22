@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -34,7 +35,7 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         JoinUserEntity joinUserEntity = new JoinUserEntity();
-        log.debug("result matches: {}", encoder.matches("admin", joinUserEntity.getPassword()));
+        log.debug(":: result matches: {}", encoder.matches("admin", joinUserEntity.getPassword()));
         return encoder;
     }
 
@@ -43,7 +44,7 @@ public class SecurityConfig {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(customUserDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
-        return provider;
+        return provider; 
     }
 
     @Bean
@@ -56,13 +57,18 @@ public class SecurityConfig {
         http
             .authenticationProvider(daoAuthenticationProvider())
             .csrf(AbstractHttpConfigurer :: disable)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionFixation().migrateSession()
+                .invalidSessionUrl("/login")
+            )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/", "/signUp", "/login",
                     "/css/**", "/js/**", "/images/**",
                     "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
-                    "/swagger-resources/**", "/myInfo/**", "/api/user/preview/**"
+                    "/swagger-resources/**", "/myInfo/**", "/api/user/preview/**",
+                    "/ws/**"
                 ).permitAll()
                 .requestMatchers("/api/**","/post/like/**")
                 .authenticated()
@@ -93,9 +99,9 @@ public class SecurityConfig {
     @Bean
     public AuthenticationSuccessHandler successHandler() {
         return (request, response, authentication) -> {
-            log.info("✅ success Login!");
-            log.info("👤 user Name: {}", authentication.getName());
-            log.info("🔑 has a Role: {}", authentication.getAuthorities());
+            log.info(":: success Login!");
+            log.info(":: user Name: {}", authentication.getName());
+            log.info(":: has a Role: {}", authentication.getAuthorities());
             response.sendRedirect("/");
         };
     }

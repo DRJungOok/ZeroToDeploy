@@ -25,26 +25,26 @@ public class FriendsController {
         return "friends";
     }
 
-    @PostMapping("/request/{username}")
-    public String sendRequest(@PathVariable String username, Authentication authentication) {
-        friendsService.sendFriendRequest(authentication.getName(), username);
+    @PostMapping("/request/{id}")
+    public String sendRequest(@PathVariable("id") Long id, Authentication authentication) {
+        friendsService.sendFriendRequest(authentication.getName(), id);
         return "redirect:/friends";
     }
 
     @PostMapping("/accept/{id}")
-    public String acceptFriend(@PathVariable Long id) {
+    public String acceptFriend(@PathVariable("id") Long id) {
         friendsService.acceptRequest(id);
         return "redirect:/friends";
     }
 
     @PostMapping("/reject/{id}")
-    public String rejectRequest(@PathVariable Long id) {
+    public String rejectRequest(@PathVariable("id") Long id) {
         friendsService.rejectRequest(id);
         return "redirect:/friends";
     }
 
     @PostMapping("/cancel/{id}")
-    public String cancelRequest(@PathVariable Long id) {
+    public String cancelRequest(@PathVariable("id") Long id) {
         friendsService.cancelRequest(id);
         return "redirect:/friends";
     }

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>알림 목록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* 모바일 최적화 스타일 */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+            }
+            
+            .notification-header {
+                padding: 20px 15px !important;
+                margin-bottom: 20px !important;
+            }
+            
+            .profile-image {
+                width: 50px !important;
+                height: 50px !important;
+            }
+            
+            .notification-item {
+                padding: 15px !important;
+                margin-bottom: 10px !important;
+            }
+            
+            .notification-icon {
+                width: 35px !important;
+                height: 35px !important;
+                font-size: 1rem !important;
+            }
+            
+            .btn {
+                font-size: 0.85rem !important;
+                padding: 0.4rem 0.6rem !important;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+            
+            .notification-header {
+                padding: 15px 10px !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .profile-image {
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .notification-item {
+                padding: 12px !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .notification-icon {
+                width: 30px !important;
+                height: 30px !important;
+                font-size: 0.9rem !important;
+            }
+            
+            .btn {
+                font-size: 0.8rem !important;
+                padding: 0.3rem 0.5rem !important;
+            }
+            
+            .notification-item h6 {
+                font-size: 0.95rem !important;
+            }
+            
+            .notification-item p {
+                font-size: 0.9rem !important;
+            }
+            
+            .empty-state i {
+                font-size: 3rem !important;
+            }
+            
+            .empty-state h4 {
+                font-size: 1.2rem !important;
+            }
+        }
+        
+        /* 기본 스타일 */
+        .notification-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .profile-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid white;
+            object-fit: cover;
+        }
+        
+        .notification-item {
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 0 15px 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .notification-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .notification-item.unread {
+            border-left-color: #ff6b6b;
+            background: #fff5f5;
+        }
+        
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .notification-icon.friend-request { background: #4ecdc4; }
+        .notification-icon.comment { background: #45b7d1; }
+        .notification-icon.like { background: #ff6b6b; }
+        .notification-icon.system { background: #96ceb4; }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        .action-buttons {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+        
+        /* 모바일에서 버튼 그룹 최적화 */
+        @media (max-width: 576px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .btn-group .btn {
+                width: 100%;
+                margin: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <!-- 알림 헤더 -->
+        <div class="notification-header">
+            <div class="row align-items-center">
+                <div class="col-md-2 col-4 text-center">
+                    <img th:if="${userProfileImage != null and userProfileImage != ''}" 
+                         th:src="${userProfileImage}" 
+                         alt="프로필" 
+                         class="profile-image">
+                    <img th:unless="${userProfileImage != null and userProfileImage != ''}" 
+                         src="https://via.placeholder.com/60x60/6c757d/ffffff?text=U" 
+                         alt="프로필" 
+                         class="profile-image">
+                </div>
+                <div class="col-md-8 col-8">
+                    <h2 class="mb-2" th:text="${currentUser.username}">사용자명</h2>
+                    <p class="mb-0">
+                        <i class="fas fa-bell me-2"></i>
+                        <span th:text="${unreadCount}">0</span>개의 읽지 않은 알림이 있습니다
+                    </p>
+                </div>
+                <div class="col-md-2 col-12 text-center text-md-end mt-3 mt-md-0">
+                    <a href="/" class="btn btn-outline-light">
+                        <i class="fas fa-home me-2"></i><span class="d-none d-sm-inline">홈으로</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 액션 버튼 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <h4><i class="fas fa-bell me-2"></i>알림 목록</h4>
+                    <div class="d-flex align-items-center gap-2">
+                        <button id="markAllReadBtn" class="btn btn-outline-primary" 
+                                th:if="${unreadCount > 0}">
+                            <i class="fas fa-check-double me-2"></i><span class="d-none d-sm-inline">모두 읽음 처리</span>
+                        </button>
+                        <span class="badge bg-primary fs-6" th:text="${notifications.size()}">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 알림 목록 -->
+        <div class="row">
+            <div class="col-12">
+                <div th:if="${#lists.isEmpty(notifications)}" class="empty-state">
+                    <i class="fas fa-bell-slash"></i>
+                    <h4>알림이 없습니다</h4>
+                    <p class="text-muted">새로운 활동이 있을 때 알림을 받을 수 있습니다.</p>
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-home me-2"></i>홈으로 돌아가기
+                    </a>
+                </div>
+
+                <div th:each="notification : ${notifications}" 
+                     th:class="${'notification-item ' + (notification.read ? '' : 'unread')}"
+                     th:data-id="${notification.id}">
+                    <div class="row align-items-center">
+                        <div class="col-md-1 col-2 text-center">
+                            <div th:class="${'notification-icon ' + notification.type.toString().toLowerCase()}">
+                                <i th:if="${notification.type.name() == 'FRIEND_REQUEST'}" class="fas fa-user-plus"></i>
+                                <i th:if="${notification.type.name() == 'COMMENT'}" class="fas fa-comment"></i>
+                                <i th:if="${notification.type.name() == 'LIKE'}" class="fas fa-heart"></i>
+                                <i th:if="${notification.type.name() == 'SYSTEM'}" class="fas fa-info-circle"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-7">
+                            <h6 class="mb-1" th:text="${notification.message}">알림 메시지</h6>
+                            <small class="text-muted" th:text="${#temporals.format(notification.createdAt, 'yyyy-MM-dd HH:mm')}">생성일</small>
+                            <div th:if="${notification.type.name() == 'FRIEND_REQUEST'}" class="mt-2">
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-sm btn-success" onclick="acceptFriendRequest(${notification.id})">
+                                        <i class="fas fa-check me-1"></i><span class="d-none d-sm-inline">수락</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="rejectFriendRequest(${notification.id})">
+                                        <i class="fas fa-times me-1"></i><span class="d-none d-sm-inline">거절</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-3 text-end">
+                            <div th:if="${!notification.read}">
+                                <button class="btn btn-sm btn-outline-primary mark-read-btn" 
+                                        th:data-id="${notification.id}">
+                                    <i class="fas fa-check me-1"></i><span class="d-none d-sm-inline">읽음</span>
+                                </button>
+                            </div>
+                            <div th:if="${notification.read}" class="text-muted">
+                                <small><i class="fas fa-check text-success"></i> <span class="d-none d-sm-inline">읽음</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 개별 알림 읽음 처리
+        document.querySelectorAll('.mark-read-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const notificationId = this.dataset.id;
+                markAsRead(notificationId);
+            });
+        });
+
+        // 모두 읽음 처리
+        document.getElementById('markAllReadBtn')?.addEventListener('click', function() {
+            markAllAsRead();
+        });
+
+        // 개별 알림 읽음 처리 함수
+        function markAsRead(notificationId) {
+            fetch(`/notifications/${notificationId}/read`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // UI 업데이트
+                    const notificationItem = document.querySelector(`[data-id="${notificationId}"]`);
+                    if (notificationItem) {
+                        notificationItem.classList.remove('unread');
+                        const btn = notificationItem.querySelector('.mark-read-btn');
+                        if (btn) {
+                            btn.outerHTML = '<div class="text-muted"><small><i class="fas fa-check text-success"></i> <span class="d-none d-sm-inline">읽음</span></small></div>';
+                        }
+                    }
+                    updateUnreadCount();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('알림 읽음 처리 중 오류가 발생했습니다.');
+            });
+        }
+
+        // 모든 알림 읽음 처리 함수
+        function markAllAsRead() {
+            fetch('/notifications/mark-all-read', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // 모든 알림을 읽음 상태로 변경
+                    document.querySelectorAll('.notification-item').forEach(item => {
+                        item.classList.remove('unread');
+                        const btn = item.querySelector('.mark-read-btn');
+                        if (btn) {
+                            btn.outerHTML = '<div class="text-muted"><small><i class="fas fa-check text-success"></i> <span class="d-none d-sm-inline">읽음</span></small></div>';
+                        }
+                    });
+                    
+                    // 모두 읽음 버튼 숨기기
+                    const markAllBtn = document.getElementById('markAllReadBtn');
+                    if (markAllBtn) {
+                        markAllBtn.style.display = 'none';
+                    }
+                    
+                    updateUnreadCount();
+                    alert('모든 알림을 읽음 처리했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('알림 읽음 처리 중 오류가 발생했습니다.');
+            });
+        }
+
+        // 읽지 않은 알림 수 업데이트
+        function updateUnreadCount() {
+            fetch('/notifications/unread-count')
+            .then(response => response.json())
+            .then(data => {
+                const unreadCount = data.count;
+                const countElement = document.querySelector('.notification-header p span');
+                if (countElement) {
+                    countElement.textContent = unreadCount;
+                }
+                
+                // 모두 읽음 버튼 표시/숨김
+                const markAllBtn = document.getElementById('markAllReadBtn');
+                if (markAllBtn) {
+                    markAllBtn.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error updating unread count:', error);
+            });
+        }
+
+        // 친구 요청 수락
+        function acceptFriendRequest(notificationId) {
+            // TODO: 친구 요청 수락 로직 구현
+            alert('친구 요청을 수락했습니다.');
+            markAsRead(notificationId);
+        }
+
+        // 친구 요청 거절
+        function rejectFriendRequest(notificationId) {
+            // TODO: 친구 요청 거절 로직 구현
+            alert('친구 요청을 거절했습니다.');
+            markAsRead(notificationId);
+        }
+
+        // 페이지 로드 시 읽지 않은 알림 수 업데이트
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUnreadCount();
+        });
+    </script>
+</body>
+</html>
